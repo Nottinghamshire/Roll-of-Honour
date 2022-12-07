@@ -48,4 +48,8 @@
     <UpToDateCheckInput Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
   </ItemGroup>
   
+  <ItemGroup>
+    <Folder Include="wwwroot\lib" />
+  </ItemGroup>
+  
 </Project>
