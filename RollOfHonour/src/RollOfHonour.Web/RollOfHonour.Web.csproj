@@ -42,4 +42,10 @@
     <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
   </ItemGroup>
   
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\Error.cshtml" />
+    <UpToDateCheckInput Remove="Views\Shared\_Layout.cshtml" />
+    <UpToDateCheckInput Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
+  </ItemGroup>
+  
 </Project>
