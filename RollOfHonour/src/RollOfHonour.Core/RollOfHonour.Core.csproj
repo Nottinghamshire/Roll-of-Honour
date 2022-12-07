@@ -14,10 +14,16 @@
     <PackageReference Include="Ardalis.Specification" />
     <PackageReference Include="Autofac" />
     <PackageReference Include="MediatR" />
+    <PackageReference Include="NetTopologySuite" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RollOfHonour.SharedKernel\RollOfHonour.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MemorialAggregate\Handlers" />
+    <Folder Include="MemorialAggregate\Specifications" />
   </ItemGroup>
 
 </Project>

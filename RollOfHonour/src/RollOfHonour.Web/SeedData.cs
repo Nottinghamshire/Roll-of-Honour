@@ -2,75 +2,66 @@
 using RollOfHonour.Core.ProjectAggregate;
 using RollOfHonour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
+using RollOfHonour.Core.MemorialAggregate;
 
 namespace RollOfHonour.Web;
 
 public static class SeedData
 {
-  public static readonly Contributor Contributor1 = new ("Ardalis");
-  public static readonly Contributor Contributor2 = new ("Snowfrog");
-  public static readonly Project TestProject1 = new Project("Test Project", PriorityStatus.Backlog);
-  public static readonly ToDoItem ToDoItem1 = new ToDoItem
-  {
-    Title = "Get Sample Working",
-    Description = "Try to get the sample to build."
-  };
-  public static readonly ToDoItem ToDoItem2 = new ToDoItem
-  {
-    Title = "Review Solution",
-    Description = "Review the different projects in the solution and how they relate to one another."
-  };
-  public static readonly ToDoItem ToDoItem3 = new ToDoItem
-  {
-    Title = "Run and Review Tests",
-    Description = "Make sure all the tests run and review what they are doing."
-  };
+  public static readonly RecordedName RecordedName1 = new RecordedName("C Frank");
+  public static readonly RecordedName RecordedName2 = new RecordedName("Bob Test");
+  public static readonly RecordedName RecordedName3 = new RecordedName("B Test");
+  public static readonly Memorial TestMemorial1 = new Memorial("Test Memorial 1", new Point(91, 41));
+  public static readonly Memorial TestMemorial2 = new Memorial("Test Memorial 2", "Lorem Ipsum", new Point(81, 35));
+  public static readonly Person Person1 = new Person() { FirstNames = "Chris", LastName = "Frank" };
+  public static readonly Person Person2 = new Person() { FirstNames = "Bob", LastName = "Test" };
 
   public static void Initialize(IServiceProvider serviceProvider)
   {
-    using (var dbContext = new AppDbContext(
-        serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null))
+    using var dbContext = new AppDbContext(
+      serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null);
+    // Look for any TODO items.
+    if (dbContext.People.Any())
     {
-      // Look for any TODO items.
-      if (dbContext.ToDoItems.Any())
-      {
-        return;   // DB has been seeded
-      }
-
-      PopulateTestData(dbContext);
-
-
+      return; // DB has been seeded
     }
+
+    PopulateTestData(dbContext);
   }
+
   public static void PopulateTestData(AppDbContext dbContext)
   {
-    foreach (var item in dbContext.Projects)
+    foreach (var item in dbContext.Memorials)
     {
       dbContext.Remove(item);
     }
-    foreach (var item in dbContext.ToDoItems)
+
+    foreach (var item in dbContext.People)
     {
       dbContext.Remove(item);
     }
-    foreach (var item in dbContext.Contributors)
+
+    foreach (var item in dbContext.Names)
     {
       dbContext.Remove(item);
     }
+
     dbContext.SaveChanges();
 
-    dbContext.Contributors.Add(Contributor1);
-    dbContext.Contributors.Add(Contributor2);
+    dbContext.People.Add(Person1);
+    dbContext.People.Add(Person2);
 
     dbContext.SaveChanges();
 
-    ToDoItem1.AddContributor(Contributor1.Id);
-    ToDoItem2.AddContributor(Contributor2.Id);
-    ToDoItem3.AddContributor(Contributor1.Id);
+    RecordedName1.MatchToPerson(Person1.Id);
+    RecordedName2.MatchToPerson(Person2.Id);
+    RecordedName3.MatchToPerson(Person2.Id);
 
-    TestProject1.AddItem(ToDoItem1);
-    TestProject1.AddItem(ToDoItem2);
-    TestProject1.AddItem(ToDoItem3);
-    dbContext.Projects.Add(TestProject1);
+    TestMemorial1.RecordName(RecordedName1);
+    TestMemorial1.RecordName(RecordedName2);
+    TestMemorial2.RecordName(RecordedName3);
+    dbContext.Memorials.Add(TestMemorial1);
 
     dbContext.SaveChanges();
   }

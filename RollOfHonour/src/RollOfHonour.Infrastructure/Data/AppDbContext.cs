@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using RollOfHonour.Core.ContributorAggregate;
 using RollOfHonour.Core.ProjectAggregate;
 using RollOfHonour.SharedKernel;
 using RollOfHonour.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using RollOfHonour.Core.MemorialAggregate;
 
 namespace RollOfHonour.Infrastructure.Data;
 
@@ -18,9 +18,10 @@ public class AppDbContext : DbContext
     _dispatcher = dispatcher;
   }
 
-  public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
-  public DbSet<Project> Projects => Set<Project>();
-  public DbSet<Contributor> Contributors => Set<Contributor>(); 
+  public DbSet<Person> People => Set<Person>();
+  public DbSet<RecordedName> Names => Set<RecordedName>();
+  public DbSet<Memorial> Memorials => Set<Memorial>();
+  public DbSet<RecordedName> RecordedNames => Set<RecordedName>(); 
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {

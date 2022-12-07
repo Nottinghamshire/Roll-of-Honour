@@ -2,13 +2,13 @@
 
 namespace RollOfHonour.Core.ProjectAggregate
 {
-  internal class Person : EntityBase
+  public class Person : EntityBase
   {
     //public int Id { get; set; }
     public string? FirstNames { get; set; }
     public string? Initials { get; set; }
     public string LastName { get; set; } = string.Empty;
-    public string? Rank { get; set; }
+    public string? Rank { get; set; } //TODO: This needs cleaning up - so many similar entries. Autopicker/Prompt perhaps
     public string? ServiceNumber { get; set; }
 
     public DateTime? DateOfBirth { get; set; }
