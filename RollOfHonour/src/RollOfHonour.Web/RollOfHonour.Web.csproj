@@ -15,17 +15,11 @@
     <PackageReference Include="Ardalis.ListStartupServices" />
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="Ardalis.Result.AspNetCore" />
-    <PackageReference Include="FastEndpoints" />
-    <PackageReference Include="FastEndpoints.ApiExplorer" />
-    <PackageReference Include="FastEndpoints.Swagger.Swashbuckle" />
     <PackageReference Include="MediatR" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" PrivateAssets="All" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" />
-    <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Serilog.AspNetCore" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
   </ItemGroup>
   
   <ItemGroup>
@@ -40,6 +34,8 @@
     <_ContentIncludedByDefault Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
     <_ContentIncludedByDefault Remove="Views\_ViewImports.cshtml" />
     <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\ProjectDetails\Incomplete.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\ProjectDetails\Index.cshtml" />
   </ItemGroup>
   
   <ItemGroup>

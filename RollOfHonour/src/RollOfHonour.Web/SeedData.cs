@@ -1,6 +1,4 @@
-﻿using RollOfHonour.Core.ContributorAggregate;
-using RollOfHonour.Core.ProjectAggregate;
-using RollOfHonour.Infrastructure.Data;
+﻿using RollOfHonour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using RollOfHonour.Core.MemorialAggregate;
