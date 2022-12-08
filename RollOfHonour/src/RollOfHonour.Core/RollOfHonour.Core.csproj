@@ -1,29 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3" />
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" />
-    <PackageReference Include="Ardalis.Result" />
-    <PackageReference Include="Ardalis.SmartEnum" />
-    <PackageReference Include="Ardalis.Specification" />
-    <PackageReference Include="Autofac" />
-    <PackageReference Include="MediatR" />
     <PackageReference Include="NetTopologySuite" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\RollOfHonour.SharedKernel\RollOfHonour.SharedKernel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="MemorialAggregate\Handlers" />
-    <Folder Include="MemorialAggregate\Specifications" />
   </ItemGroup>
 
 </Project>
