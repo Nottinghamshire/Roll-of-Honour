@@ -15,6 +15,6 @@ public class RecordedNameSearchResult : SearchResult { }
  * e.g.
 Bob (searched for)
   Person   | Bob Mortimer -> West BridgfordCemetaryMemorial
-  Recorded | Bobba Fett - Rank
-  Memorial | Boberton Church Memorial - SomeLocation
+  Recorded | Bobba Fett (& Rank) - Memorial on
+  Memorial | Boberton Church Memorial - Location
 */
