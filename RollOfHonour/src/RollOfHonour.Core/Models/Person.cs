@@ -2,7 +2,7 @@
 
 public class Person
 {
-  //public int Id { get; set; }
+  public int Id { get; set; }
   public string FirstNames { get; set; } = string.Empty;
   public string Initials { get; set; } = string.Empty;
   public string LastName { get; set; } = string.Empty;
@@ -24,4 +24,23 @@ public class Person
   public string? ExtraInfo { get; set; }
 
   public int? MainPhotoId { get; set; }
+
+  public string Name
+  {
+    get
+    {
+      if (string.IsNullOrEmpty(FirstNames))
+      {
+        if (string.IsNullOrEmpty(Initials))
+        {
+          return $"{LastName}";
+        }
+        else
+        {
+          return $"{LastName}, {Initials}";
+        }
+      }
+      return $"{LastName}, {FirstNames}";
+    }
+  }
 }
