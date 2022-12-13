@@ -10,8 +10,8 @@ public class Memorial : IAggregateRoot
 
   public int Id { get; set; }
   public int? UKNIWMRef { get; set; }
-  public string? Name { get; set; } = string.Empty;
-  public string? Description { get; set; } = string.Empty;
+  public string Name { get; set; } = string.Empty;
+  public string Description { get; set; } = string.Empty;
 
   //public int Easting { get; set; }
   //public int Northing { get; set; }
