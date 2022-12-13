@@ -63,6 +63,7 @@ public partial class RollOfHonourContext : DbContext
     public virtual DbSet<WebpagesRole> WebpagesRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
