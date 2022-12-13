@@ -6,7 +6,7 @@ namespace RollOfHonour.Core.Models;
 
 public class Memorial : IAggregateRoot
 {
-  private List<RecordedName> _recordedNames = new List<RecordedName>();
+  private readonly List<RecordedName> _recordedNames = new();
 
   public int Id { get; set; }
   public int? UKNIWMRef { get; set; }
