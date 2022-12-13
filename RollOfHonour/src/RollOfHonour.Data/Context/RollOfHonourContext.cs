@@ -63,7 +63,6 @@ public partial class RollOfHonourContext : DbContext
     public virtual DbSet<WebpagesRole> WebpagesRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("data source=db22-0029\\DigitalTeamDev;Initial Catalog=RollOfHonour;Persist Security Info=True;Trusted_Connection=True;TrustServerCertificate=Yes;");
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
