@@ -1,9 +1,10 @@
 ﻿using Ardalis.GuardClauses;
 using NetTopologySuite.Geometries;
+using RollOfHonour.Core.Shared;
 
 namespace RollOfHonour.Core.Models;
 
-public class Memorial
+public class Memorial : IAggregateRoot
 {
     private List<RecordedName> _recordedNames = new List<RecordedName>();
 
