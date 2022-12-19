@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/RollOfHonour/src/RollOfHonour.Data/Models/DB/WebpagesRole.cs
+/RollOfHonour/.idea/.idea.RollOfHonour/.idea
