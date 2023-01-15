@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3.3.0
@@ -21,8 +21,7 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: '7.x'
-          include-prerelease: true
+          global-json-file: ./RollOfHonour/global.json
 
       - name: Build with dotnet
         run: dotnet build ./RollOfHonour/RollOfHonour.sln --configuration Release
