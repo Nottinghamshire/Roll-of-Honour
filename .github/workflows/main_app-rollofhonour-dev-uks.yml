@@ -18,11 +18,10 @@ jobs:
         with:
           ref: CI/CD-impl
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: '7.x'
-          include-prerelease: true
+          global-json-file: ./RollOfHonour/global.json
 
       - name: Build with dotnet
         run: dotnet build ./RollOfHonour/RollOfHonour.sln --configuration Release
@@ -30,8 +29,8 @@ jobs:
       - name: dotnet publish
         run: dotnet publish ./RollOfHonour/RollOfHonour.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+      - name: Upload Build Artifact for deployment
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
