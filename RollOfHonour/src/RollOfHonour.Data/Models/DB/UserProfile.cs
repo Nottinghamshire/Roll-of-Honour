@@ -23,7 +23,7 @@ public partial class UserProfile
 
     public virtual ICollection<PhotoModeration> PhotoModerations { get; } = new List<PhotoModeration>();
 
-    public virtual ICollection<WebpagesRole> Roles { get; } = new List<WebpagesRole>();
+    //public virtual ICollection<WebpagesRole> Roles { get; } = new List<WebpagesRole>();
 
     public virtual ICollection<WarMemorial> WarMemorials { get; } = new List<WarMemorial>();
 }
