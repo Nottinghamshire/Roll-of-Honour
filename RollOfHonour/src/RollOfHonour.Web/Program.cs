@@ -1,5 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using RollOfHonour.Core.Models;
+using RollOfHonour.Core.Shared;
+using RollOfHonour.Data.Context;
+using RollOfHonour.Data.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<RollOfHonourContext>(options =>
+  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 // Add services to the container.
 //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));

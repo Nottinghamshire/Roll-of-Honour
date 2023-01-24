@@ -1,0 +1,37 @@
+﻿@page
+@model RollOfHonour.Web.Pages.Person.Details
+
+@{
+
+}
+
+<div class="container w-75 d-flex justify-content-between">
+    <div class="card w-50">
+        <div class="card-body">
+            <h3 class="card-title">@Model.Person.Name</h3>
+            <div class="dateOfBirth">@Model.Person.DateOfBirth?.ToString("D")</div>
+            <div class="dateOfDeath">@Model.Person.DateOfDeath?.ToString("D")</div>
+            <div class="militaryInfo">
+                <div>
+                    <span class="fw-bold">Address: </span>@Model.Person.AddressAtEnlistment
+                </div>
+                <div>
+                    <span class="fw-bold">Rank: </span>@Model.Person.Rank
+                </div>
+                <div>
+                    <span class="fw-bold">Service Number: </span>@Model.Person.ServiceNumber
+                </div>
+                <div>
+                    <span class="fw-bold">Military History: </span>@Model.Person.MilitaryHistory
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="width: 45%;">
+        <img class="card-img-top" src="../images/portraitPlaceholder.jpg" alt="Card image cap">
+        <div class="card-body">
+            <p class="card-text">@Model.Person.FamilyHistory</p>
+            @* <a href="#" class="btn btn-primary">Go somewhere</a> *@
+        </div>
+    </div>
+</div>

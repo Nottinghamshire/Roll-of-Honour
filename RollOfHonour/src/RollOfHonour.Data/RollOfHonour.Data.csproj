@@ -23,4 +23,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RollOfHonour.Core\RollOfHonour.Core.csproj" />
+  </ItemGroup>
+
 </Project>
