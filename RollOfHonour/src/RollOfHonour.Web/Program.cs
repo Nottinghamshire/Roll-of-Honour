@@ -10,6 +10,7 @@ builder.Services.AddDbContext<RollOfHonourContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
 // Add services to the container.
 //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));

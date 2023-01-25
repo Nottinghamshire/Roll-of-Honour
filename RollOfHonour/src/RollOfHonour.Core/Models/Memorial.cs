@@ -35,6 +35,11 @@ public class Memorial : IAggregateRoot
     Description = description;
   }
 
+  public Memorial(string name)
+  {
+    Name = Guard.Against.NullOrEmpty(name, nameof(name));
+  }
+
   public void RecordName(RecordedName newName)
   {
     Guard.Against.Null(newName, nameof(newName));
