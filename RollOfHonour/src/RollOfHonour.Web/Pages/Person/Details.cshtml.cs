@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RollOfHonour.Core.Shared;
 
@@ -18,7 +17,7 @@ public class Details : PageModel
 
   public async Task<IActionResult> OnGet(int id)
   {
-    var person = await _personRepository.FindPersonById(id);
+    var person = await _personRepository.FindById(id);
 
     if (person == null)
     {

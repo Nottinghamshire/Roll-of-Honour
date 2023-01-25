@@ -14,7 +14,7 @@ public class PersonRepository : IPersonRepository
     _dbContext = dbContext;
   }
   
-  public async Task<Core.Models.Person?> FindPersonById(int id)
+  public async Task<Core.Models.Person?> FindById(int id)
   {
     try
     {

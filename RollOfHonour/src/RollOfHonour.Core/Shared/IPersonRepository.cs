@@ -4,5 +4,5 @@ namespace RollOfHonour.Core.Shared;
 
 public interface IPersonRepository
 {
-  Task<Person?> FindPersonById(int id);
+  Task<Person?> FindById(int id);
 }
