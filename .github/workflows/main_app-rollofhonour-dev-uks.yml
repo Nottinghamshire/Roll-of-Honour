@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3.3.0
         with:
-          ref: CI/CD-impl
+          ref: main 
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.0.3
@@ -47,6 +47,15 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           name: .net-app
+
+      - name: Azure App Service Settings
+        uses: Azure/appservice-settings@v1
+        with:
+          # Name of the Azure Web App
+          app-name: 'APP-RollOfHonour-DEV-UKS'
+          # app-settings-json:
+          connection-strings-json: '${{ secrets.CONNECTION_STRINGS }}' 
+          mask-inputs: true 
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
