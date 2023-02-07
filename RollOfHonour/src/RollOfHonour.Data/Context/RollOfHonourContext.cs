@@ -60,7 +60,7 @@ public partial class RollOfHonourContext : DbContext
 
     public virtual DbSet<WebpagesOauthMembership> WebpagesOauthMemberships { get; set; }
 
-    public virtual DbSet<WebpagesRole> WebpagesRoles { get; set; }
+    // public virtual DbSet<WebpagesRole> WebpagesRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer();
@@ -383,22 +383,22 @@ public partial class RollOfHonourContext : DbContext
 
             entity.ToTable("UserProfile");
 
-            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "WebpagesUsersInRole",
-                    r => r.HasOne<WebpagesRole>().WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("fk_RoleId"),
-                    l => l.HasOne<UserProfile>().WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("fk_UserId"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "RoleId").HasName("PK__webpages__AF2760AD571DF1D5");
-                        j.ToTable("webpages_UsersInRoles");
-                    });
+            // entity.HasMany(d => d.Roles).WithMany(p => p.Users)
+            //     .UsingEntity<Dictionary<string, object>>(
+            //         "WebpagesUsersInRole",
+            //         r => r.HasOne<WebpagesRole>().WithMany()
+            //             .HasForeignKey("RoleId")
+            //             .OnDelete(DeleteBehavior.ClientSetNull)
+            //             .HasConstraintName("fk_RoleId"),
+            //         l => l.HasOne<UserProfile>().WithMany()
+            //             .HasForeignKey("UserId")
+            //             .OnDelete(DeleteBehavior.ClientSetNull)
+            //             .HasConstraintName("fk_UserId"),
+            //         j =>
+            //         {
+            //             j.HasKey("UserId", "RoleId").HasName("PK__webpages__AF2760AD571DF1D5");
+            //             j.ToTable("webpages_UsersInRoles");
+            //         });
 
             entity.HasMany(d => d.WarMemorials).WithMany(p => p.UserProfileUsers)
                 .UsingEntity<Dictionary<string, object>>(
@@ -480,16 +480,16 @@ public partial class RollOfHonourContext : DbContext
             entity.Property(e => e.ProviderUserId).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<WebpagesRole>(entity =>
-        {
-            entity.HasKey(e => e.RoleId).HasName("PK__webpages__8AFACE1A5070F446");
-
-            entity.ToTable("webpages_Roles");
-
-            entity.HasIndex(e => e.RoleName, "UQ__webpages__8A2B6160534D60F1").IsUnique();
-
-            entity.Property(e => e.RoleName).HasMaxLength(256);
-        });
+        // modelBuilder.Entity<WebpagesRole>(entity =>
+        // {
+        //     entity.HasKey(e => e.RoleId).HasName("PK__webpages__8AFACE1A5070F446");
+        //
+        //     entity.ToTable("webpages_Roles");
+        //
+        //     entity.HasIndex(e => e.RoleName, "UQ__webpages__8A2B6160534D60F1").IsUnique();
+        //
+        //     entity.Property(e => e.RoleName).HasMaxLength(256);
+        // });
 
         OnModelCreatingPartial(modelBuilder);
     }

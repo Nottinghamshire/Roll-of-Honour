@@ -20,4 +20,9 @@
     <PackageReference Include="Microsoft.Identity.Web.UI" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RollOfHonour.Core\RollOfHonour.Core.csproj" />
+    <ProjectReference Include="..\RollOfHonour.Data\RollOfHonour.Data.csproj" />
+  </ItemGroup>
+
 </Project>

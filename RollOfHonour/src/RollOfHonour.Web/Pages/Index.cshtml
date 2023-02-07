@@ -2,9 +2,23 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+<div class="bg-image">
+</div>
+
+<div class="homeContent text-center min-vh-100 is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
+    <h1 class="display-4">Roll of Honour</h1>
+    <div class="columns is-flex">
+        <div class="column is-11">
+            <input type="text" class="input" placeholder="Search box" aria-label="Search box" aria-describedby="button-addon2">
+        </div>
+        <div class="is-1 column">
+            <button class="button is-white" type="button" id="button-addon2">Search</button>
+        </div>
+    </div>
 </div>

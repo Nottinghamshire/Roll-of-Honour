@@ -1,0 +1,26 @@
+﻿@page
+@model RollOfHonour.Web.Pages.Memorial.Details
+
+@{
+
+}
+
+<div class="columns">
+    <div class="card column is-two-fifths">
+        <div class="card-image">
+            <figure class="image is-4by3">
+                <img src="../images/portraitPlaceholder.jpg" alt="Placeholder image">
+            </figure>
+        </div>
+        <div class="card-content">
+            <div class="media">
+                <div class="media-content">
+                    <p class="title is-4">@Model.Memorial.Name</p>
+                </div>
+            </div>
+            <div class="content">
+                @Model.Memorial.Description
+            </div>
+        </div>
+    </div>
+</div>

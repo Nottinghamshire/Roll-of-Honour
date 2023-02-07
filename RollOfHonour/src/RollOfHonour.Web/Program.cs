@@ -1,23 +1,27 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
+using Microsoft.EntityFrameworkCore;
+using RollOfHonour.Core.Models;
+using RollOfHonour.Core.Shared;
+using RollOfHonour.Data.Context;
+using RollOfHonour.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+builder.Services.AddDbContext<RollOfHonourContext>(options =>
+  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAuthorization(options =>
-{
-    // By default, all incoming requests will be authorized according to the default policy.
-    options.FallbackPolicy = options.DefaultPolicy;
-});
-builder.Services.AddRazorPages()
-    .AddMicrosoftIdentityUI();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
+// Add services to the container.
+//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+
+//builder.Services.AddAuthorization(options =>
+//{
+    //// By default, all incoming requests will be authorized according to the default policy.
+    //options.FallbackPolicy = options.DefaultPolicy;
+//});
+builder.Services.AddRazorPages();
+    //.AddMicrosoftIdentityUI();
 
 var app = builder.Build();
 
@@ -34,7 +38,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
