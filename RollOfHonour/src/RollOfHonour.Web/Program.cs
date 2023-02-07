@@ -5,19 +5,19 @@ using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
 
 builder.Services.AddDbContext<RollOfHonourContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
-// Add services to the container.
+
 //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 //builder.Services.AddAuthorization(options =>
 //{
-    //// By default, all incoming requests will be authorized according to the default policy.
     //options.FallbackPolicy = options.DefaultPolicy;
 //});
 builder.Services.AddRazorPages();
@@ -25,7 +25,6 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
