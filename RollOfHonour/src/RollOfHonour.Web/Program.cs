@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using RollOfHonour.Core.Models;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
@@ -13,15 +15,15 @@ builder.Services.AddDbContext<RollOfHonourContext>(options =>
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
 
-//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C");
 
 //builder.Services.AddAuthorization(options =>
 //{
-    //options.FallbackPolicy = options.DefaultPolicy;
+//options.FallbackPolicy = options.DefaultPolicy;
 //});
-builder.Services.AddRazorPages();
-    //.AddMicrosoftIdentityUI();
+
+builder.Services.AddRazorPages()
+    .AddMicrosoftIdentityUI();
 
 var app = builder.Build();
 
@@ -37,7 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
