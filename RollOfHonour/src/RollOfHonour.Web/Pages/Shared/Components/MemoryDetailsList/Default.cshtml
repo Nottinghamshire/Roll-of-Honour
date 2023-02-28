@@ -1,0 +1,24 @@
+@model IEnumerable<RollOfHonour.Core.Models.Person>
+
+<ul class="memory-list">
+    @foreach (var person in Model)
+    {
+        <li>
+            <div class="memory-block">
+                <div class="memory-picture">
+                    <div class="picture-border">
+                        <div class="picture-embed" style="background-image: url(/images/sample-data/picture1.jpeg);"></div>
+                    </div>
+                </div>
+                <div class="memory-details">
+                    <span class="name">@person.Name</span>
+                    <!-- fix date formatting and work out what to do when there is no dates --!>
+                    <span class="lived">@person.DateOfBirth?.Date - @person.DateOfDeath?.Date</span>
+                    <a asp-page="/Person/Details"
+                        asp-route-id="@person.Id" title="Read about @person.Name" class="button secondary">
+                        <i class="fal fa-glasses"></i> Read about @person.Name</a>
+                </div>
+            </div>
+        </li>
+    }
+</ul>
