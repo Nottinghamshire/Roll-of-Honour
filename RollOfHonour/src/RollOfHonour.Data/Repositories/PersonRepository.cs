@@ -20,31 +20,6 @@ public class PersonRepository : IPersonRepository
     try
     {
       var dbPerson = await _dbContext.People.FirstAsync(p => p.Id == id);
-
-      // TODO: Work out mapping
-      var result = new Person()
-      {
-        Id = dbPerson.Id,
-        Comments = dbPerson.Comments,
-        Cwgc = dbPerson.Cwgc,
-        Deleted = dbPerson.Deleted,
-        Initials = dbPerson.Initials ?? string.Empty,
-        Rank = dbPerson.Rank ?? string.Empty,
-        EmploymentHobbies = dbPerson.EmploymentHobbies,
-        ExtraInfo = dbPerson.ExtraInfo,
-        FamilyHistory = dbPerson.FamilyHistory,
-        FirstNames = dbPerson.FirstNames ?? string.Empty,
-        LastName = dbPerson.LastName ?? string.Empty,
-        MilitaryHistory = dbPerson.MilitaryHistory,
-        ServiceNumber = dbPerson.ServiceNumber ?? string.Empty,
-        AddressAtEnlistment = dbPerson.AddressAtEnlistment,
-        AgeAtDeath = dbPerson.AgeAtDeath,
-        DateOfBirth = dbPerson.DateOfBirth,
-        DateOfDeath = dbPerson.DateOfDeath,
-        MainPhotoId = dbPerson.MainPhotoId,
-        PlaceOfBirth = dbPerson.PlaceOfBirth
-      };
-
       return dbPerson.ToDomainModel();
     }
     catch (InvalidOperationException)
