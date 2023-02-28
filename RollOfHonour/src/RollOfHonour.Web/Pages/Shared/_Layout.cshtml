@@ -1,61 +1,135 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - RollOfHonour.Web</title>
-    @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"> *@
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/lib/bulma/bulma.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/RollOfHonour.Web.styles.css" asp-append-version="true"/>
+    <title>Roll of Honour | Nottinghamshire County Council</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    <!-- App Stylesheets -->
+    <link href="/css/style.css?v=0003" rel="stylesheet">
+    <link href="/css/overrides.css?v=0003" rel="stylesheet">
+    <link href="/css/simpleLightbox.css" rel="stylesheet"/>
+
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <!-- Fontawesome Icon Kit -->
+    <script src="https://kit.fontawesome.com/890f72bac6.js" crossorigin="anonymous"></script>
+
+    <!-- Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 </head>
-<body>
-<header>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" asp-area="" asp-page="/Index">
-                RollOfHonour.Web
-            </a>
-        </div>
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item">
-                    Home
-                </a>
-
-                <a class="navbar-item">
-                    People
-                </a>               
-                <a class="navbar-item">
-                    Memorials
+<body class="app-body">
+<header class="app-header">
+    <div class="container is-fluid">
+        <div class="columns is-vcentered is-multiline">
+            <div class="column is-12-tablet is-12-desktop is-2-widescreen">
+                <a href="/" title="Go back to the homepage">
+                    <img class="header-logo" srcset="/images/logo-roh.png 1x, /images/logo-roh@2x.png 2x" src="/images/logo-roh.jpg" alt="Nottinghamshire Roll of Honour Logo"/>
                 </a>
             </div>
+            <div class="column is-12-tablet is-12-desktop is-8-widescreen">
+                <div class="mobile-menu">
+                    <span class="menu-state menu-is-closed">
+                        <i class="fal fa-bars"></i> Browse this website
+                    </span>
 
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-light">
-                            Log in
-                        </a>
-                    </div>
+                    <span class="menu-state menu-is-open true">
+                        <i class="fal fa-times-circle"></i> Close this menu
+                    </span>
                 </div>
+                <nav aria-label="primary-navigation" class="nav-primary">
+                    <ul class="primary-navigation">
+                        <li>
+                            <a href="" title="Go back to the homepage" class="current">Home</a>
+                        </li>
+                        <li>
+                            <a href="" title="About">About</a>
+                        </li>
+                        <li>
+                            <a href="" title="People">People</a>
+                        </li>
+                        <li>
+                            <a href="" title="Memorials">Memorials</a>
+                        </li>
+                        <li>
+                            <a href="" title="Timeline">Timeline</a>
+                        </li>
+                        <li>
+                            <a href="" title="Search">Search</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="column is-hidden-touch is-hidden-desktop-only is-2-widescreen">
+                <a href="/" title="Visit the Nottinghamshire County Council website">
+                    <img class="header-logo" srcset="/images/logo-ncc.png 1x, /images/logo-ncc@2x.png 2x" src="/images/logo-ncc.jpg" alt="Nottinghamshire County Council Logo"/>
+                </a>
             </div>
         </div>
-    </nav>
+    </div>
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+<main>
+    @RenderBody()
+</main>
 <script src="~/js/site.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", required: false)
-</body>
 
-<footer class="footer">
-    <div class="content has-text-centered">
-        &copy; 2022 - RollOfHonour.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+<footer class="app-footer">
+    <div class="container is-fluid">
+        <div class="columns">
+            <div class="column">
+                <span class="footer-copyright">&copy; Nottinghamshire County Council 2023</span>
+                <ul class="footer-links">
+                    <li>
+                        <a href="/" title="Go back to the homepage">Home</a>
+                    </li>
+                    <li>
+                        <a href="/about.html" title="About">About</a>
+                    </li>
+                    <li>
+                        <a href="/people.html" title="People">People</a>
+                    </li>
+                    <li>
+                        <a href="/memorials.html" title="Memorials">Memorials</a>
+                    </li>
+                    <li>
+                        <a href="/timeline.html" title="Timeline">Timeline</a>
+                    </li>
+                    <li>
+                        <a href="/search.html" title="Search">Search</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column alignright">
+                <ul class="footer-links">
+                    <li>
+                        <a href="#" title="Privacy Policy">Privacy Policy</a>
+                    </li>
+                    <li>
+                        <a href="#" title="Terms and Conditions">Terms and Conditions</a>
+                    </li>
+                    <li>
+                        <span class="footer-login">
+                            <a href="#" title="Login"><i class="fa-light fa-right-to-bracket"></i> Login</a>
+                        </span>
+                    </li>
+                </ul>
+
+                <span class="footer-support">Proudly supported by</span>
+                <img class="footer-logo" src="/images/footer-nottinghamshire-county-council-logo.svg" alt="Nottinghamshire County Council Logo"/>
+                <img class="footer-logo" src="/images/footer-nottingham-city-council-logo.png" alt="Nottinghamshire County Council Logo"/>
+            </div>
+        </div>
     </div>
-</footer>   
+</footer>
+</body>
 </html>
