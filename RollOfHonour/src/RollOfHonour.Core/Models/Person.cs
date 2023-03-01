@@ -10,8 +10,41 @@ public class Person
   public string ServiceNumber { get; set; } = string.Empty;
 
   public DateTime? DateOfBirth { get; set; }
+  public string DateOfBirthString => DateOfBirth.HasValue ? DateOfBirth.Value.ToString("dd MMM yyyy") : "Unknown";
   public DateTime? DateOfDeath { get; set; }
+  public string DateOfDeathString => DateOfDeath.HasValue ? DateOfDeath.Value.ToString("dd MMM yyyy") : "Unknown";
   public int? AgeAtDeath { get; set; }
+  public string AgeAtDeathString
+  {
+    get
+    {
+      if (AgeAtDeath.HasValue)
+      {
+        return $"{AgeAtDeath.Value.ToString()} Years Old";
+      }
+
+      if (DateOfBirth.HasValue && DateOfDeath.HasValue)
+      {
+        return $"{AgeCalculator(DateOfBirth.Value, DateOfDeath.Value)} Years Old";
+      }
+      return "Age Unknown";
+    }
+  }
+
+  public string LivedFromUntilString
+  {
+    get
+    {
+      if (DateOfBirth.HasValue && DateOfDeath.HasValue)
+      {
+        throw new NotImplementedException();
+        //Lived 25 Jan 1892 until 24 Mar 1918
+      }
+
+      return string.Empty;
+    }
+  }
+  
   public string? Comments { get; set; }
   public bool Deleted { get; set; }
 
@@ -25,22 +58,18 @@ public class Person
 
   public int? MainPhotoId { get; set; }
 
-  public string Name
+  public string Name => string.IsNullOrEmpty(FirstNames)
+    ? string.IsNullOrEmpty(Initials) ? $"{LastName}" : $"{Initials} {LastName}"
+    : $"{FirstNames} {LastName}";
+
+  private int AgeCalculator(DateTime dateOfBirth, DateTime dateOfDeath)
   {
-    get
-    {
-      if (string.IsNullOrEmpty(FirstNames))
-      {
-        if (string.IsNullOrEmpty(Initials))
+        int age = dateOfDeath.Year - dateOfBirth.Year;
+        if (dateOfBirth > dateOfDeath.AddYears(-age))
         {
-          return $"{LastName}";
+          age--;
         }
-        else
-        {
-          return $"{LastName}, {Initials}";
-        }
-      }
-      return $"{LastName}, {FirstNames}";
-    }
+
+        return age;
   }
 }

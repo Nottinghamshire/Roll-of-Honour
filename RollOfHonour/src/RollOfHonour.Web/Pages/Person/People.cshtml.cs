@@ -4,27 +4,26 @@ using RollOfHonour.Core.Shared;
 
 namespace RollOfHonour.Web.Pages.Person;
 
-public class Details : PageModel
+public class PeopleModel : PageModel
 {
-  public Core.Models.Person? Person { get; set; }
-
+  public List<Core.Models.Person>? People { get; set; }
   private IPersonRepository _personRepository { get; set; } = null!;
 
-  public Details(IPersonRepository personRepository)
+  public PeopleModel(IPersonRepository personRepository)
   {
     _personRepository = personRepository;
   }
 
-  public async Task<IActionResult> OnGet(int id)
+  public async Task<IActionResult> OnGet()
   {
-    var person = await _personRepository.GetById(id);
-
-    if (person == null)
+    var people = await _personRepository.GetAll();
+    
+    if (!people.Any())
     {
       return NotFound();
     }
 
-    Person = person;
+    People = people;
     return Page();
   }
 }
