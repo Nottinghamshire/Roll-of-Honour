@@ -34,13 +34,23 @@ public class Person
   public string LivedFromUntilString
   {
     get
-    {
+    {        //Lived 25 Jan 1892 until 24 Mar 1918
       if (DateOfBirth.HasValue && DateOfDeath.HasValue)
       {
-        throw new NotImplementedException();
-        //Lived 25 Jan 1892 until 24 Mar 1918
+        return $"Lived {DateOfBirthString} until {DateOfDeathString}";
+        
       }
 
+      if (DateOfBirth.HasValue)
+      {
+        return $"Born {DateOfBirthString}";
+      }
+      
+      if (DateOfDeath.HasValue)
+      {
+        return $"Died {AgeAtDeathString}";
+      }
+      
       return string.Empty;
     }
   }
