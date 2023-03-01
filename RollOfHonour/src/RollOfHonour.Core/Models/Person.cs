@@ -48,7 +48,7 @@ public class Person
       
       if (DateOfDeath.HasValue)
       {
-        return $"Died {AgeAtDeathString}";
+        return $"Died {DateOfDeathString}";
       }
       
       return string.Empty;
