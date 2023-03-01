@@ -132,5 +132,14 @@
         </div>
     </div>
 </footer>
+<script>
+	AOS.init();
+	jQuery(document).ready(function(){
+		jQuery(".mobile-menu").click(function() {
+			jQuery(".nav-primary").toggleClass("active");
+			jQuery(".menu-state").toggleClass("true");
+		});
+	});
+</script>
 </body>
 </html>

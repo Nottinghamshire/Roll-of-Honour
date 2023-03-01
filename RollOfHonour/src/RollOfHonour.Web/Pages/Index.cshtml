@@ -1,4 +1,5 @@
 ﻿@page
+@using Shared.ViewComponents;
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -10,17 +11,25 @@
             <div class="column is-full-tablet is-7-desktop is-8-fullhd">
                 <div class="text-block" data-aos="fade-up">
                     <h1><span class="subtitle">Nottinghamshire </span>Roll of Honour</h1>
-                    <p>The Nottinghamshire Great War Roll of Honour is a permanent tribute to local men and women who died during the First and second World War. Until now, no list of Nottinghamshire’s Great War dead has been compiled and many communities did not keep written records of 1914-18 losses. This project pays homage to the county’s fallen and creates a unique, centralised archive for researchers, historians and the general public.</p>
+                    <p>The Nottinghamshire Great War Roll of Honour is a permanent tribute to local men and women who
+                        died during the First and second World War. Until now, no list of Nottinghamshire’s Great War
+                        dead has been compiled and many communities did not keep written records of 1914-18 losses. This
+                        project pays homage to the county’s fallen and creates a unique, centralised archive for
+                        researchers, historians and the general public.</p>
                 </div>
 
                 <div class="form-block with-margin-bottom with-margin-top" data-aos="fade-up">
                     <form action="#search-controller" method="post" id="search-all">
                         <div class="form-row">
-                            <label for="searchquery" id="Query-ariaLabel">Begin your search by entering a name below:</label>
-                            <input id="searchquery" name="Query" class="input-text" type="text" aria-labelledby="Query-ariaLabel" title="Enter your search query here..." placeholder="e.g. Ken Ashford"/>
+                            <label for="searchquery" id="Query-ariaLabel">Begin your search by entering a name
+                                below:</label>
+                            <input id="searchquery" name="Query" class="input-text" type="text"
+                                aria-labelledby="Query-ariaLabel" title="Enter your search query here..."
+                                placeholder="e.g. Ken Ashford" />
                         </div>
                         <div class="form-row">
-                            <button type="submit" class="submit-button" form="search-all"><i class="fal fa-file-search"></i> Search our records</button>
+                            <button type="submit" class="submit-button" form="search-all"><i
+                                    class="fal fa-file-search"></i> Search our records</button>
                         </div>
                     </form>
 
@@ -31,68 +40,9 @@
                     <div class="text-block">
                         <h3 class="aligncenter">Today we remember...</h3>
                     </div>
-
-                    <ul class="memory-list">
-                        <li>
-                            <div class="memory-block">
-                                <div class="memory-picture">
-                                    <div class="picture-border">
-                                        <div class="picture-embed" style="background-image: url(/images/sample-data/picture1.jpeg);"></div>
-                                    </div>
-                                </div>
-                                <div class="memory-details">
-                                    <span class="name">George William Slack</span>
-                                    <span class="lived">11 October 1883 - 28 June 1918</span>
-                                    <a href="/person.html" title="Read about #NAME OF RECORD" class="button secondary"><i class="fal fa-glasses"></i> Read about George William Slack</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="memory-block">
-                                <div class="memory-picture">
-                                    <div class="picture-border">
-                                        <div class="picture-embed" style="background-image: url(/images/sample-data/picture3.jpeg);"></div>
-                                    </div>
-                                </div>
-                                <div class="memory-details">
-                                    <span class="name">Peter John Abbott</span>
-                                    <span class="lived">19 April 1863 - 15 February 1918</span>
-                                    <a href="/person.html" title="Read about #NAME OF RECORD" class="button secondary"><i class="fal fa-glasses"></i> Read about Peter John Abbott</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="memory-block">
-                                <div class="memory-picture">
-                                    <div class="picture-border">
-                                        <div class="picture-embed" style="background-image: url(/images/sample-data/picture2.jpeg);"></div>
-                                    </div>
-                                </div>
-                                <div class="memory-details">
-                                    <span class="name">Abraham Abbott</span>
-                                    <span class="lived">11 November 1886 - 22 August 1913</span>
-                                    <a href="/person.html" title="Read about #NAME OF RECORD" class="button secondary"><i class="fal fa-glasses"></i> Read about Abraham Abbott</a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="memory-block">
-                                <div class="memory-picture">
-                                    <div class="picture-border">
-                                        <div class="picture-embed" style="background-image: url(/images/no-picture.jpg);"></div>
-                                    </div>
-                                </div>
-                                <div class="memory-details">
-                                    <span class="name">Graham August Clarke</span>
-                                    <span class="lived">11 September 1881 - 25 December 1917</span>
-                                    <a href="/person.html" title="Read about #NAME OF RECORD" class="button secondary"><i class="fal fa-glasses"></i> Read about Graham August Clarke</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <a href="/search.html" title="Look at all our records" class="button primary"><i class="fal fa-folder-open"></i> Look at all our records</a>
+                    @await Component.InvokeAsync(nameof(MemoryDetailsList))
+                    <a href="/search.html" title="Look at all our records" class="button primary"><i
+                            class="fal fa-folder-open"></i> Look at all our records</a>
                 </aside>
             </div>
         </div>
@@ -109,7 +59,8 @@
                 <a href="/people.html" title="Look at our records by People" class="card with-background bg-people">
                     <div class="label">
                         <span class="title">
-                            People
+                            Peoplear
+
                         </span>
                         <span class="data">
                             4000 Records Available
@@ -118,7 +69,8 @@
                 </a>
             </div>
             <div class="column">
-                <a href="/memorials.html" title="Look at our records by war memorial" class="card with-background bg-memorials">
+                <a href="/memorials.html" title="Look at our records by war memorial"
+                    class="card with-background bg-memorials">
                     <div class="label">
                         <span class="title">
                             War Memorials
@@ -130,7 +82,8 @@
                 </a>
             </div>
             <div class="column">
-                <a href="/timeline.html" title="Look at our records by using a timeline" class="card with-background bg-timeline">
+                <a href="/timeline.html" title="Look at our records by using a timeline"
+                    class="card with-background bg-timeline">
                     <div class="label">
                         <span class="title">
                             Timeline
