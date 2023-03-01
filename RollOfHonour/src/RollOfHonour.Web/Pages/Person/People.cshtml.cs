@@ -23,7 +23,7 @@ public class PeopleModel : PageModel
       return NotFound();
     }
 
-    People = people;
+    People = people.ToList();
     return Page();
   }
 }

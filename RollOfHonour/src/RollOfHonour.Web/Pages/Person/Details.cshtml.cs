@@ -6,7 +6,7 @@ namespace RollOfHonour.Web.Pages.Person;
 
 public class Details : PageModel
 {
-  public Core.Models.Person? Person { get; set; }
+  public Core.Models.Person Person { get; set; }
 
   private IPersonRepository _personRepository { get; set; } = null!;
 

@@ -2,7 +2,6 @@
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
-using System.Linq;
 
 namespace RollOfHonour.Data.Repositories;
 
@@ -45,50 +44,6 @@ public class PersonRepository : IPersonRepository
         PlaceOfBirth = dbPerson.PlaceOfBirth
       };
 
-      return result;
-    }
-    catch (InvalidOperationException ex)
-    {
-      return null;
-    }
-  }
-
-  public async Task<List<Person>> GetAll()
-  {
-    try
-    {
-      var people = await _dbContext.People.OrderByDescending(x => x.Id).Take(25).ToListAsync();
-
-      return people.Select(person => new Person
-        {
-          Id = person.Id,
-          Comments = person.Comments,
-          Cwgc = person.Cwgc,
-          Deleted = person.Deleted,
-          Initials = person.Initials ?? string.Empty,
-          Rank = person.Rank ?? string.Empty,
-          EmploymentHobbies = person.EmploymentHobbies,
-          ExtraInfo = person.ExtraInfo,
-          FamilyHistory = person.FamilyHistory,
-          FirstNames = person.FirstNames ?? string.Empty,
-          LastName = person.LastName ?? string.Empty,
-          MilitaryHistory = person.MilitaryHistory,
-          ServiceNumber = person.ServiceNumber ?? string.Empty,
-          AddressAtEnlistment = person.AddressAtEnlistment,
-          AgeAtDeath = person.AgeAtDeath,
-          DateOfBirth = person.DateOfBirth,
-          DateOfDeath = person.DateOfDeath,
-          MainPhotoId = person.MainPhotoId,
-          PlaceOfBirth = person.PlaceOfBirth
-        })
-        .ToList();
-    }
-    catch (Exception e)
-    {
-      //Console.WriteLine(e);
-      //throw;
-      return null;
-      var dbPerson = await _dbContext.People.FirstAsync(p => p.Id == id);
       return dbPerson.ToDomainModel();
     }
     catch (InvalidOperationException)
@@ -97,12 +52,26 @@ public class PersonRepository : IPersonRepository
     }
   }
 
-  public async Task<IEnumerable<Core.Models.Person>> DiedOnThisDay(DateTime date)
+  public async Task<IEnumerable<Person>> GetAll()
+  {
+    try
+    {
+      var people = await _dbContext.People.OrderByDescending(x => x.Id).Take(25).ToListAsync();
+
+      return people.Select(p => p.ToDomainModel());
+    }
+    catch (Exception e)
+    {
+      return null;
+    }
+  }
+
+  public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
   {
     var countOfPeople = _dbContext.People.Count();
     var random = new Random((int)date.Ticks);
 
-    var dbPeople = new List<Data.Models.DB.Person>();
+    var dbPeople = new List<Models.DB.Person>();
 
     for (var i = 0; i <= 2; i++)
     {
@@ -117,7 +86,7 @@ public class PersonRepository : IPersonRepository
         dbPeople.Add(person);
       }
     }
-    IEnumerable<Core.Models.Person> people = dbPeople.Select(p => p.ToDomainModel());
+    IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel());
     return people;
   }
 }
