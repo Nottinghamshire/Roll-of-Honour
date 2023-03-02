@@ -4,62 +4,265 @@
 @{
 
 }
+<section class="panel with-background bg-app">
+<div class="container is-fluid">
+<div class="breadcrumb-block with-margin-bottom">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li>
+                <a href="/" class="parent">
+                    Home
+                    <span class="spacer" aria-hidden="true">
+                        <i class="fa-light fa-chevron-right"></i>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/people.html" class="parent">
+                    Search by People
+                    <span class="spacer" aria-hidden="true">
+                        <i class="fa-light fa-chevron-right"></i>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/person.html" aria-current="location" class="current">
+                    About @Model.Person.Name
+                </a>
+            </li>
+        </ol>
+    </nav>
+</div>
 
-<div class="columns">
-    <div class="card column is-two-fifths">
-        <div class="card-image">
-            <figure class="image is-4by3">
-                <img src="../images/portraitPlaceholder.jpg" alt="Placeholder image">
-            </figure>
+<div class="columns is-multiline">
+<div class="column is-full-tablet is-8-desktop is-8-fullhd">
+    <div class="person-block">
+        <span class="rank">@Model.Person.Rank</span>
+        <h1 class="name">@Model.Person.Name</h1>
+
+        <div class="service-number">
+            <span class="label"><i class="fa-light fa-hashtag fa-fw"></i> Service Number</span>
+            <span class="data">@Model.Person.ServiceNumber</span>
         </div>
-        <div class="card-content">
-            <div class="media">
-                <div class="media-content">
-                    <p class="title is-4">@Model.Person.Name</p>
-                </div>
-            </div>
-            <div class="content">
-                @Model.Person.FamilyHistory
-            </div>
+
+        <div class="military-unit">
+            <span class="label"><i class="fa-light fa-flag fa-fw"></i> Military Unit</span>
+            <span class="data">11th Bn York and Lancaster Regiment</span>
+        </div>
+
+        <div class="date-of-birth">
+            <span class="label"><i class="fa-light fa-calendar fa-fw"></i> Date of birth</span>
+            <span class="data">@Model.Person.DateOfBirthString</span>
+        </div>
+
+        <div class="date-of-death">
+            <span class="label"><i class="fa-light fa-tombstone fa-fw"></i> Date of Death</span>
+            <span class="data">@Model.Person.DateOfDeathString (@Model.Person.AgeAtDeathString)</span>
+        </div>
+
+        <div class="place-of-birth">
+            <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of Birth</span>
+            <span class="data">@Model.Person.PlaceOfBirth</span>
+        </div>
+
+        <div class="employment">
+            <span class="label"><i class="fa-light fa-timeline fa-fw"></i> Employment, Education or Hobbies</span>
+            <span class="data">@Model.Person.EmploymentHobbies</span>
         </div>
     </div>
-    <div class="column is-one-fifth"></div>
-    <div class="card column is-two-fifths">
-        <header class="card-header">
-            <p class="card-header-title">
-                Military History
-            </p>
-        </header>
-        <div class="card-content">
-            <div class="content">
-                @Model.Person.MilitaryHistory
+
+    <div class="person-details-block">
+        <div class="tabs-block">
+            <div class="tabList-container">
+                <ul role="tablist">
+                    <li id="tab-01" role="tab" tabindex="0" aria-selected="true" aria-controls="tabpanel-01">
+                        <i class="fa-light fa-family"></i> Family History
+                    </li>
+                    <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02">
+                        <i class="fa-light fa-person-military-rifle"></i> Military History
+                    </li>
+                    <li id="tab-03" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-03">
+                        <i class="fa-light fa-circle-info"></i> Extra Information
+                    </li>
+                    <li id="tab-04" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-04">
+                        <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
+                    </li>
+                </ul>
             </div>
+            <div id="tabpanel-01" role="tabpanel">
+
+                <div class="tab-title"><i class="fa-light fa-family"></i> Family History</div>
+
+                <div class="text-block">
+                    <p>
+                        @Model.Person.FamilyHistory
+                    </p>
+                </div>
+                @* <div class="text-block">   *@
+                @*  	 *@
+                @* 			<p>George Fred Gelsthorpe was born in 1897 at Hucknall, he was the son of Mary Ann Clay, and stepson of Samuel Clay, of 65 Bentinck Street, Hucknall.</p> *@
+                @* 			 *@
+                @* 			<p>He was the brother of Mrs L Perkins of 68 Bentinck Road Hucknall Torkard Nottinghamshire.</p> *@
+                @* 			 *@
+                @* 			<p>In the 1911 census the family are living at 65 Bentinck Street, Hucknall and are shown as Samuel Clay 48 yrs a coal miner hewer, he is living with his wife Mary Ann Clay 47 yrs and his stepchildren, Lilly Gelsthorpe 17 yrs and George F Gelsthorpe 14 yrs.</p> *@
+                @* </div> *@
+
+            </div>
+
+            <div id="tabpanel-02" role="tabpanel" class="hide">
+
+                <div class="tab-title"><i class="fa-light fa-person-military-rifle"></i> Military History</div>
+
+                <div class="text-block">
+                    <p>
+                        @Model.Person.MilitaryHistory
+                    </p>
+                </div>
+
+                @*                   <div class="text-block"> *@
+                @* <p>Private George Fred Gelsthorpe, enlisted at Hucknall on 2nd August 1915 he served with the 2nd Battalion Gordon Highlanders, he was killed in action on 1st July 1916 the first day of the Battle of Somme. He is buried in Gordon Cemetery, Mametz.</p> *@
+                @* </div> *@
+
+            </div>
+
+            <div id="tabpanel-03" role="tabpanel" class="hide">
+
+                <div class="tab-title"><i class="fa-light fa-circle-info"></i> Extra Information</div>
+                <div class="text-block">
+                    <p>
+                        @Model.Person.ExtraInfo
+                    </p>
+                </div>
+
+                @*                   <div class="text-block"> *@
+                @* <p>Article published on 12th February 1916 in the Beeston Gazette &amp; Echo :-</p> *@
+                @* 	 *@
+                @* <p>“The fourth portrait is of George F. Gelsthorpe, the son of Mrs. Clay and step-son of Mr. Clay, of Bentinck street, Hucknall. He enlisted in the Gordon Highlanders on August 2nd, and in November he was facing the foe in France. He reports himself in good health, and thanks the townspeople for their most acceptable gift. Gelsthorpe, who is 19 years of age, does not forward any detail of the engagements in which he has been fighting.”</p> *@
+                @* 	 *@
+                @* <p>Above article is courtesy of Jim Grundy and his facebook pages Small Town Great War Hucknall 1914-1918</p> *@
+                @* </div> *@
+
+            </div>
+
+            <div id="tabpanel-04" role="tabpanel" class="hide">
+
+                <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div>
+
+
+                <div class="gallery-block">
+                    <div class="columns is-multiline">
+                        <div class="column is-4-desktop">
+                            <a href="/images/gallery/example2.jpeg" title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
+                                <div class="picture-block short styled-alt">
+                                    <div class="picture-border">
+                                        <div class="picture-embed" style="
+												background-image: url(/images/gallery/example2.jpeg);
+											  "></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="column is-4-desktop">
+                            <a href="/images/gallery/example1.jpeg" title="Photo of Reginald Dudley Bawdwen Anderson ">
+                                <div class="picture-block short styled">
+                                    <div class="picture-border">
+                                        <div class="picture-embed" style="
+												background-image: url(/images/gallery/example1.jpeg);
+											  "></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="column is-4-desktop">
+                            <a href="/images/gallery/example3.jpeg" title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings">
+                                <div class="picture-block short styled">
+                                    <div class="picture-border">
+                                        <div class="picture-embed" style="
+												background-image: url(/images/gallery/example3.jpeg);
+											  ">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-        <header class="card-header">
-            <p class="card-header-title">
-                Personal Information
-            </p>
-        </header>
-        <div class="card-content">
-            <div class="content">
-                @Model.Person.AddressAtEnlistment
-            </div>
-            <div class="content">
-                @Model.Person.EmploymentHobbies
-            </div>
-            <div class="content">
-                @Model.Person.DateOfBirth?.ToString("D")
-            </div>
-            <div class="content">
-                @Model.Person.DateOfDeath?.ToString("D")
-            </div>
-            <div class="content">
-                @Model.Person.AgeAtDeath
-            </div>
-        </div>
-        <footer class="card-footer">
-            <a href="https://www.cwgc.org/find-records/find-war-dead/casualty-details/@Model.Person.Cwgc" target="_blank" class="card-footer-item">CWGC</a>
-            <a href="#" class="card-footer-item">Delete</a>
-        </footer>
     </div>
 </div>
+<div class="column is-full-tablet is-4-desktop is-4-fullhd">
+    <aside class="sidebar">
+        <div class="picture-block profile-picture">
+            <div class="picture-border">
+                <div class="picture-embed" style="
+                        background-image: url(/images/sample-data/picture3.jpeg);
+                      "></div>
+            </div>
+        </div>
+
+        <div class="plaque-block with-margin-bottom with-margin-top">
+            <span class="subtitle">Remembering</span>
+            <span class="name">@Model.Person.Name</span>
+
+            <span class="lived">@Model.Person.LivedFromUntilString</span>
+        </div>
+
+        <div class="decorations-block">
+            <h3>Decorations</h3>
+
+            <ul>
+                <li>
+                    <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">Military Cross</span>
+                </li>
+                <li>
+                    <img src="/images/decorations/d2.png" title="Military Medal"> <span class="title">Military Medal</span>
+                </li>
+                <li>
+                    <img src="/images/decorations/d3.png" title="Queen's Commendation for Brave Conduct"> <span class="title">Queen's Commendation for Brave Conduct</span>
+                </li>
+                <li>
+                    <img src="/images/decorations/d4.png" title="Distinguished Conduct Medal"><span class="title"> Distinguished Conduct Medal</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="remembered-on-block with-margin-top">
+            <h3>Remembered on...</h3>
+
+            <ul>
+                <li>
+                    <div class="bg-icon">
+                        <i class="fa-light fa-monument"></i>
+                    </div>
+                    <a href="/memorial.html" title="Learn about #MEMORIAL NAME">Hucknall - St Mary Magdalene War Memorial</a>
+                </li>
+
+                <li>
+                    <div class="bg-icon">
+                        <i class="fa-light fa-monument"></i>
+                    </div>
+                    <a href="/memorial.html" title="Learn about #MEMORIAL NAME">Hucknall - Titchfield Park War Memorial</a>
+                </li>
+            </ul>
+
+            <div class="cwgc-link">
+                <img src="/images/logo-cwgc.png" title="Commonwealth War Graves Commission">
+                <a href="https://www.cwgc.org/find-records/find-war-dead/casualty-details/536199/george-f-gelsthorpe/" target="_blank">
+                    Grave Number @Model.Person.Cwgc <i class="fa-light fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        </div>
+
+
+    </aside>
+</div>
+</div>
+</div>
+</section>

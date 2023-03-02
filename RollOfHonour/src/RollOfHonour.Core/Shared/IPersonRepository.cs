@@ -4,5 +4,7 @@ namespace RollOfHonour.Core.Shared;
 
 public interface IPersonRepository
 {
-  Task<Person?> FindById(int id);
+  Task<Person?> GetById(int id);
+  Task<IEnumerable<Person>> GetAll();
+  Task<IEnumerable<Person>> DiedOnThisDay(DateTime date);
 }

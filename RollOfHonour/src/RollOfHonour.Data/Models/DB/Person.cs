@@ -5,6 +5,34 @@ namespace RollOfHonour.Data.Models.DB;
 
 public partial class Person
 {
+    public Core.Models.Person ToDomainModel()
+    {
+        var person = new Core.Models.Person() 
+        {
+            Id = this.Id,
+            Comments = this.Comments,
+            Cwgc = this.Cwgc,
+            Deleted = this.Deleted,
+            Initials = this.Initials ?? string.Empty,
+            Rank = this.Rank ?? string.Empty,
+            EmploymentHobbies = this.EmploymentHobbies,
+            ExtraInfo = this.ExtraInfo,
+            FamilyHistory = this.FamilyHistory,
+            FirstNames = this.FirstNames ?? string.Empty,
+            LastName = this.LastName ?? string.Empty,
+            MilitaryHistory = this.MilitaryHistory,
+            ServiceNumber = this.ServiceNumber ?? string.Empty,
+            AddressAtEnlistment = this.AddressAtEnlistment,
+            AgeAtDeath = this.AgeAtDeath,
+            DateOfBirth = this.DateOfBirth,
+            DateOfDeath = this.DateOfDeath,
+            MainPhotoId = this.MainPhotoId,
+            PlaceOfBirth = this.PlaceOfBirth
+        };
+
+        return person;
+    }
+
     public int Id { get; set; }
 
     public string? FirstNames { get; set; }
