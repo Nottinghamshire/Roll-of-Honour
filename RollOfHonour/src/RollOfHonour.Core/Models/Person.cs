@@ -9,6 +9,27 @@ public class Person
   public string Rank { get; set; } = string.Empty;//TODO: This needs cleaning up - so many similar entries. Autopicker/Prompt perhaps
   public string ServiceNumber { get; set; } = string.Empty;
 
+  public string Unit  { get; set; }
+  public string Regiment  { get; set; }
+
+  public string UnitRegimentString
+  {
+    get
+    {
+      if (!string.IsNullOrEmpty(Unit) && !string.IsNullOrEmpty(Regiment))
+      {
+        return $"{Unit} {Regiment}";
+      }
+
+      if (!string.IsNullOrEmpty(Unit))
+      {
+        return Unit;
+      }
+
+      return !string.IsNullOrEmpty(Regiment) ? Regiment : string.Empty;
+    }
+  }
+
   public DateTime? DateOfBirth { get; set; }
   public string DateOfBirthString => DateOfBirth.HasValue ? DateOfBirth.Value.ToString("dd MMM yyyy") : "Unknown";
   public DateTime? DateOfDeath { get; set; }
