@@ -47,7 +47,7 @@
 
         <div class="military-unit">
             <span class="label"><i class="fa-light fa-flag fa-fw"></i> Military Unit</span>
-             <span class="data">@Model.Person.UnitRegimentString</span>
+            <span class="data">@Model.Person.UnitRegimentString</span>
         </div>
 
         <div class="date-of-birth">
@@ -218,18 +218,15 @@
             <h3>Decorations</h3>
 
             <ul>
-                <li>
-                    <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">Military Cross</span>
-                </li>
-                <li>
-                    <img src="/images/decorations/d2.png" title="Military Medal"> <span class="title">Military Medal</span>
-                </li>
-                <li>
-                    <img src="/images/decorations/d3.png" title="Queen's Commendation for Brave Conduct"> <span class="title">Queen's Commendation for Brave Conduct</span>
-                </li>
-                <li>
-                    <img src="/images/decorations/d4.png" title="Distinguished Conduct Medal"><span class="title"> Distinguished Conduct Medal</span>
-                </li>
+
+                @foreach (var decoration in Model.Person.Decorations)
+                {
+                    <li>
+                        @* <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">@decoration.Name</span> *@
+                        <span class="title">@decoration.Name</span>
+                    </li>
+                }
+
             </ul>
         </div>
 

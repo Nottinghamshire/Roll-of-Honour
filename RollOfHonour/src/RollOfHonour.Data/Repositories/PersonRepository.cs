@@ -18,8 +18,11 @@ public class PersonRepository : IPersonRepository
   {
     try
     {
-      var dbPerson = await _dbContext.People.Include(p=>p.SubUnit).ThenInclude(unit => unit.Regiment).FirstOrDefaultAsync(p => p.Id == id);
-
+      var dbPerson = await _dbContext.People
+        .Include(p=>p.Decorations)
+        .Include(p=>p.SubUnit).ThenInclude(unit => unit.Regiment)
+        .FirstOrDefaultAsync(p => p.Id == id);
+      
       return dbPerson.ToDomainModel();
     }
     catch (InvalidOperationException ex)

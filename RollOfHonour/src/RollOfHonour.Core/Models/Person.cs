@@ -1,4 +1,6 @@
-﻿namespace RollOfHonour.Core.Models;
+﻿using System.Collections.ObjectModel;
+
+namespace RollOfHonour.Core.Models;
 
 public class Person
 {
@@ -88,10 +90,12 @@ public class Person
   public string? ExtraInfo { get; set; }
 
   public int? MainPhotoId { get; set; }
-
+ 
   public string Name => string.IsNullOrEmpty(FirstNames)
     ? string.IsNullOrEmpty(Initials) ? $"{LastName}" : $"{Initials} {LastName}"
     : $"{FirstNames} {LastName}";
+
+  public List<Decoration> Decorations { get; set; } = new List<Decoration>();
 
   private int AgeCalculator(DateTime dateOfBirth, DateTime dateOfDeath)
   {
