@@ -1,19 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RollOfHonour.Data.Models.DB;
+﻿namespace RollOfHonour.Data.Models.DB;
 
 public partial class Decoration
 {
-    public int Id { get; set; }
+  public Core.Models.Decoration ToDomainModel()
+  {
+    var person = new Core.Models.Decoration()
+    {
+      Id = this.Id, Name = this.Name, Initials = this.Initials, Description = this.Description
+    };
 
-    public string? Name { get; set; }
+    return person;
+  }
 
-    public string? Description { get; set; }
+  public int Id { get; set; }
 
-    public string? Initials { get; set; }
+  public string? Name { get; set; }
 
-    public virtual ICollection<Person> People { get; } = new List<Person>();
+  public string? Description { get; set; }
 
-    public virtual ICollection<RecordedName> RecordedNames { get; } = new List<RecordedName>();
+  public string? Initials { get; set; }
+
+  public virtual ICollection<Person> People { get; } = new List<Person>();
+
+  public virtual ICollection<RecordedName> RecordedNames { get; } = new List<RecordedName>();
 }

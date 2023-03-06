@@ -1,6 +1,6 @@
 ﻿namespace RollOfHonour.Core.Models;
 
-public class Decoration
+public record Decoration
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

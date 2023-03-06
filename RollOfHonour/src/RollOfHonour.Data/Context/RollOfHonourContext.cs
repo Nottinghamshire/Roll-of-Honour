@@ -118,34 +118,34 @@ public partial class RollOfHonourContext : DbContext
 
             entity.HasMany(d => d.People).WithMany(p => p.Decorations)
                 .UsingEntity<Dictionary<string, object>>(
-                    "DecorationPerson",
+                    "DecorationPersons",
                     r => r.HasOne<Person>().WithMany()
-                        .HasForeignKey("PersonId")
+                        .HasForeignKey("Person_Id")
                         .HasConstraintName("FK_dbo.DecorationPersons_dbo.People_Person_Id"),
                     l => l.HasOne<Decoration>().WithMany()
-                        .HasForeignKey("DecorationId")
+                        .HasForeignKey("Decoration_Id")
                         .HasConstraintName("FK_dbo.DecorationPersons_dbo.Decorations_Decoration_Id"),
                     j =>
                     {
-                        j.HasKey("DecorationId", "PersonId").HasName("PK_dbo.DecorationPersons");
-                        j.HasIndex(new[] { "DecorationId" }, "IX_Decoration_Id");
-                        j.HasIndex(new[] { "PersonId" }, "IX_Person_Id");
+                        j.HasKey("Decoration_Id", "Person_Id").HasName("PK_dbo.DecorationPersons");
+                        j.HasIndex(new[] { "Decoration_Id" }, "IX_Decoration_Id");
+                        j.HasIndex(new[] { "Person_Id" }, "IX_Person_Id");
                     });
 
             entity.HasMany(d => d.RecordedNames).WithMany(p => p.Decorations)
                 .UsingEntity<Dictionary<string, object>>(
-                    "DecorationRecordedName",
+                    "DecorationRecordedNames",
                     r => r.HasOne<RecordedName>().WithMany()
-                        .HasForeignKey("RecordedNameId")
+                        .HasForeignKey("RecordedName_Id")
                         .HasConstraintName("FK_dbo.DecorationRecordedNames_dbo.RecordedNames_RecordedName_Id"),
                     l => l.HasOne<Decoration>().WithMany()
-                        .HasForeignKey("DecorationId")
+                        .HasForeignKey("Decoration_Id")
                         .HasConstraintName("FK_dbo.DecorationRecordedNames_dbo.Decorations_Decoration_Id"),
                     j =>
                     {
-                        j.HasKey("DecorationId", "RecordedNameId").HasName("PK_dbo.DecorationRecordedNames");
-                        j.HasIndex(new[] { "DecorationId" }, "IX_Decoration_Id");
-                        j.HasIndex(new[] { "RecordedNameId" }, "IX_RecordedName_Id");
+                        j.HasKey("Decoration_Id", "RecordedName_Id").HasName("PK_dbo.DecorationRecordedNames");
+                        j.HasIndex(new[] { "Decoration_Id" }, "IX_Decoration_Id");
+                        j.HasIndex(new[] { "RecordedName_Id" }, "IX_RecordedName_Id");
                     });
         });
 
