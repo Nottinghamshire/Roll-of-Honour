@@ -27,7 +27,9 @@ public partial class Person
             DateOfBirth = this.DateOfBirth,
             DateOfDeath = this.DateOfDeath,
             MainPhotoId = this.MainPhotoId,
-            PlaceOfBirth = this.PlaceOfBirth
+            PlaceOfBirth = this.PlaceOfBirth,
+            Unit = this.SubUnit?.Name,
+            Regiment = this.SubUnit?.Regiment?.Name
         };
 
         return person;
