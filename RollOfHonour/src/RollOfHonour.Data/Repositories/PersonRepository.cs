@@ -20,6 +20,7 @@ public class PersonRepository : IPersonRepository
     {
       var dbPerson = await _dbContext.People
         .Include(p=>p.Decorations)
+        .Include(p => p.RecordedNames).ThenInclude(rn=>rn.WarMemorial)
         .Include(p=>p.SubUnit).ThenInclude(unit => unit.Regiment)
         .FirstOrDefaultAsync(p => p.Id == id);
       

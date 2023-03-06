@@ -37,6 +37,11 @@ public partial class Person
       person.Decorations.Add(decoration.ToDomainModel());
     }
 
+    foreach (var memorial in this.RecordedNames.Select(rn=>rn.WarMemorial))
+    {
+      person.Memorials.Add(memorial.Id, memorial.Name);
+    }
+
     return person;
   }
 

@@ -136,55 +136,55 @@
 
             </div>
 
-@*             <div id="tabpanel-04" role="tabpanel" class="hide"> *@
-@* *@
-@*                 <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div> *@
-@* *@
-@* *@
-@*                 <div class="gallery-block"> *@
-@*                     <div class="columns is-multiline"> *@
-@*                         <div class="column is-4-desktop"> *@
-@*                             <a href="/images/gallery/example2.jpeg" title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College"> *@
-@*                                 <div class="picture-block short styled-alt"> *@
-@*                                     <div class="picture-border"> *@
-@*                                         <div class="picture-embed" style=" *@
-@* 												background-image: url(/images/gallery/example2.jpeg); *@
-@* 											  "></div> *@
-@*                                     </div> *@
-@*                                 </div> *@
-@*                             </a> *@
-@*                         </div> *@
-@* *@
-@*                         <div class="column is-4-desktop"> *@
-@*                             <a href="/images/gallery/example1.jpeg" title="Photo of Reginald Dudley Bawdwen Anderson "> *@
-@*                                 <div class="picture-block short styled"> *@
-@*                                     <div class="picture-border"> *@
-@*                                         <div class="picture-embed" style=" *@
-@* 												background-image: url(/images/gallery/example1.jpeg); *@
-@* 											  "></div> *@
-@*                                     </div> *@
-@*                                 </div> *@
-@*                             </a> *@
-@*                         </div> *@
-@* *@
-@*                         <div class="column is-4-desktop"> *@
-@*                             <a href="/images/gallery/example3.jpeg" title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings"> *@
-@*                                 <div class="picture-block short styled"> *@
-@*                                     <div class="picture-border"> *@
-@*                                         <div class="picture-embed" style=" *@
-@* 												background-image: url(/images/gallery/example3.jpeg); *@
-@* 											  "> *@
-@*                                         </div> *@
-@*                                     </div> *@
-@*                                 </div> *@
-@*                             </a> *@
-@*                         </div> *@
-@* *@
-@* *@
-@*                     </div> *@
-@*                 </div> *@
-@* *@
-@*             </div> *@
+            @*             <div id="tabpanel-04" role="tabpanel" class="hide"> *@
+            @* *@
+            @*                 <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div> *@
+            @* *@
+            @* *@
+            @*                 <div class="gallery-block"> *@
+            @*                     <div class="columns is-multiline"> *@
+            @*                         <div class="column is-4-desktop"> *@
+            @*                             <a href="/images/gallery/example2.jpeg" title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College"> *@
+            @*                                 <div class="picture-block short styled-alt"> *@
+            @*                                     <div class="picture-border"> *@
+            @*                                         <div class="picture-embed" style=" *@
+            @* 												background-image: url(/images/gallery/example2.jpeg); *@
+            @* 											  "></div> *@
+            @*                                     </div> *@
+            @*                                 </div> *@
+            @*                             </a> *@
+            @*                         </div> *@
+            @* *@
+            @*                         <div class="column is-4-desktop"> *@
+            @*                             <a href="/images/gallery/example1.jpeg" title="Photo of Reginald Dudley Bawdwen Anderson "> *@
+            @*                                 <div class="picture-block short styled"> *@
+            @*                                     <div class="picture-border"> *@
+            @*                                         <div class="picture-embed" style=" *@
+            @* 												background-image: url(/images/gallery/example1.jpeg); *@
+            @* 											  "></div> *@
+            @*                                     </div> *@
+            @*                                 </div> *@
+            @*                             </a> *@
+            @*                         </div> *@
+            @* *@
+            @*                         <div class="column is-4-desktop"> *@
+            @*                             <a href="/images/gallery/example3.jpeg" title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings"> *@
+            @*                                 <div class="picture-block short styled"> *@
+            @*                                     <div class="picture-border"> *@
+            @*                                         <div class="picture-embed" style=" *@
+            @* 												background-image: url(/images/gallery/example3.jpeg); *@
+            @* 											  "> *@
+            @*                                         </div> *@
+            @*                                     </div> *@
+            @*                                 </div> *@
+            @*                             </a> *@
+            @*                         </div> *@
+            @* *@
+            @* *@
+            @*                     </div> *@
+            @*                 </div> *@
+            @* *@
+            @*             </div> *@
 
         </div>
     </div>
@@ -226,19 +226,15 @@
             <h3>Remembered on...</h3>
 
             <ul>
-                <li>
-                    <div class="bg-icon">
-                        <i class="fa-light fa-monument"></i>
-                    </div>
-                    <a href="/memorial.html" title="Learn about #MEMORIAL NAME">Hucknall - St Mary Magdalene War Memorial</a>
-                </li>
-
-                <li>
-                    <div class="bg-icon">
-                        <i class="fa-light fa-monument"></i>
-                    </div>
-                    <a href="/memorial.html" title="Learn about #MEMORIAL NAME">Hucknall - Titchfield Park War Memorial</a>
-                </li>
+                @foreach (var memorial in Model.Person.Memorials)
+                {
+                    <li>
+                        <div class="bg-icon">
+                            <i class="fa-light fa-monument"></i>
+                        </div>
+                        <a href="/@memorial.Key" title="Learn about #MEMORIAL NAME">@memorial.Value</a>
+                    </li>
+                }
             </ul>
 
             <div class="cwgc-link">
