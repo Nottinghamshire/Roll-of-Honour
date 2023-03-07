@@ -48,14 +48,14 @@ jobs:
         with:
           name: .net-app
 
-      - name: Azure App Service Settings
-        uses: Azure/appservice-settings@v1
-        with:
-          # Name of the Azure Web App
-          app-name: 'APP-RollOfHonour-DEV-UKS'
-          # app-settings-json:
-          connection-strings-json: '${{ secrets.CONNECTION_STRINGS }}' 
-          mask-inputs: true 
+      #- name: Azure App Service Settings
+        #uses: Azure/appservice-settings@v1
+        #with:
+          ## Name of the Azure Web App
+          #app-name: 'APP-RollOfHonour-DEV-UKS'
+          ## app-settings-json:
+          #connection-strings-json: '${{ secrets.CONNECTION_STRINGS }}' 
+          #mask-inputs: true 
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
