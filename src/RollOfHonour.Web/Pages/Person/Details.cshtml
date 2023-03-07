@@ -232,7 +232,8 @@
                         <div class="bg-icon">
                             <i class="fa-light fa-monument"></i>
                         </div>
-                        <a href="/@memorial.Key" title="Learn about #MEMORIAL NAME">@memorial.Value</a>
+                        <a asp-page="/Memorial/Details"
+                        asp-route-id="@memorial.Key" title="Learn about #MEMORIAL NAME">@memorial.Value</a>
                     </li>
                 }
             </ul>
