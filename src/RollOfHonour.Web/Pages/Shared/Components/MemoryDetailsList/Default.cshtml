@@ -13,7 +13,7 @@
                 <div class="memory-details">
                     <span class="name">@person.Name</span>
                     <!-- fix date formatting and work out what to do when there is no dates -->
-                    <span class="lived">@person.DateOfBirth?.Date - @person.DateOfDeath?.Date</span>
+                    <span class="lived">@person.DateOfBirthString - @person.DateOfDeathString</span>
                     <a asp-page="/Person/Details"
                         asp-route-id="@person.Id" title="Read about @person.Name" class="button secondary">
                         <i class="fal fa-glasses"></i> Read about @person.Name</a>

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/RollOfHonour/src/RollOfHonour.Web/RollOfHonour.Web.csproj",
+                "${workspaceFolder}/src/RollOfHonour.Web/RollOfHonour.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/RollOfHonour/src/RollOfHonour.Web/RollOfHonour.Web.csproj",
+                "${workspaceFolder}/src/RollOfHonour.Web/RollOfHonour.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/RollOfHonour/src/RollOfHonour.Web/RollOfHonour.Web.csproj"
+                "${workspaceFolder}/src/RollOfHonour.Web/RollOfHonour.Web.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
