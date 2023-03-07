@@ -19,8 +19,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore ./RollOfHonour/RollOfHonour.sln
+      run: dotnet restore ./RollOfHonour.sln
     - name: Build
-      run: dotnet build ./RollOfHonour/RollOfHonour.sln  --no-restore --configuration Release 
+      run: dotnet build ./RollOfHonour.sln  --no-restore --configuration Release 
     - name: Test
-      run: dotnet test ./RollOfHonour/RollOfHonour.sln --no-build --verbosity normal
+      run: dotnet test ./RollOfHonour.sln --no-build --verbosity normal

@@ -21,13 +21,13 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.0.3
         with:
-          global-json-file: ./RollOfHonour/global.json
+          global-json-file: ./global.json
 
       - name: Build with dotnet
-        run: dotnet build ./RollOfHonour/RollOfHonour.sln --configuration Release
+        run: dotnet build ./RollOfHonour.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ./RollOfHonour/RollOfHonour.sln --configuration Release --output ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ./RollOfHonour.sln --configuration Release --output ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload Build Artifact for deployment
         uses: actions/upload-artifact@v3.1.2
@@ -48,14 +48,14 @@ jobs:
         with:
           name: .net-app
 
-      - name: Azure App Service Settings
-        uses: Azure/appservice-settings@v1
-        with:
-          # Name of the Azure Web App
-          app-name: 'APP-RollOfHonour-DEV-UKS'
-          # app-settings-json:
-          connection-strings-json: '${{ secrets.CONNECTION_STRINGS }}' 
-          mask-inputs: true 
+      #- name: Azure App Service Settings
+        #uses: Azure/appservice-settings@v1
+        #with:
+          ## Name of the Azure Web App
+          #app-name: 'APP-RollOfHonour-DEV-UKS'
+          ## app-settings-json:
+          #connection-strings-json: '${{ secrets.CONNECTION_STRINGS }}' 
+          #mask-inputs: true 
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
