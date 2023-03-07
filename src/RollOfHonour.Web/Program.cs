@@ -7,7 +7,7 @@ using RollOfHonour.Data.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
-//builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
+builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
 
 builder.Services.AddDbContext<RollOfHonourContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
