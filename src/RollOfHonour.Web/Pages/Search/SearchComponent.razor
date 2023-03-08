@@ -1,15 +1,49 @@
 ﻿@using RollOfHonour.Core.BasicSearch
+@using Ardalis.Result
 @inject ISuperSearchService searchService;
 
-<input type="text" @bind="@searchTerm" />
-<button value="Search" @onclick="SearchRollOfHonour">Search</button>
+<div class="is-inline-flex">
+    <input type="text" @bind="@searchTerm"/>
+    <button value="Search" @onclick="SearchRollOfHonour">Search</button>
+
+    <label>WW1<InputCheckbox @bind-Value=@ww1/></label>
+
+    <label>WW2<InputCheckbox @bind-Value=@ww2>WW2</InputCheckbox></label>
+
+    <InputRadioGroup @bind-Value="SelectedPersonType">
+        <br>
+        @foreach (var personType in @PersonTypes)
+        {
+            <InputRadio Value="personType"/>
+            @personType
+            <br/>
+        }
+    </InputRadioGroup>
+
+</div>
 
 @code {
-    
-    private string searchTerm;
 
-    private void SearchRollOfHonour()
+    private string searchTerm;
+    private bool ww1;
+    private bool ww2;
+    private string SelectedPersonType = "Military";
+    //private bool expanded;
+    List<string> PersonTypes = new() { "Military", "Civilian" };
+
+    private List<SearchResult> SearchResults = null;
+
+    private async Task SearchRollOfHonour()
     {
-        
+        var searchQuery = new SearchQuery
+        {
+            SearchTerm = searchTerm,
+            WW1 = ww1,
+            WW2 = ww2,
+            PersonType = SelectedPersonType,
+        };
+
+        Result<List<SearchResult>> results = await searchService.AdvancedSearch(searchQuery);
     }
+
 }

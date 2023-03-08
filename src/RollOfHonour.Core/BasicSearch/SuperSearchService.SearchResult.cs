@@ -6,9 +6,26 @@ public abstract class SearchResult
   public string Name { get; set; } = string.Empty;
 }
 
-public class PersonSearchResult : SearchResult { }
-public class MemorialSearchResult : SearchResult { public string Description { get; set; } = string.Empty; }
-public class RecordedNameSearchResult : SearchResult { }
+public class SearchQuery
+{
+  public string SearchTerm { get; set; }
+  public bool WW1 { get; set; }
+  public bool WW2 { get; set; }
+  public string PersonType { get; set; }
+}
+
+public class PersonSearchResult : SearchResult
+{
+}
+
+public class MemorialSearchResult : SearchResult
+{
+  public string Description { get; set; } = string.Empty;
+}
+
+public class RecordedNameSearchResult : SearchResult
+{
+}
 
 
 /*
