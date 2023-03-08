@@ -32,7 +32,7 @@ public class SuperSearchService : ISuperSearchService
         new()
         {
           Identifier = nameof(searchQuery.SearchTerm),
-          ErrorMessage = $"{nameof(searchQuery.SearchTerm)} is required."
+          ErrorMessage = $"{nameof(searchQuery.SearchTerm)} is required." 
         }
       };
 
@@ -45,16 +45,16 @@ public class SuperSearchService : ISuperSearchService
     //   results.AddRange((IEnumerable<SearchResult>)memorialResults);
 
 
-    var peopleResults = await pe.ListAsync();
+    var peopleResults = await _personRepository.FindByName(searchQuery.SearchTerm);
     if (peopleResults != null)
       results.AddRange((IEnumerable<SearchResult>)peopleResults);
 
-    Query
-      .Select(person => new PersonSearchResult() { Id = person.Id, Name = person.Name })
-      .Where(person =>
-        person.FirstNames.Contains(searchString) ||
-        person.LastName.Contains(searchString) ||
-        person.Initials.Contains(searchString));
+    // Query
+    //   .Select(person => new PersonSearchResult() { Id = person.Id, Name = person.Name })
+    //   .Where(person =>
+    //     person.FirstNames.Contains(searchString) ||
+    //     person.LastName.Contains(searchString) ||
+    //     person.Initials.Contains(searchString));
 
     //
     // var recordedNamesSpec = new TextSearchRecordedNameSpec(searchString);

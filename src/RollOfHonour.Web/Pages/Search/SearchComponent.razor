@@ -6,7 +6,7 @@
     <input type="text" @bind="@searchTerm"/>
     <button value="Search" @onclick="SearchRollOfHonour">Search</button>
 
-    <label>WW1<InputCheckbox @bind-Value=@ww1/></label>
+    <label>WW1<InputCheckbox @bind-Value=@ww1 /></label>
 
     <label>WW2<InputCheckbox @bind-Value=@ww2>WW2</InputCheckbox></label>
 
@@ -20,6 +20,18 @@
         }
     </InputRadioGroup>
 
+   
+</div>
+
+<div>
+     @if (_searchResults != null || _searchResults.Count() != 0)
+        {
+            @foreach (var result in _searchResults)
+            {
+                @result.Name;
+                <br />
+            }
+        }
 </div>
 
 @code {
@@ -28,6 +40,7 @@
     private bool ww1;
     private bool ww2;
     private string SelectedPersonType = "Military";
+    private List<SearchResult> _searchResults = new();
     //private bool expanded;
     List<string> PersonTypes = new() { "Military", "Civilian" };
 
@@ -44,6 +57,7 @@
         };
 
         Result<List<SearchResult>> results = await searchService.AdvancedSearch(searchQuery);
+        _searchResults = results.Value;
     }
 
 }

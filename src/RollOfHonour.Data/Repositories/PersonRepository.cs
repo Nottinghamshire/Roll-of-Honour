@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RollOfHonour.Core.BasicSearch;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
@@ -19,11 +20,11 @@ public class PersonRepository : IPersonRepository
     try
     {
       var dbPerson = await _dbContext.People
-        .Include(p=>p.Decorations)
-        .Include(p => p.RecordedNames).ThenInclude(rn=>rn.WarMemorial)
-        .Include(p=>p.SubUnit).ThenInclude(unit => unit.Regiment)
+        .Include(p => p.Decorations)
+        .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
+        .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
         .FirstOrDefaultAsync(p => p.Id == id);
-      
+
       return dbPerson.ToDomainModel();
     }
     catch (InvalidOperationException ex)
@@ -37,7 +38,7 @@ public class PersonRepository : IPersonRepository
     try
     {
       var people = await _dbContext.People.OrderByDescending(x => x.Id).Take(25).ToListAsync();
-   
+
       return people.Select(p => p.ToDomainModel());
     }
     catch (Exception e)
@@ -55,7 +56,7 @@ public class PersonRepository : IPersonRepository
 
     for (var i = 0; i <= 2; i++)
     {
-      var randomId = random.Next(0, countOfPeople - 1); 
+      var randomId = random.Next(0, countOfPeople - 1);
       var person = await _dbContext.People.FirstOrDefaultAsync(p => p.Id == randomId);
       if (person == null)
       {
@@ -66,7 +67,24 @@ public class PersonRepository : IPersonRepository
         dbPeople.Add(person);
       }
     }
+
     IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel());
     return people;
+  }
+
+  public async Task<IEnumerable<PersonSearchResult>?> FindByName(string nameFragment)
+  {
+    var dbPeople = _dbContext.People.Where(p =>
+      p.FirstNames.Contains(nameFragment) ||
+      p.LastName.Contains(nameFragment));
+
+     if (dbPeople.Count() == 0)
+     {
+      return null;
+     } 
+      
+      var results = await dbPeople.Select(p => new PersonSearchResult() {Id = p.Id, Name = $"{p.FirstNames} {p.LastName}"}).ToListAsync();
+
+      return results;
   }
 }
