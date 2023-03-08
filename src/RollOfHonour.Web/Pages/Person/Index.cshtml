@@ -1,0 +1,113 @@
+﻿@page 
+@model RollOfHonour.Web.Pages.Person.PeopleModel
+@{
+}
+
+<section class="panel with-background bg-app">
+    <div class="container is-fluid">
+
+        <div class="columns is-multiline is-vcentered">
+            <div class="column">
+                <div class="text-block">
+                    <h1>People records</h1>
+                    <p>Our database contains thousands of records detailing those who were lost during the World Wars. You can use this page to view our records alphabetically, or use our <a href="/search.html" title="Search our records">Search</a> page to narrow down your search.</p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="form-block compact alignright">
+                    <form action="#search-controller" method="post" id="search-all">
+                        <div class="form-row">
+                            <label for="searchquery" id="Query-ariaLabel">Search by entering a name:</label>
+                            <input id="searchquery" name="Query" class="input-text" type="text" aria-labelledby="Query-ariaLabel" title="Enter your search query here..." placeholder="e.g. Ken Ashford"/>
+                            <button type="submit" class="submit-button" form="search-all"><i class="fal fa-file-search"></i> Search</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="index-block">
+
+            <div class="columns is-multiline is-mobile">
+                @foreach (var person in Model.People)
+                {
+                    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+                            <a asp-page="/Person/Details"
+                                                    asp-route-id="@person.Id" title="Learn about @person.Name" class="index-card">
+                            <div class="columns is-mobile">
+                                <div class="column is-4-mobile">
+                                    <div class="picture-block index-picture">
+                                        <div class="picture-border">
+                                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/11225/medium.jpg);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <span class="rank">@person.Rank</span>
+                                    <span class="name">@person.Name</span>
+                                    <span class="unit">@person.UnitRegimentString</span>
+                                    <span class="date">@person.DateOfDeathString</span>
+                                    <span class="link"><i class="fal fa-glasses"></i> Read more</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <div class="pagination-block">
+                <ul>
+                    <li>
+                        <a href="people.html">
+                            <i class="fa-light fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="people.html">1</a>
+                    </li>
+                    <li>
+                        <a href="people.html">2</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=3">3</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=4">4</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=5">5</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=6">6</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=7">7</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=8">8</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=9">9</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=10">10</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=589">589</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=590">590</a>
+                    </li>
+                    <li>
+                        <a href="people.html?page=3">
+                            <i class="fa-light fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</section>
