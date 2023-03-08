@@ -3,406 +3,299 @@
 @{
 }
 
-<html lang="en-GB">
-  <head>
-    <title>Roll of Honour | Nottinghamshire County Council</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="profile" href="https://gmpg.org/xfn/11" />
-    <!-- App Stylesheets -->
-    <link href="/css/style.css?v=0006" rel="stylesheet" />
-    <link href="/css/overrides.css?v=0003" rel="stylesheet" />
-	<link href="/css/simpleLightbox.css" rel="stylesheet" />
+<section class="panel with-background bg-app">
+<div class="container is-fluid">
 
-    <!-- Jquery -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
-      integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Fontawesome Icon Kit -->
-    <script
-      src="https://kit.fontawesome.com/890f72bac6.js"
-      crossorigin="anonymous"
-    ></script>
-
-    <!-- Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  </head>
-
-  <body class="app-body">
-    <header class="app-header">
-      <div class="container is-fluid">
-        <div class="columns is-vcentered is-multiline">
-          <div class="column is-12-tablet is-12-desktop is-2-widescreen">
-            <a href="/" title="Go back to the homepage">
-              <img
-                class="header-logo"
-                srcset="/images/logo-roh.png 1x, /images/logo-roh@2x.png 2x"
-                src="/images/logo-roh.jpg"
-                alt="Nottinghamshire Roll of Honour Logo"
-              />
-            </a>
-          </div>
-          <div class="column is-12-tablet is-12-desktop is-8-widescreen">
-            <div class="mobile-menu">
-              <span class="menu-state menu-is-closed">
-                <i class="fal fa-bars"></i> Browse this website
-              </span>
-
-              <span class="menu-state menu-is-open true">
-                <i class="fal fa-times-circle"></i> Close this menu
-              </span>
-            </div>
-            <nav aria-label="primary-navigation" class="nav-primary">
-              <ul class="primary-navigation">
-                <li><a href="/" title="Go back to the homepage">Home</a></li>
-                <li><a href="/about.html" title="About">About</a></li>
-                <li>
-                  <a href="/people.html" title="People">People</a>
-                </li>
-                <li>
-                  <a href="/memorials.html" title="Memorials" class="current">Memorials</a>
-                </li>
-                <li><a href="/timeline.html" title="Timeline">Timeline</a></li>
-                <li><a href="/search.html" title="Search">Search</a></li>
-              </ul>
-            </nav>
-          </div>
-          <div class="column is-hidden-touch is-hidden-desktop-only is-2-widescreen">
-            <a href="/" title="Visit the Nottinghamshire County Council website">
-              <img
-                class="header-logo"
-                srcset="/images/logo-ncc.png 1x, /images/logo-ncc@2x.png 2x"
-                src="/images/logo-ncc.jpg"
-                alt="Nottinghamshire County Council Logo"
-              />
-            </a>
-          </div>
+<div class="columns is-multiline is-vcentered">
+    <div class="column">
+        <div class="text-block">
+            <h1>War Memorials</h1>
+            <p>Our database includes a list of all the war memorials in and around Nottinghamshire. You can use this page to view our records alphabetically, or use our <a href="/search.html" title="Search our records">Search</a> page to narrow down your search.</p>
         </div>
-      </div>
-    </header>
+    </div>
+    <div class="column">
+        <div class="form-block compact alignright">
+            <form action="#search-controller" method="post" id="search-all">
+                <div class="form-row">
+                    <label for="searchquery" id="Query-ariaLabel">Search by entering a name:</label>
+                    <input id="searchquery" name="Query" class="input-text" type="text" aria-labelledby="Query-ariaLabel" title="Enter your search query here..." placeholder="e.g. The City War Memorial"/>
+                    <button type="submit" class="submit-button" form="search-all"><i class="fal fa-file-search"></i> Search</button>
+                </div>
+            </form>
 
-    <main>
-      <section class="panel with-background bg-app">
-        <div class="container is-fluid">
+        </div>
+    </div>
 
-          <div class="columns is-multiline is-vcentered">
+</div>
+
+<div class="index-block">
+
+<div class="columns is-multiline">
+
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10050/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <!-- Is it possible to get a string length check on the memorial name, then add a class if it's greater than 30 characters? There is such a variation in the length of these things that I can't find a way to style them all consistently - I've used the class name "long" in this example -->
+                    <span class="memorial-name long">St Thomas's Church, 2019 Plaque to Villagers Killed on Military Service</span>
+                    <span class="unit">11 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10054/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">St Ann's District Virtual </span>
+                    <span class="unit">505 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10053/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">All Saints Church</span>
+                    <span class="unit">18 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10048/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">Chaworth-Musters</span>
+                    <span class="unit">4 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10074/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">Arnold and Daybrook</span>
+                    <span class="unit">25 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10078/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">British School Memorial </span>
+                    <span class="unit">14 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10089/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">Ebenezer Methodist Church</span>
+                    <span class="unit">8 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10090/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">St Mary's Church</span>
+                    <span class="unit">252 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
+            <div class="columns is-mobile">
+                <div class="column is-4-mobile">
+                    <div class="picture-block index-picture">
+                        <div class="picture-border">
+                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10102/medium.jpg);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <span class="memorial-name">St Thomas's Church</span>
+                    <span class="unit">6 Names</span>
+                    <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+</div>
+
+<div class="pagination-block">
+    <ul>
+        <li>
+            <a href="people.html">
+                <i class="fa-light fa-chevron-left"></i>
+            </a>
+        </li>
+        <li class="active">
+            <a href="people.html">1</a>
+        </li>
+        <li>
+            <a href="people.html">2</a>
+        </li>
+        <li>
+            <a href="people.html?page=3">3</a>
+        </li>
+        <li>
+            <a href="people.html?page=4">4</a>
+        </li>
+        <li>
+            <a href="people.html?page=5">5</a>
+        </li>
+        <li>
+            <a href="people.html?page=6">6</a>
+        </li>
+        <li>
+            <a href="people.html?page=7">7</a>
+        </li>
+        <li>
+            <a href="people.html?page=8">8</a>
+        </li>
+        <li>
+            <a href="people.html?page=9">9</a>
+        </li>
+        <li>
+            <a href="people.html?page=10">10</a>
+        </li>
+        <li>
+            <a href="people.html?page=589">589</a>
+        </li>
+        <li>
+            <a href="people.html?page=590">590</a>
+        </li>
+        <li>
+            <a href="people.html?page=3">
+                <i class="fa-light fa-chevron-right"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+</div>
+</div>
+</section>
+
+<section class="panel green">
+    <div class="container is-fluid">
+        <div class="text-block dark">
+            <h2 class="aligncenter with-margin-bottom">Look at our records by...</h2>
+        </div>
+        <div class="columns">
             <div class="column">
-				<div class="text-block">
-					<h1>War Memorials</h1>
-					<p>Our database includes a list of all the war memorials in and around Nottinghamshire. You can use this page to view our records alphabetically, or use our <a href="/search.html" title="Search our records">Search</a> page to narrow down your search.</p>
-				</div>
+                <a href="/people.html" title="Look at our records by People" class="card with-background bg-people">
+                    <div class="label">
+                        <span class="title">
+                            People
+                        </span>
+                        <span class="data">
+                            4000 Records Available
+                        </span>
+                    </div>
+                </a>
             </div>
-			<div class="column">
-				<div class="form-block compact alignright">
-					<form action="#search-controller" method="post" id="search-all">
-					<div class="form-row">
-						<label for="searchquery" id="Query-ariaLabel">Search by entering a name:</label>
-						<input id="searchquery" name="Query" class="input-text" type="text" aria-labelledby="Query-ariaLabel" title="Enter your search query here..." placeholder="e.g. The City War Memorial" />
-						<button type="submit" class="submit-button" form="search-all"><i class="fal fa-file-search"></i> Search</button>
-					</div>
-					</form>
-				
-				</div>
-			</div>
- 
-          </div>
-		  
-		  <div class="index-block">
-
-		  <div class="columns is-multiline">
-
-	  		<div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-				 <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-					<div class="columns is-mobile">
-						<div class="column is-4-mobile">
-						  <div class="picture-block index-picture">
-							 <div class="picture-border">
-								<div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10050/medium.jpg);"></div>
-							 </div>
-						  </div>
-					   </div>
-					   <div class="column">
-						   <!-- Is it possible to get a string length check on the memorial name, then add a class if it's greater than 30 characters? There is such a variation in the length of these things that I can't find a way to style them all consistently - I've used the class name "long" in this example -->
-						  <span class="memorial-name long">St Thomas's Church, 2019 Plaque to Villagers Killed on Military Service</span>
-						  <span class="unit">11 Names</span>
-						  <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-					   </div>
-					</div>
-				 </a>
-			  </div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-				   <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-					<div class="columns is-mobile">
-					  <div class="column is-4-mobile">
-							<div class="picture-block index-picture">
-							   <div class="picture-border">
-								  <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10054/medium.jpg);"></div>
-							   </div>
-							</div>
-						 </div>
-						 <div class="column">
-							<span class="memorial-name">St Ann's District Virtual </span>
-							<span class="unit">505 Names</span>
-							<span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-						 </div>
-					  </div>
-				   </a>
-				</div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-					 <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-					<div class="columns is-mobile">
-						<div class="column is-4-mobile">
-							  <div class="picture-block index-picture">
-								 <div class="picture-border">
-									<div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10053/medium.jpg);"></div>
-								 </div>
-							  </div>
-						   </div>
-						   <div class="column">
-							  <span class="memorial-name">All Saints Church</span>
-							  <span class="unit">18 Names</span>
-							  <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-						   </div>
-						</div>
-					 </a>
-				  </div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-					   <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-					<div class="columns is-mobile">
-						  <div class="column is-4-mobile">
-								<div class="picture-block index-picture">
-								   <div class="picture-border">
-									  <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10048/medium.jpg);"></div>
-								   </div>
-								</div>
-							 </div>
-							 <div class="column">
-								<span class="memorial-name">Chaworth-Musters</span>
-								<span class="unit">4 Names</span>
-								<span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-							 </div>
-						  </div>
-					   </a>
-					</div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-						 <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-					<div class="columns is-mobile">
-							<div class="column is-4-mobile">
-								  <div class="picture-block index-picture">
-									 <div class="picture-border">
-										<div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10074/medium.jpg);"></div>
-									 </div>
-								  </div>
-							   </div>
-							   <div class="column">
-								  <span class="memorial-name">Arnold and Daybrook</span>
-								  <span class="unit">25 Names</span>
-								  <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-							   </div>
-							</div>
-						 </a>
-					  </div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-						   <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-						   <div class="columns is-mobile">
-							  <div class="column is-4-mobile">
-									<div class="picture-block index-picture">
-									   <div class="picture-border">
-										  <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10078/medium.jpg);"></div>
-									   </div>
-									</div>
-								 </div>
-								 <div class="column">
-									<span class="memorial-name">British School Memorial </span>
-									<span class="unit">14 Names</span>
-									<span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-								 </div>
-							  </div>
-						   </a>
-						</div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-							 <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-							 <div class="columns is-mobile">
-								<div class="column is-4-mobile">
-									  <div class="picture-block index-picture">
-										 <div class="picture-border">
-											<div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10089/medium.jpg);"></div>
-										 </div>
-									  </div>
-								   </div>
-								   <div class="column">
-									  <span class="memorial-name">Ebenezer Methodist Church</span>
-									  <span class="unit">8 Names</span>
-									  <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-								   </div>
-								</div>
-							 </a>
-						  </div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-							   <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-							   <div class="columns is-mobile">
-								  <div class="column is-4-mobile">
-										<div class="picture-block index-picture">
-										   <div class="picture-border">
-											  <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10090/medium.jpg);"></div>
-										   </div>
-										</div>
-									 </div>
-									 <div class="column">
-										<span class="memorial-name">St Mary's Church</span>
-										<span class="unit">252 Names</span>
-										<span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-									 </div>
-								  </div>
-							   </a>
-							</div>
-			  <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-								 <a href="/memorial.html" class="index-card memorial" title="Learn about #PERSONNAME">
-								 <div class="columns is-mobile">
-									<div class="column is-4-mobile">
-										  <div class="picture-block index-picture">
-											 <div class="picture-border">
-												<div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/10102/medium.jpg);"></div>
-											 </div>
-										  </div>
-									   </div>
-									   <div class="column">
-										  <span class="memorial-name">St Thomas's Church</span>
-										  <span class="unit">6 Names</span>
-										  <span class="link"><i class="fal fa-glasses"></i> Learn more</span>
-									   </div>
-									</div>
-								 </a>
-							  </div>													  											  									  							  
-			  
-			  
-		  </div>
-		  
-		  <div class="pagination-block">
-			  <ul>
-				 <li><a href="people.html"><i class="fa-light fa-chevron-left"></i></a></li>
-				 <li class="active"><a href="people.html">1</a></li>
-				 <li><a href="people.html">2</a></li>
-				 <li><a href="people.html?page=3">3</a></li>
-				 <li><a href="people.html?page=4">4</a></li>
-				 <li><a href="people.html?page=5">5</a></li>
-				 <li><a href="people.html?page=6">6</a></li>
-				 <li><a href="people.html?page=7">7</a></li>
-				 <li><a href="people.html?page=8">8</a></li>
-				 <li><a href="people.html?page=9">9</a></li>
-				 <li><a href="people.html?page=10">10</a></li>
-				 <li><a href="people.html?page=589">589</a></li>
-				 <li><a href="people.html?page=590">590</a></li>
-				 <li><a href="people.html?page=3"><i class="fa-light fa-chevron-right"></i></a></li>
-			  </ul>
-		  </div>
-
-		  </div>
+            <div class="column">
+                <a href="/memorials.html" title="Look at our records by war memorial" class="card with-background bg-memorials">
+                    <div class="label">
+                        <span class="title">
+                            War Memorials
+                        </span>
+                        <span class="data">
+                            4000 Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <div class="column">
+                <a href="/timeline.html" title="Look at our records by using a timeline" class="card with-background bg-timeline">
+                    <div class="label">
+                        <span class="title">
+                            Timeline
+                        </span>
+                        <span class="data">
+                            4000 Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
         </div>
-      </section>
-
-    <section class="panel green">
-			<div class="container is-fluid">
-				<div class="text-block dark">
-					<h2 class="aligncenter with-margin-bottom">Look at our records by...</h2>
-				</div>				
-				<div class="columns">
-					<div class="column">
-						<a href="/people.html" title="Look at our records by People" class="card with-background bg-people">
-							<div class="label">
-								<span class="title">
-									People
-								</span>
-								<span class="data">
-									4000 Records Available
-								</span>
-							</div>
-						</a>
-					</div>
-					<div class="column">
-						<a href="/memorials.html" title="Look at our records by war memorial" class="card with-background bg-memorials">
-							<div class="label">
-								<span class="title">
-									War Memorials
-								</span>
-								<span class="data">
-									4000 Records Available
-								</span>
-							</div>
-						</a>
-					</div>	
-					<div class="column">
-						<a href="/timeline.html" title="Look at our records by using a timeline" class="card with-background bg-timeline">
-							<div class="label">
-								<span class="title">
-									Timeline
-								</span>
-								<span class="data">
-									4000 Records Available
-								</span>
-							</div>
-						</a>
-					</div>									
-				</div>
-			</div>
-		</section>
-	</main>
-
-   <footer class="app-footer">
-	   <div class="container is-fluid">
-		   <div class="columns">
-			   <div class="column">
-				   <span class="footer-copyright">&copy; Nottinghamshire County Council 2023</span>
-				   <ul class="footer-links">
-					   <li><a href="/" title="Go back to the homepage">Home</a></li>
-					   <li><a href="/about.html" title="About">About</a></li>
-					   <li><a href="/people.html" title="People">People</a></li>
-					   <li><a href="/memorials.html" title="Memorials">Memorials</a></li>
-					   <li><a href="/timeline.html" title="Timeline">Timeline</a></li>
-					   <li><a href="/search.html" title="Search">Search</a></li>						
-				   </ul>
-			   </div>
-			   <div class="column alignright">					
-				   <ul class="footer-links">
-					   <li><a href="#" title="Privacy Policy">Privacy Policy</a></li>
-					   <li><a href="#" title="Terms and Conditions">Terms and Conditions</a></li>
-					   <li><span class="footer-login"><a href="#" title="Login"><i class="fa-light fa-right-to-bracket"></i> Login</a></span></li>
-				   </ul>
-				   
-				   <span class="footer-support">Proudly supported by</span>
-				   <img class="footer-logo" src="/images/footer-nottinghamshire-county-council-logo.svg" alt="Nottinghamshire County Council Logo" />
-				   <img class="footer-logo" src="/images/footer-nottingham-city-council-logo.png" alt="Nottinghamshire County Council Logo" />
-			   </div>				
-		   </div>
-	   </div>
-   </footer>
-
-    <script src="/js/scripts.js"></script>
-	<script src="/js/simpleLightbox.js"></script>
-
-    <script>
-		$('.gallery-block a').simpleLightbox();
-		
-      AOS.init();
-      jQuery(document).ready(function () {
-        jQuery(".mobile-menu").click(function () {
-          jQuery(".nav-primary").toggleClass("active");
-          jQuery(".menu-state").toggleClass("true");
-        });
-      });
-    </script>
-  </body>
-</html>
+    </div>
+</section>
