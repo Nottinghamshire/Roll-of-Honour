@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RollOfHonour.Web.Pages.Search
 {
-    public class AdvancedModel : PageModel
+    public class IndexModel : PageModel
     {
         public void OnGet()
         {

@@ -8,11 +8,11 @@ namespace RollOfHonour.Core.BasicSearch;
 
 public class SuperSearchService : ISuperSearchService
 {
-  private readonly IRepository<Memorial> _repository;
+  private readonly IMemorialRepository _memorialRepository;
 
-  public SuperSearchService(IRepository<Memorial> repository)
+  public SuperSearchService(IMemorialRepository memorialRepository)
   {
-    _repository = repository;
+    _memorialRepository = memorialRepository;
   }
 
   public async Task<Result<List<SearchResult>>> BasicSearch(string searchString)
@@ -29,22 +29,22 @@ public class SuperSearchService : ISuperSearchService
       return Result<List<SearchResult>>.Invalid(errors);
     }
 
-    var memorialsSpec = new TextSearchMemorialSpec(searchString);
-    var memorialResults = await _repository.ListAsync();
-    if (memorialResults != null)
-      results.AddRange((IEnumerable<SearchResult>)memorialResults);
+    // var memorialsSpec = new TextSearchMemorialSpec(searchString);
+    // var memorialResults = await _memorialRepository.ListAsync();
+    // if (memorialResults != null)
+    //   results.AddRange((IEnumerable<SearchResult>)memorialResults);
 
 
-    var peopleSpec = new TextSearchPersonSpec(searchString);
-    var peopleResults = await _repository.ListAsync();
-    if (peopleResults != null)
-      results.AddRange((IEnumerable<SearchResult>)peopleResults);
-
-
-    var recordedNamesSpec = new TextSearchRecordedNameSpec(searchString);
-    var recordedNamesResults = await _repository.ListAsync();
-    if (recordedNamesResults != null)
-      results.AddRange((IEnumerable<SearchResult>)recordedNamesResults);
+    // var peopleSpec = new TextSearchPersonSpec(searchString);
+    // var peopleResults = await _memorialRepository.ListAsync();
+    // if (peopleResults != null)
+    //   results.AddRange((IEnumerable<SearchResult>)peopleResults);
+    //
+    //
+    // var recordedNamesSpec = new TextSearchRecordedNameSpec(searchString);
+    // var recordedNamesResults = await _memorialRepository.ListAsync();
+    // if (recordedNamesResults != null)
+    //   results.AddRange((IEnumerable<SearchResult>)recordedNamesResults);
 
     if (!results.Any())
     {

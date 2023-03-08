@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using RollOfHonour.Core.BasicSearch;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<RollOfHonourContext>(options =>
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
+builder.Services.AddTransient<ISuperSearchService, SuperSearchService>();
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C");
 
@@ -24,6 +26,8 @@ builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration,
 
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
+
+builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
 
@@ -42,6 +46,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapBlazorHub();
 app.MapControllers();
 
 app.Run();

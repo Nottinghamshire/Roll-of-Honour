@@ -1,0 +1,15 @@
+﻿@using RollOfHonour.Core.BasicSearch
+@inject ISuperSearchService searchService;
+
+<input type="text" @bind="@searchTerm" />
+<button value="Search" @onclick="SearchRollOfHonour">Search</button>
+
+@code {
+    
+    private string searchTerm;
+
+    private bool SearchRollOfHonour()
+    {
+        return true;
+    }
+}
