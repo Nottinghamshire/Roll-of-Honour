@@ -14,7 +14,7 @@ public class MemorialRepository : IMemorialRepository
     _dbContext = dbContext;
   }
   
-  public async Task<Memorial> FindById(int id)
+  public async Task<Memorial> GetById(int id)
   {
     try
     {
@@ -30,12 +30,28 @@ public class MemorialRepository : IMemorialRepository
         // TODO: Convert recorded names to domain model
         // RecordedNames = dbMemorial.RecordedNames.AsEnumerable(),
         MainPhotoId = dbMemorial.MainPhotoId,
-        UKNIWMRef = int.TryParse(dbMemorial.Ukniwmref, out int ukniwmRef) ? ukniwmRef : null
+        UKNIWMRef = dbMemorial.Ukniwmref
       };
           
       return result;
     }
     catch (InvalidOperationException)
+    {
+      return null;
+    }
+  }
+  
+  public async Task<IEnumerable<Memorial>> GetAll()
+  {
+    try
+    {
+      var memorials = await _dbContext.WarMemorials
+        //.OrderByDescending(x => x.Id)
+        .Take(80).ToListAsync();
+
+      return memorials.Select(m => m.ToDomainModel());
+    }
+    catch (Exception e)
     {
       return null;
     }

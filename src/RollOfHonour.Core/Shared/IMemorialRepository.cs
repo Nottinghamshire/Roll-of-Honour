@@ -4,5 +4,6 @@ namespace RollOfHonour.Core.Shared;
 
 public interface IMemorialRepository
 {
-  Task<Memorial?> FindById(int id);
+  Task<Memorial?> GetById(int id);
+  Task<IEnumerable<Memorial>> GetAll();
 }

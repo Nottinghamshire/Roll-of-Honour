@@ -16,7 +16,7 @@ public class Details : PageModel
   }
   public async Task<IActionResult> OnGet(int id)
   {
-    var memorial = await _memorialRepository.FindById(id);
+    var memorial = await _memorialRepository.GetById(id);
 
     if (memorial == null)
     {
