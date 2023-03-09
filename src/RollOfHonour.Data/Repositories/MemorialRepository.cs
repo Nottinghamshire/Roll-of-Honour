@@ -13,34 +13,23 @@ public class MemorialRepository : IMemorialRepository
   {
     _dbContext = dbContext;
   }
-  
+
   public async Task<Memorial> GetById(int id)
   {
     try
     {
-      var dbMemorial = await _dbContext.WarMemorials.FirstAsync(p => p.Id == id);
-          
-      // TODO: Work out mapping
-      var result = new Memorial(dbMemorial.Name)
-      {
-        Id = dbMemorial.Id,
-        Description = dbMemorial.Description,
-        District = dbMemorial.District,
-        Postcode = dbMemorial.Postcode,
-        // TODO: Convert recorded names to domain model
-        // RecordedNames = dbMemorial.RecordedNames.AsEnumerable(),
-        MainPhotoId = dbMemorial.MainPhotoId,
-        UKNIWMRef = dbMemorial.Ukniwmref
-      };
-          
-      return result;
+      var dbMemorial = await _dbContext.WarMemorials
+        .Include(m => m.RecordedNames)
+        .FirstAsync(p => p.Id == id);
+
+      return dbMemorial.ToDomainModel();
     }
     catch (InvalidOperationException)
     {
       return null;
     }
   }
-  
+
   public async Task<IEnumerable<Memorial>> GetAll()
   {
     try

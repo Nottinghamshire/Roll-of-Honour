@@ -40,6 +40,12 @@ public class Memorial : IAggregateRoot
     Name = Guard.Against.NullOrEmpty(name, nameof(name));
   }
 
+  public Memorial(string name, List<RecordedName> recordedNames)
+  {
+    Name = Guard.Against.NullOrEmpty(name, nameof(name));
+    _recordedNames.AddRange(recordedNames);
+  }
+
   public void RecordName(RecordedName newName)
   {
     Guard.Against.Null(newName, nameof(newName));

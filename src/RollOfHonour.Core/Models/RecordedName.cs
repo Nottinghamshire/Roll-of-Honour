@@ -11,7 +11,7 @@ public class RecordedName
 
   public int Id { get; set; }
   public int? IWMNameRefNo { get; set; } // Imperial War Museum
-  public string AsRecorded { get; set; } = string.Empty;
+  public string AsRecorded { get; private set; } = string.Empty;
   public string FirstName { get; set; } = string.Empty;
   public string Initials { get; set; } = string.Empty;
   public string LastName { get; set; } = string.Empty;

@@ -4,7 +4,21 @@ public partial class WarMemorial
 {
   public Core.Models.Memorial ToDomainModel()
   {
-    var memorial = new Core.Models.Memorial(this.Name)
+    var domainRecordedNames = this.RecordedNames.Select(recordedName => new Core.Models.RecordedName(recordedName.AsRecorded)
+      {
+        Id = recordedName.Id,
+        PersonId = recordedName.PersonId,
+        Initials = recordedName.Initials,
+        FirstName = recordedName.FirstName,
+        LastName = recordedName.LastName,
+        ServiceNumber = recordedName.ServiceNumber,
+        Rank = recordedName.Rank,
+        Sex = recordedName.Sex,
+        IWMNameRefNo = recordedName.IwmnameRefNo
+      })
+      .ToList();
+
+    var memorial = new Core.Models.Memorial(this.Name, domainRecordedNames)
     {
       Id = this.Id,
       UKNIWMRef = this.Ukniwmref,
@@ -16,16 +30,6 @@ public partial class WarMemorial
       Postcode = this.Postcode,
     };
 
-    // foreach (var decoration in this.Decorations)
-    // {
-    //   person.Decorations.Add(decoration.ToDomainModel());
-    // }
-    //
-    // foreach (var memorial in this.RecordedNames.Select(rn=>rn.WarMemorial).Distinct())
-    // {
-    //   Memorial.Memorials.Add(memorial.Id, memorial.Name);
-    // }
-    //
     return memorial;
   }
 
