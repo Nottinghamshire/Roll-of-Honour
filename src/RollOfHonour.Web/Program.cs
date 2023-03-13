@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using RollOfHonour.Core.BasicSearch;
+using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;

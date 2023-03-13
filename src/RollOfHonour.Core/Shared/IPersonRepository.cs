@@ -1,5 +1,5 @@
-﻿using RollOfHonour.Core.BasicSearch;
-using RollOfHonour.Core.Models;
+﻿using RollOfHonour.Core.Models;
+using RollOfHonour.Core.Models.Search;
 
 namespace RollOfHonour.Core.Shared;
 
