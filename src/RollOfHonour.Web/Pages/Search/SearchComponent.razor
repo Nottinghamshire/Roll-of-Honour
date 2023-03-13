@@ -40,7 +40,6 @@
         @foreach (var result in _personSearchResults)
         {
             @result.Name
-            ;
             <br />
         }
     </div>
@@ -51,12 +50,12 @@
     <div>
         @foreach (var result in _memorialSearchResults)
         {
-            @result.Name;
+            @result.Name
             <br />
         }
     </div>
 }
-<br /> <br /> 
+<br /> <br />
 
 @code {
     private string searchTerm = "";
@@ -70,20 +69,19 @@
 
     private async Task SearchRollOfHonour()
     {
-        var searchQuery = new SearchQuery
-            {
-                SearchTerm = searchTerm,
-                WW1 = ww1,
-                WW2 = ww2,
-                PersonType = _selectedPersonType,
-                QueryType = _selectedQueryType
-            };
-
         _personSearchResults = new();
         _memorialSearchResults = new();
 
-        if (searchQuery.QueryType == QueryType.Person)
+        if (_selectedQueryType == QueryType.Person)
         {
+            var searchQuery = new PersonQuery
+                {
+                    SearchTerm = searchTerm,
+                    WW1 = ww1,
+                    WW2 = ww2,
+                    PersonType = _selectedPersonType,
+                };
+
             Result<List<PersonSearchResult>> results = await _searchService.PersonSearch(searchQuery);
 
             if (results.IsSuccess is not true)
@@ -99,8 +97,13 @@
             _personSearchResults = results.Value;
         }
 
-        if (searchQuery.QueryType == QueryType.Memorial)
+        if (_selectedQueryType == QueryType.Memorial)
         {
+            var searchQuery = new MemorialQuery
+                {
+                    SearchTerm = searchTerm
+                };
+
             Result<List<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery);
 
             if (results.IsSuccess is not true)

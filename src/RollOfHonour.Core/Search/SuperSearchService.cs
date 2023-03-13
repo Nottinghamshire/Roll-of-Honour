@@ -20,7 +20,7 @@ public class SuperSearchService : ISuperSearchService
         throw new NotImplementedException();
     }
 
-    public async Task<Result<List<MemorialSearchResult>>> MemorialSearch(SearchQuery query)
+    public async Task<Result<List<MemorialSearchResult>>> MemorialSearch(MemorialQuery query)
     {
         List<MemorialSearchResult> results = new List<MemorialSearchResult>();
 
@@ -51,7 +51,7 @@ public class SuperSearchService : ISuperSearchService
         return results;
     }
 
-    public async Task<Result<List<PersonSearchResult>>> PersonSearch(SearchQuery query)
+    public async Task<Result<List<PersonSearchResult>>> PersonSearch(PersonQuery query)
     {
         List<PersonSearchResult> results = new List<PersonSearchResult>();
 

@@ -6,6 +6,6 @@ namespace RollOfHonour.Core.Search;
 public interface ISuperSearchService
 {
   Task<Result<List<ISearchResult>>> BasicSearch(string searchString);
-  Task<Result<List<PersonSearchResult>>> PersonSearch(SearchQuery searchQuery);
-  Task<Result<List<MemorialSearchResult>>> MemorialSearch(SearchQuery searchQuery);
+  Task<Result<List<PersonSearchResult>>> PersonSearch(PersonQuery searchQuery);
+  Task<Result<List<MemorialSearchResult>>> MemorialSearch(MemorialQuery searchQuery);
 }
