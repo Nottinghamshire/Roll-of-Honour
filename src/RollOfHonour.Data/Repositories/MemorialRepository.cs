@@ -15,35 +15,48 @@ public class MemorialRepository : IMemorialRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Memorial> GetById(int id)
+    public async Task<Memorial?> GetById(int id)
     {
         try
         {
             var dbMemorial = await _dbContext.WarMemorials
               .Include(m => m.RecordedNames)
               .FirstAsync(p => p.Id == id);
+            if (dbMemorial == null)
+            {
+                return null;
+            }
 
             return dbMemorial.ToDomainModel();
         }
         catch (InvalidOperationException)
         {
+            // TODO: Understand if this is even possible 
             return null;
         }
     }
 
+    // TODO: Should this return be nullable, if there were no memorials rather than an empty list?
     public async Task<IEnumerable<Memorial>> GetAll()
     {
         try
         {
-            var memorials = await _dbContext.WarMemorials
-              //.OrderByDescending(x => x.Id)
-                .Take(80).ToListAsync();
+            var memorials = _dbContext.WarMemorials
+                //.OrderByDescending(x => x.Id)
+                .Take(80);
 
-            return memorials.Select(m => m.ToDomainModel());
+            if (!memorials.Any())
+            {
+                return Enumerable.Empty<Memorial>();
+            }
+
+            return memorials
+            .Select(m => m.ToDomainModel());
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            return null;
+            // TODO: Handle exceptions 
+            throw ex;
         }
     }
 
@@ -53,12 +66,17 @@ public class MemorialRepository : IMemorialRepository
             m.Name.Contains(nameFragment))
             .AsNoTracking();
 
-        if (dbMemorials.Count() == 0)
+        if (!dbMemorials.Any())
         {
             return null;
         }
 
-        var results = await dbMemorials.Take(25).Select(m => new MemorialSearchResult() { Id = m.Id, Name = m.Name, Description = m.Description }).ToListAsync();
+        var results = await dbMemorials.Take(25).Select(m => new MemorialSearchResult()
+        {
+            Id = m.Id,
+            Name = m.Name,
+            Description = m.Description == null ? string.Empty : m.Description
+        }).ToListAsync();
 
         return results;
     }

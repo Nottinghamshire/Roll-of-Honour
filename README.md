@@ -8,5 +8,5 @@ A website dedicated to those who were lost during the Great War and the Second W
 - Add a reference an Azure App Configuration and a database (optionally configure with your own DB provider or app configuration service/file)
 - Run using:
 ```bash
-$ dotnet watch --verbose run  --project .\src\RollOfHonour.Web\RollOfHonour.Web.csproj
+$ dotnet watch --verbose run --project .\src\RollOfHonour.Web\RollOfHonour.Web.csproj
 ```

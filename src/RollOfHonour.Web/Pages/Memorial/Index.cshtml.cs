@@ -6,25 +6,25 @@ namespace RollOfHonour.Web.Pages.Memorial;
 
 public class IndexModel : PageModel
 {
-  public List<Core.Models.Memorial> Memorials { get; set; }
-  
-  private IMemorialRepository _memorialRepository { get; set; } = null!;
+    public List<Core.Models.Memorial> Memorials { get; set; }
 
-  public IndexModel(IMemorialRepository memorialRepository)
-  {
-    _memorialRepository = memorialRepository;
-  }
-  
-  public async Task<IActionResult> OnGet()
-  {
-    var memorials = await _memorialRepository.GetAll();
-    
-    if (!memorials.Any())
+    private IMemorialRepository _memorialRepository { get; set; } = null!;
+
+    public IndexModel(IMemorialRepository memorialRepository)
     {
-      return NotFound();
+        _memorialRepository = memorialRepository;
     }
 
-    Memorials = memorials.ToList();
-    return Page();
-  }
+    public async Task<IActionResult> OnGet()
+    {
+        var memorials = await _memorialRepository.GetAll();
+
+        if (!memorials.Any())
+        {
+            return NotFound();
+        }
+
+        Memorials = memorials.ToList();
+        return Page();
+    }
 }

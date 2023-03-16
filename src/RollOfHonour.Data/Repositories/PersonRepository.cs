@@ -24,26 +24,32 @@ public class PersonRepository : IPersonRepository
               .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
               .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
               .FirstOrDefaultAsync(p => p.Id == id);
+            
+            if (dbPerson is null)
+            {
+                return null;
+            }
 
             return dbPerson.ToDomainModel();
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
+            // TODO: Is this necessary?
             return null;
         }
     }
 
+    // TODO: Should this return a null rather than an empty enumerable?
     public async Task<IEnumerable<Person>> GetAll()
     {
         try
         {
             var people = await _dbContext.People.OrderByDescending(x => x.Id).Take(25).ToListAsync();
-
             return people.Select(p => p.ToDomainModel());
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            return null;
+            return Enumerable.Empty<Person>();
         }
     }
 
