@@ -1,10 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RollOfHonour.Data.Models.DB;
+﻿namespace RollOfHonour.Data.Models.DB;
 
 public partial class WarMemorial
 {
+    public Core.Models.Memorial ToDomainModel()
+    {
+        var domainRecordedNames = this.RecordedNames.Select(recordedName => new Core.Models.RecordedName(recordedName.AsRecorded)
+        {
+            Id = recordedName.Id,
+            PersonId = recordedName.PersonId,
+            Initials = recordedName.Initials == null ? string.Empty : recordedName.Initials,
+            FirstName = recordedName.FirstName == null ? string.Empty : recordedName.FirstName,
+            LastName = recordedName.LastName == null ? string.Empty : recordedName.LastName,
+            ServiceNumber = recordedName.ServiceNumber,
+            Rank = recordedName.Rank,
+            Sex = recordedName.Sex,
+            IWMNameRefNo = recordedName.IwmnameRefNo
+        })
+          .ToList();
+
+        var memorial = new Core.Models.Memorial(this.Name, domainRecordedNames)
+        {
+            Id = this.Id,
+            UKNIWMRef = this.Ukniwmref,
+            Description = this.Description,
+            //Location = //TODO: Convert to LatLong from East/North 
+            MainPhotoId = this.MainPhotoId,
+            NamesCount = this.NamesCount,
+            District = this.District,
+            Postcode = this.Postcode,
+        };
+
+        return memorial;
+    }
+
     public int Id { get; set; }
 
     public string? Ukniwmref { get; set; }

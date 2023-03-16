@@ -1,0 +1,122 @@
+﻿@using RollOfHonour.Core.Models.Search
+@using Ardalis.Result
+@using Core.Enums
+@inject RollOfHonour.Core.Search.ISuperSearchService _searchService;
+
+<div class="is-inline-flex">
+    <input type="text" @bind="@searchTerm" />
+    <button value="Search" @onclick="SearchRollOfHonour">Search</button>
+
+    <label>WW1
+        <InputCheckbox @bind-Value=@ww1 />
+    </label>
+
+    <label>WW2
+        <InputCheckbox @bind-Value=@ww2 />
+    </label>
+
+    <InputRadioGroup @bind-Value="_selectedPersonType">
+        <br>
+        @foreach (var personType in Enum.GetValues(typeof(PersonType)))
+        {
+            <InputRadio Value="personType" />
+            @Enum.GetName(typeof(PersonType), personType)
+            <br />
+        }
+    </InputRadioGroup>
+    <InputRadioGroup @bind-Value="_selectedQueryType">
+        <br>
+        @foreach (var queryType in Enum.GetValues(typeof(QueryType)))
+        {
+            <InputRadio Value="queryType" />
+            @Enum.GetName(typeof(QueryType), queryType)
+            <br />
+        }
+    </InputRadioGroup>
+</div>
+@if (_personSearchResults.Count() != 0)
+{
+    <div>
+        @foreach (var result in _personSearchResults)
+        {
+            @result.Name
+            <br />
+        }
+    </div>
+}
+
+@if (_memorialSearchResults.Count() != 0)
+{
+    <div>
+        @foreach (var result in _memorialSearchResults)
+        {
+            @result.Name
+            <br />
+        }
+    </div>
+}
+<br /> <br />
+
+@code {
+    private string searchTerm = "";
+    private bool ww1;
+    private bool ww2;
+    private PersonType _selectedPersonType = PersonType.Military;
+    private QueryType _selectedQueryType = QueryType.Person;
+    private List<MemorialSearchResult> _memorialSearchResults = new();
+    private List<PersonSearchResult> _personSearchResults = new();
+
+
+    private async Task SearchRollOfHonour()
+    {
+        _personSearchResults = new();
+        _memorialSearchResults = new();
+
+        if (_selectedQueryType == QueryType.Person)
+        {
+            var searchQuery = new PersonQuery
+                {
+                    SearchTerm = searchTerm,
+                    WW1 = ww1,
+                    WW2 = ww2,
+                    PersonType = _selectedPersonType,
+                };
+
+            Result<List<PersonSearchResult>> results = await _searchService.PersonSearch(searchQuery);
+
+            if (results.IsSuccess is not true)
+            {
+                // Do something
+            }
+
+            if (!results.Value.Any())
+            {
+                // Do something
+            }
+
+            _personSearchResults = results.Value;
+        }
+
+        if (_selectedQueryType == QueryType.Memorial)
+        {
+            var searchQuery = new MemorialQuery
+                {
+                    SearchTerm = searchTerm
+                };
+
+            Result<List<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery);
+
+            if (results.IsSuccess is not true)
+            {
+                // Do something
+            }
+
+            if (!results.Value.Any())
+            {
+                // Do something
+            }
+
+            _memorialSearchResults = results.Value;
+        }
+    }
+}

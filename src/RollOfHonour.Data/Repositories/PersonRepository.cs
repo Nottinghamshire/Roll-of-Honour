@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RollOfHonour.Core.Models;
+using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 
@@ -7,66 +8,89 @@ namespace RollOfHonour.Data.Repositories;
 
 public class PersonRepository : IPersonRepository
 {
-  private RollOfHonourContext _dbContext { get; set; }
+    private RollOfHonourContext _dbContext { get; set; }
 
-  public PersonRepository(RollOfHonourContext dbContext)
-  {
-    _dbContext = dbContext;
-  }
-
-  public async Task<Person?> GetById(int id)
-  {
-    try
+    public PersonRepository(RollOfHonourContext dbContext)
     {
-      var dbPerson = await _dbContext.People
-        .Include(p=>p.Decorations)
-        .Include(p => p.RecordedNames).ThenInclude(rn=>rn.WarMemorial)
-        .Include(p=>p.SubUnit).ThenInclude(unit => unit.Regiment)
-        .FirstOrDefaultAsync(p => p.Id == id);
-      
-      return dbPerson.ToDomainModel();
+        _dbContext = dbContext;
     }
-    catch (InvalidOperationException ex)
-    {
-      return null;
-    }
-  }
 
-  public async Task<IEnumerable<Person>> GetAll()
-  {
-    try
+    public async Task<Person?> GetById(int id)
     {
-      var people = await _dbContext.People.OrderByDescending(x => x.Id).Take(25).ToListAsync();
-   
-      return people.Select(p => p.ToDomainModel());
+        try
+        {
+            var dbPerson = await _dbContext.People
+              .Include(p => p.Decorations)
+              .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
+              .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
+              .FirstOrDefaultAsync(p => p.Id == id);
+            
+            if (dbPerson is null)
+            {
+                return null;
+            }
+
+            return dbPerson.ToDomainModel();
+        }
+        catch (InvalidOperationException)
+        {
+            // TODO: Is this necessary?
+            return null;
+        }
     }
-    catch (Exception e)
+
+    // TODO: Should this return a null rather than an empty enumerable?
+    public async Task<IEnumerable<Person>> GetAll()
     {
-      return null;
+        try
+        {
+            var people = await _dbContext.People.OrderByDescending(x => x.Id).Take(25).ToListAsync();
+            return people.Select(p => p.ToDomainModel());
+        }
+        catch (Exception)
+        {
+            return Enumerable.Empty<Person>();
+        }
     }
-  }
 
-  public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
-  {
-    var countOfPeople = _dbContext.People.Count();
-    var random = new Random((int)date.Ticks);
-
-    var dbPeople = new List<Models.DB.Person>();
-
-    for (var i = 0; i <= 2; i++)
+    public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
     {
-      var randomId = random.Next(0, countOfPeople - 1); 
-      var person = await _dbContext.People.FirstOrDefaultAsync(p => p.Id == randomId);
-      if (person == null)
-      {
-        --i;
-      }
-      else
-      {
-        dbPeople.Add(person);
-      }
+        var countOfPeople = _dbContext.People.Count();
+        var random = new Random((int)date.Ticks);
+
+        var dbPeople = new List<Models.DB.Person>();
+
+        for (var i = 0; i <= 2; i++)
+        {
+            var randomId = random.Next(0, countOfPeople - 1);
+            var person = await _dbContext.People.FirstOrDefaultAsync(p => p.Id == randomId);
+            if (person == null)
+            {
+                --i;
+            }
+            else
+            {
+                dbPeople.Add(person);
+            }
+        }
+
+        IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel());
+        return people;
     }
-    IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel());
-    return people;
-  }
+
+    public async Task<IEnumerable<PersonSearchResult>?> FindByName(string nameFragment)
+    {
+        var dbPeople = _dbContext.People.Where(p =>
+          p.FirstNames.Contains(nameFragment) ||
+          p.LastName.Contains(nameFragment)).AsNoTracking();
+
+        if (dbPeople.Count() == 0)
+        {
+            return null;
+        }
+
+        var results = await dbPeople.Take(25).Select(p => new PersonSearchResult() { Id = p.Id, Name = $"{p.FirstNames} {p.LastName}" }).ToListAsync();
+
+        return results;
+    }
 }
