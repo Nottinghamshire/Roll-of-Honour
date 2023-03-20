@@ -15,9 +15,7 @@ namespace RollOfHonour.Core.Models
         {
             PageIndex = pageIndex;
             PageSize = pageSize;
-            // Maybe this should be calculated in case the list changes?
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
             this.AddRange(items);
         }
 
