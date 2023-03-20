@@ -49,7 +49,7 @@ namespace RollOfHonour.Web.Pages.Shared.ViewComponents
                 return;
             }
 
-            var count = maxRange - minRange;
+            var count = (maxRange - minRange) + 1;
             if (maxRange == PageCount)
             {
                 this.PageRange = Enumerable.Range(minRange, count).Prepend(1).ToArray();
