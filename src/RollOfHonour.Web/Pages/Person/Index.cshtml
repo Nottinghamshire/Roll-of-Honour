@@ -56,58 +56,9 @@
                     </div>
                 }
             </div>
-
-            <div class="pagination-block">
-                <ul>
-                    <li>
-                        <a href="people.html">
-                            <i class="fa-light fa-chevron-left"></i>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="people.html">1</a>
-                    </li>
-                    <li>
-                        <a href="people.html">2</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=3">3</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=4">4</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=5">5</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=6">6</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=7">7</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=8">8</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=9">9</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=10">10</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=589">589</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=590">590</a>
-                    </li>
-                    <li>
-                        <a href="people.html?page=3">
-                            <i class="fa-light fa-chevron-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
+            <vc:pagination-component current-page=@Model.PageNumber page-count=@Model.People.TotalPages
+                slug="/person/index">
+            </vc:pagination-component>
         </div>
     </div>
 </section>

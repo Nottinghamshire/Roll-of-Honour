@@ -49,20 +49,20 @@
                 <nav aria-label="primary-navigation" class="nav-primary">
                     <ul class="primary-navigation">
                         <li>
-                            <a href="" title="Go back to the homepage" class="current">Home</a>
+                            <a asp-page="/index" title="Go back to the homepage">Home</a>
                         </li>
                         <li>
                             <a href="" title="About">About</a>
                         </li>
                         <li>
-                            <a href="" title="People">People</a>
+                            <a asp-page="/person/index" title="People">People</a>
                         </li>
                         <li>
-                            <a href="" title="Memorials">Memorials</a>
+                            <a asp-page="/memorial/index" title="Memorials">Memorials</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="" title="Timeline">Timeline</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a asp-page="Search" asp title="Search">Search</a>
                         </li>
@@ -92,16 +92,16 @@
                 <span class="footer-copyright">&copy; Nottinghamshire County Council 2023</span>
                 <ul class="footer-links">
                     <li>
-                        <a href="/" title="Go back to the homepage">Home</a>
+                        <a asp-page="/index" title="Go back to the homepage">Home</a>
                     </li>
                     <li>
                         <a href="/about.html" title="About">About</a>
                     </li>
                     <li>
-                        <a href="/people.html" title="People">People</a>
+                        <a asp-page="/person/index" title="People">People</a>
                     </li>
                     <li>
-                        <a href="/memorials.html" title="Memorials">Memorials</a>
+                        <a asp-page="/memorial/index" title="Memorials">Memorials</a>
                     </li>
                     <li>
                         <a href="/timeline.html" title="Timeline">Timeline</a>
