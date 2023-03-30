@@ -7,6 +7,9 @@ namespace RollOfHonour.Data.Repositories;
 
 public class MemorialRepository : IMemorialRepository
 {
+  private string settingBlobName = "ncc01sarollhonstdlrsdev";
+  private string settingBlobImageContainerName = "images";
+
   public RollOfHonourContext _dbContext { get; set; }
 
   public MemorialRepository(RollOfHonourContext dbContext)
@@ -20,9 +23,10 @@ public class MemorialRepository : IMemorialRepository
     {
       var dbMemorial = await _dbContext.WarMemorials
         .Include(m => m.RecordedNames)
+        .Include(m => m.Photos)
         .FirstAsync(p => p.Id == id);
 
-      return dbMemorial.ToDomainModel();
+      return dbMemorial.ToDomainModel(settingBlobName, settingBlobImageContainerName);
     }
     catch (InvalidOperationException)
     {
@@ -35,10 +39,10 @@ public class MemorialRepository : IMemorialRepository
     try
     {
       var memorials = await _dbContext.WarMemorials
-        //.OrderByDescending(x => x.Id)
+        .Include(m => m.Photos)
         .Take(80).ToListAsync();
 
-      return memorials.Select(m => m.ToDomainModel());
+      return memorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName));
     }
     catch (Exception e)
     {
