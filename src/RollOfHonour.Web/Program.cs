@@ -15,6 +15,7 @@ builder.Services.AddDbContext<RollOfHonourContext>(options =>
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
+builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 builder.Services.AddTransient<ISuperSearchService, SuperSearchService>();
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C");

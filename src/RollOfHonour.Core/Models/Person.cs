@@ -4,6 +4,11 @@ namespace RollOfHonour.Core.Models;
 
 public class Person
 {
+  public Person(int?  mainPhotoId)
+  {
+    MainPhotoId = mainPhotoId;
+  }
+  
   public int Id { get; set; }
   public string FirstNames { get; set; } = string.Empty;
   public string Initials { get; set; } = string.Empty;
@@ -94,7 +99,7 @@ public class Person
   public string? MilitaryHistory { get; set; }
   public string? ExtraInfo { get; set; }
 
-  public int? MainPhotoId { get; set; }
+  public int? MainPhotoId { get; private set; }
 
   public string Name => string.IsNullOrEmpty(FirstNames)
     ? string.IsNullOrEmpty(Initials) ? $"{LastName}" : $"{Initials} {LastName}"

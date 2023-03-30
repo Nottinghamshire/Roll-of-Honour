@@ -7,7 +7,7 @@ public partial class Person
 {
   public Core.Models.Person ToDomainModel()
   {
-    var person = new Core.Models.Person()
+    var person = new Core.Models.Person(this.MainPhotoId)
     {
       Id = this.Id,
       Comments = this.Comments,
@@ -26,7 +26,6 @@ public partial class Person
       AgeAtDeath = this.AgeAtDeath,
       DateOfBirth = this.DateOfBirth,
       DateOfDeath = this.DateOfDeath,
-      MainPhotoId = this.MainPhotoId,
       PlaceOfBirth = this.PlaceOfBirth,
       Unit = this.SubUnit?.Name,
       Regiment = this.SubUnit?.Regiment?.Name

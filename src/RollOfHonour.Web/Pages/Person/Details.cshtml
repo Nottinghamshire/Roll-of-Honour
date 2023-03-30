@@ -84,9 +84,9 @@
                     <li id="tab-03" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-03">
                         <i class="fa-light fa-circle-info"></i> Extra Information
                     </li>
-                    @* <li id="tab-04" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-04"> *@
-                    @*     <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs *@
-                    @* </li> *@
+                    <li id="tab-04" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-04">
+                        <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
+                    </li>
                 </ul>
             </div>
             <div id="tabpanel-01" role="tabpanel">
@@ -111,10 +111,6 @@
                     </p>
                 </div>
 
-                @*                   <div class="text-block"> *@
-                @* <p>Private George Fred Gelsthorpe, enlisted at Hucknall on 2nd August 1915 he served with the 2nd Battalion Gordon Highlanders, he was killed in action on 1st July 1916 the first day of the Battle of Somme. He is buried in Gordon Cemetery, Mametz.</p> *@
-                @* </div> *@
-
             </div>
 
             <div id="tabpanel-03" role="tabpanel" class="hide">
@@ -126,67 +122,55 @@
                     </p>
                 </div>
 
-                @*                   <div class="text-block"> *@
-                @* <p>Article published on 12th February 1916 in the Beeston Gazette &amp; Echo :-</p> *@
-                @* 	 *@
-                @* <p>“The fourth portrait is of George F. Gelsthorpe, the son of Mrs. Clay and step-son of Mr. Clay, of Bentinck street, Hucknall. He enlisted in the Gordon Highlanders on August 2nd, and in November he was facing the foe in France. He reports himself in good health, and thanks the townspeople for their most acceptable gift. Gelsthorpe, who is 19 years of age, does not forward any detail of the engagements in which he has been fighting.”</p> *@
-                @* 	 *@
-                @* <p>Above article is courtesy of Jim Grundy and his facebook pages Small Town Great War Hucknall 1914-1918</p> *@
-                @* </div> *@
+            </div>
+
+            <div id="tabpanel-04" role="tabpanel">
+
+                <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div>
+
+                <div class="gallery-block">
+                    <div class="columns is-multiline">
+
+                        @if (Model.MainPhoto.Id > 0)
+                        {
+                            <div class="column is-4-desktop">
+                                <a href="@Model.MainPhoto.ImageUriSmall" title="@Model.MainPhoto.Description">
+                                    <div class="picture-block short styled-alt">
+                                        <div class="picture-border">
+                                            <div
+                                                class="picture-embed"
+                                                style="background-image: url(@Model.MainPhoto.ImageUriOriginal);            											      ">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+
+                        @foreach (var photo in @Model.Photos)
+                        {
+                            <div class="column is-4-desktop">
+                                <a href="@photo.ImageUriSmall" title="@photo.Description">
+                                    <div class="picture-block short styled-alt">
+                                        <div class="picture-border">
+                                            <div
+                                                class="picture-embed"
+                                                style="background-image: url(@photo.ImageUriOriginal);            											      ">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
 
             </div>
 
-            @*             <div id="tabpanel-04" role="tabpanel" class="hide"> *@
-            @* *@
-            @*                 <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div> *@
-            @* *@
-            @* *@
-            @*                 <div class="gallery-block"> *@
-            @*                     <div class="columns is-multiline"> *@
-            @*                         <div class="column is-4-desktop"> *@
-            @*                             <a href="/images/gallery/example2.jpeg" title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College"> *@
-            @*                                 <div class="picture-block short styled-alt"> *@
-            @*                                     <div class="picture-border"> *@
-            @*                                         <div class="picture-embed" style=" *@
-            @* 												background-image: url(/images/gallery/example2.jpeg); *@
-            @* 											  "></div> *@
-            @*                                     </div> *@
-            @*                                 </div> *@
-            @*                             </a> *@
-            @*                         </div> *@
-            @* *@
-            @*                         <div class="column is-4-desktop"> *@
-            @*                             <a href="/images/gallery/example1.jpeg" title="Photo of Reginald Dudley Bawdwen Anderson "> *@
-            @*                                 <div class="picture-block short styled"> *@
-            @*                                     <div class="picture-border"> *@
-            @*                                         <div class="picture-embed" style=" *@
-            @* 												background-image: url(/images/gallery/example1.jpeg); *@
-            @* 											  "></div> *@
-            @*                                     </div> *@
-            @*                                 </div> *@
-            @*                             </a> *@
-            @*                         </div> *@
-            @* *@
-            @*                         <div class="column is-4-desktop"> *@
-            @*                             <a href="/images/gallery/example3.jpeg" title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings"> *@
-            @*                                 <div class="picture-block short styled"> *@
-            @*                                     <div class="picture-border"> *@
-            @*                                         <div class="picture-embed" style=" *@
-            @* 												background-image: url(/images/gallery/example3.jpeg); *@
-            @* 											  "> *@
-            @*                                         </div> *@
-            @*                                     </div> *@
-            @*                                 </div> *@
-            @*                             </a> *@
-            @*                         </div> *@
-            @* *@
-            @* *@
-            @*                     </div> *@
-            @*                 </div> *@
-            @* *@
-            @*             </div> *@
-
         </div>
+
     </div>
 </div>
 <div class="column is-full-tablet is-4-desktop is-4-fullhd">
@@ -194,7 +178,7 @@
         <div class="picture-block profile-picture">
             <div class="picture-border">
                 <div class="picture-embed" style="
-                        background-image: url(/images/sample-data/picture3.jpeg);
+                        background-image: url(@Model.MainPhoto.ImageUriSmall);
                       "></div>
             </div>
         </div>
@@ -233,7 +217,9 @@
                             <i class="fa-light fa-monument"></i>
                         </div>
                         <a asp-page="/Memorial/Details"
-                        asp-route-id="@memorial.Key" title="Learn about @memorial.Value">@memorial.Value</a>
+                           asp-route-id="@memorial.Key" title="Learn about @memorial.Value">
+                            @memorial.Value
+                        </a>
                     </li>
                 }
             </ul>
@@ -250,5 +236,6 @@
     </aside>
 </div>
 </div>
+
 </div>
 </section>
