@@ -4,11 +4,11 @@ namespace RollOfHonour.Core.Models;
 
 public class Person
 {
-  public Person(int?  mainPhotoId)
+  public Person(int? mainPhotoId)
   {
     MainPhotoId = mainPhotoId;
   }
-  
+
   public int Id { get; set; }
   public string FirstNames { get; set; } = string.Empty;
   public string Initials { get; set; } = string.Empty;
@@ -107,6 +107,24 @@ public class Person
 
   public List<Decoration> Decorations { get; set; } = new List<Decoration>();
   public Dictionary<int, string> Memorials { get; set; } = new Dictionary<int, string>();
+
+  public Photo MainPhoto
+  {
+    get
+    {
+      //Photo decision
+      //If main photo null, then use the first of the other images (or a random one)
+      if (MainPhotoId == null && Photos.Any())
+      {
+        //Promote an image to MainPhoto
+        return Photos.FirstOrDefault();
+      }
+
+      return null;
+    }
+  }
+
+  public List<Photo> Photos { get; set; } = new List<Photo>();
 
   private int AgeCalculator(DateTime dateOfBirth, DateTime dateOfDeath)
   {

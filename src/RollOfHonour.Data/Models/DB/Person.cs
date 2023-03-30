@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace RollOfHonour.Data.Models.DB;
 
-namespace RollOfHonour.Data.Models.DB;
-
-public partial class Person
+public class Person
 {
-  public Core.Models.Person ToDomainModel()
+  public Core.Models.Person ToDomainModel(string blobServiceName, string blobImagesContainer)
   {
     var person = new Core.Models.Person(this.MainPhotoId)
     {
@@ -30,15 +27,20 @@ public partial class Person
       Unit = this.SubUnit?.Name,
       Regiment = this.SubUnit?.Regiment?.Name
     };
-    
+
     foreach (var decoration in this.Decorations)
     {
       person.Decorations.Add(decoration.ToDomainModel());
     }
 
-    foreach (var memorial in this.RecordedNames.Select(rn=>rn.WarMemorial).Distinct())
+    foreach (var memorial in this.RecordedNames.Select(rn => rn.WarMemorial).Distinct())
     {
       person.Memorials.Add(memorial.Id, memorial.Name);
+    }
+
+    foreach (var photo in this.Photos)
+    {
+      person.Photos.Add(photo.ToDomainModel(blobServiceName, blobImagesContainer));
     }
 
     return person;

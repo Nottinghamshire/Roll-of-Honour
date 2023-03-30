@@ -131,26 +131,10 @@
                 <div class="gallery-block">
                     <div class="columns is-multiline">
 
-                        @if (Model.MainPhoto.Id > 0)
+                        @foreach (var photo in Model.Person.Photos)
                         {
                             <div class="column is-4-desktop">
-                                <a href="@Model.MainPhoto.ImageUriSmall" title="@Model.MainPhoto.Description">
-                                    <div class="picture-block short styled-alt">
-                                        <div class="picture-border">
-                                            <div
-                                                class="picture-embed"
-                                                style="background-image: url(@Model.MainPhoto.ImageUriOriginal);            											      ">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        }
-
-                        @foreach (var photo in @Model.Photos)
-                        {
-                            <div class="column is-4-desktop">
-                                <a href="@photo.ImageUriSmall" title="@photo.Description">
+                                <a href="@photo.ImageUriMedium" title="@photo.Description">
                                     <div class="picture-block short styled-alt">
                                         <div class="picture-border">
                                             <div
@@ -162,7 +146,6 @@
                                 </a>
                             </div>
                         }
-
 
                     </div>
                 </div>
@@ -178,7 +161,7 @@
         <div class="picture-block profile-picture">
             <div class="picture-border">
                 <div class="picture-embed" style="
-                        background-image: url(@Model.MainPhoto.ImageUriSmall);
+                        background-image: url(@Model.Person.MainPhoto?.ImageUriMedium);
                       "></div>
             </div>
         </div>
