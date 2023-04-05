@@ -24,7 +24,7 @@ public class PersonRepository : IPersonRepository
               .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
               .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
               .FirstOrDefaultAsync(p => p.Id == id);
-            
+
             if (dbPerson is null)
             {
                 return null;
@@ -92,5 +92,18 @@ public class PersonRepository : IPersonRepository
         var results = await dbPeople.Take(25).Select(p => new PersonSearchResult() { Id = p.Id, Name = $"{p.FirstNames} {p.LastName}" }).ToListAsync();
 
         return results;
+    }
+
+    public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)
+    {
+        var dbPeople = await _dbContext.People.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        if (!dbPeople.Any())
+        {
+            return new PaginatedList<Person>();
+        }
+
+        return new PaginatedList<Person>(dbPeople.Select(p => 
+            p.ToDomainModel()).ToList(), _dbContext.People.Count(), pageIndex, pageSize);
     }
 }

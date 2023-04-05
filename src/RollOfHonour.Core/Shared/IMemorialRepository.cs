@@ -8,4 +8,5 @@ public interface IMemorialRepository
     Task<Memorial?> GetById(int id);
     Task<IEnumerable<Memorial>> GetAll();
     Task<IEnumerable<MemorialSearchResult>?> FindMemorialByName(string nameFragment);
+    Task<PaginatedList<Memorial>> GetPageOfMemorials(int pageIndex, int pageSize);
 }

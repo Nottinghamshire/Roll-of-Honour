@@ -3,6 +3,7 @@ using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
+using RollOfHonour.Data.Models.DB;
 
 namespace RollOfHonour.Data.Repositories;
 
@@ -34,6 +35,20 @@ public class MemorialRepository : IMemorialRepository
             // TODO: Understand if this is even possible 
             return null;
         }
+    }
+
+    public async Task<PaginatedList<Memorial>> GetPageOfMemorials(int pageIndex, int pageSize)
+    {
+        var dbMemorials = await _dbContext.WarMemorials.Skip(
+            (pageIndex - 1) * pageSize)
+            .Take(pageSize).ToListAsync();
+
+        if (!dbMemorials.Any())
+        {
+            return new PaginatedList<Memorial>();
+        }
+
+        return new PaginatedList<Memorial>(dbMemorials.Select(m => m.ToDomainModel()).ToList(), _dbContext.WarMemorials.Count(), pageIndex, pageSize);
     }
 
     // TODO: Should this return be nullable, if there were no memorials rather than an empty list?
