@@ -8,6 +8,7 @@
     <PackageVersion Include="Ardalis.Result" Version="4.1.0" />
     <PackageVersion Include="Ardalis.Specification" Version="6.1.0" />
     <PackageVersion Include="MediatR" Version="11.1.0" />
+    <PackageVersion Include="Microsoft.Azure.SignalR" Version="1.21.2" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1" />
