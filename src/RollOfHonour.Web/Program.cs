@@ -27,6 +27,11 @@ builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration,
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
+builder.Services.AddSignalR().AddAzureSignalR(options =>
+{
+    options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required;
+});
+
 builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
