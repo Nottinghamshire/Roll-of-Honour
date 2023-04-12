@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
 
@@ -20,7 +21,7 @@ public class SuperSearchService : ISuperSearchService
         throw new NotImplementedException();
     }
 
-    public async Task<Result<List<MemorialSearchResult>>> MemorialSearch(MemorialQuery query)
+    public async Task<Result<PaginatedList<MemorialSearchResult>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
     {
         List<MemorialSearchResult> results = new List<MemorialSearchResult>();
 
@@ -33,10 +34,10 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<List<MemorialSearchResult>>.Invalid(errors);
+            return Result<PaginatedList<MemorialSearchResult>>.Invalid(errors);
         }
 
-        var memorialResults = await _memorialRepository.FindMemorialByName(query.SearchTerm);
+        var memorialResults = await _memorialRepository.SearchMemorials(query.SearchTerm, pageNumber, pageSize);
 
         if (memorialResults != null)
         {
@@ -45,16 +46,14 @@ public class SuperSearchService : ISuperSearchService
 
         if (!results.Any())
         {
-            return Result<List<MemorialSearchResult>>.NotFound();
+            return Result<PaginatedList<MemorialSearchResult>>.NotFound();
         }
 
-        return results;
+        return memorialResults;
     }
 
-    public async Task<Result<List<PersonSearchResult>>> PersonSearch(PersonQuery query)
+    public async Task<Result<PaginatedList<PersonSearchResult>>> PersonSearch(PersonQuery query, int pageNumber, int pageSize)
     {
-        List<PersonSearchResult> results = new List<PersonSearchResult>();
-
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
             var errors = new List<ValidationError> { new()
@@ -64,20 +63,16 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<List<PersonSearchResult>>.Invalid(errors);
+            return Result<PaginatedList<PersonSearchResult>>.Invalid(errors);
         }
 
-        var peopleResults = await _personRepository.FindByName(query.SearchTerm);
-        if (peopleResults != null)
+        var peopleResults = await _personRepository.SearchPeople(query.SearchTerm, pageNumber, pageSize);
+
+        if (!peopleResults.Any())
         {
-            results.AddRange(peopleResults);
+            return Result<PaginatedList<PersonSearchResult>>.NotFound();
         }
 
-        if (!results.Any())
-        {
-            return Result<List<PersonSearchResult>>.NotFound();
-        }
-
-        return results;
+        return peopleResults;
     }
 }

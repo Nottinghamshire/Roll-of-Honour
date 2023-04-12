@@ -49,10 +49,13 @@
                         @if (Model.PersonSearchResults.Any())
                         {
                             <vc:PersonResultsList people=@Model.PersonSearchResults></vc:PersonResultsList>
+                            <vc:pagination-component current-page=@Model.PageIndex page-count=@Model.PersonSearchResults.TotalPages
+                                slug="/person/index">
+                            </vc:pagination-component>
                         }
                         else if (Model.MemorialSearchResults.Any())
                         {
-                           // memorial results 
+                            // memorial results
                         }
                         <div class="pagination-block">
                             <ul>

@@ -78,20 +78,25 @@ public class PersonRepository : IPersonRepository
         return people;
     }
 
-    public async Task<IEnumerable<PersonSearchResult>?> FindByName(string nameFragment)
+    public async Task<PaginatedList<PersonSearchResult>> SearchPeople(string searchString, int pageIndex, int pageSize)
     {
         var dbPeople = _dbContext.People.Where(p =>
-          p.FirstNames.Contains(nameFragment) ||
-          p.LastName.Contains(nameFragment)).AsNoTracking();
-
-        if (dbPeople.Count() == 0)
+          p.FirstNames.Contains(searchString) ||
+          p.LastName.Contains(searchString));
+          
+        var resultCount = dbPeople.Count();
+        if (resultCount == 0)
         {
-            return null;
+            // return something else
+            throw new NotImplementedException();
         }
+          
+        dbPeople = dbPeople.Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking();
 
-        var results = await dbPeople.Take(25).Select(p => new PersonSearchResult() { Id = p.Id, Name = $"{p.FirstNames} {p.LastName}" }).ToListAsync();
-
-        return results;
+        //TODO: Add extra fields
+        var results = await dbPeople.Select(p => new PersonSearchResult() { Id = p.Id, Name = $"{p.FirstNames} {p.LastName}" }).ToListAsync();
+        var paginatedResults = new PaginatedList<PersonSearchResult>(results, resultCount, pageIndex, pageSize);
+        return paginatedResults;
     }
 
     public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)
@@ -103,7 +108,7 @@ public class PersonRepository : IPersonRepository
             return new PaginatedList<Person>();
         }
 
-        return new PaginatedList<Person>(dbPeople.Select(p => 
+        return new PaginatedList<Person>(dbPeople.Select(p =>
             p.ToDomainModel()).ToList(), _dbContext.People.Count(), pageIndex, pageSize);
     }
 

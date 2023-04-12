@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 
 namespace RollOfHonour.Core.Search;
@@ -6,6 +7,6 @@ namespace RollOfHonour.Core.Search;
 public interface ISuperSearchService
 {
   Task<Result<List<ISearchResult>>> BasicSearch(string searchString);
-  Task<Result<List<PersonSearchResult>>> PersonSearch(PersonQuery searchQuery);
-  Task<Result<List<MemorialSearchResult>>> MemorialSearch(MemorialQuery searchQuery);
+  Task<Result<PaginatedList<PersonSearchResult>>> PersonSearch(PersonQuery searchQuery, int pageNumber, int pageSize);
+  Task<Result<PaginatedList<MemorialSearchResult>>> MemorialSearch(MemorialQuery searchQuery, int pageNumber, int pageSize);
 }
