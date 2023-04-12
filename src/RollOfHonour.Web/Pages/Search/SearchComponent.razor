@@ -2,6 +2,7 @@
 @using Ardalis.Result
 @using Core.Enums
 @inject RollOfHonour.Core.Search.ISuperSearchService _searchService;
+@inject NavigationManager navManager;
 
 <div class="columns is-multiline is-vcentered">
     <div class="column">
@@ -263,7 +264,7 @@
 
     private async Task SearchRollOfHonour()
     {
+        navManager.NavigateTo($"/Search/Results?s={searchTerm}&w=0&pt=0&qt=0&i=1", true);
         // TODO form and make request to search Razor page.
-        throw new NotImplementedException();
     }
 }

@@ -12,21 +12,24 @@ namespace RollOfHonour.Web.Pages.Search
     {
         private ISuperSearchService _searchService;
 
-        [BindProperty(SupportsGet = false)]
-        [FromQuery]
+        [BindProperty(SupportsGet = true)]
+        [FromQuery(Name = "w")]
         public War War { get; set; } = War.WW1;
-        [BindProperty(SupportsGet = false)]
-        [FromQuery]
-        public PersonType SelectedPersonType { get; set; }
-        [BindProperty(SupportsGet = false)]
-        [FromQuery]
-        public QueryType SelectedQueryType { get; set; }
-        [FromQuery(Name = "PageIndex")]
+        [BindProperty(SupportsGet = true)]
+        [FromQuery(Name = "pt")]
+        public PersonType SelectedPersonType { get; set; } = PersonType.Military;
+        [BindProperty(SupportsGet = true)]
+        [FromQuery(Name = "qt")]
+        public QueryType SelectedQueryType { get; set; } = QueryType.Person;
+        [FromQuery(Name = "i")]
+        [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
+        [FromQuery(Name = "s")]
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; } = String.Empty;
         public PaginatedList<MemorialSearchResult> MemorialSearchResults = new();
         public PaginatedList<PersonSearchResult> PersonSearchResults = new();
         public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
-        public string SearchString = String.Empty;
 
         public ResultsModel(ISuperSearchService searchService)
         {
