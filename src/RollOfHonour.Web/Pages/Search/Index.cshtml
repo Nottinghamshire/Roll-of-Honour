@@ -8,7 +8,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li>
-                            <a href="/" class="parent">Home
+                            <a asp-page="/index" class="parent">Home
                                 <span class="spacer" aria-hidden="true">
                                     <i class="fa-light fa-chevron-right"></i>
                                 </span>
@@ -39,6 +39,7 @@
                 <component type="typeof(SearchComponent)" render-mode="Server" />
             </div>
             }
+
             @if (Model.HasResults)
             {
             <div class="columns is-multiline">
@@ -57,68 +58,7 @@
                                 class="fal fa-sort-size-down"></i> Change
                             or filter these search results?</a>
                     </div>
-
-                    <div class="search-results-block" id="jumpto-results">
-                        <ul>
-                            <li>
-                                <div class="search-result-block">
-                                    <div class="war-label">
-                                        <img class="ww-insignia" src="/images/insignia-ww1.png"
-                                            alt="This data is related to World War 1" />
-                                    </div>
-                                    <div class="columns is-mobile">
-                                        <div
-                                            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-2-fullhd">
-                                            <div class="picture-block search-picture">
-                                                <div class="picture-border">
-                                                    <div class="picture-embed"
-                                                        style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/11224/medium.jpg);">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="column">
-                                            <span class="rank">Sergeant Major</span>
-                                            <h1 class="name">William Brown</h1>
-
-                                            <div class="service-number">
-                                                <span class="label"><i class="fa-light fa-hashtag fa-fw"></i> Service
-                                                    Number</span>
-                                                <span class="data">76543</span>
-                                            </div>
-
-                                            <div class="military-unit">
-                                                <span class="label"><i class="fa-light fa-flag fa-fw"></i> Military
-                                                    Unit</span>
-                                                <span class="data">4th Bn East Surrey Regiment</span>
-                                            </div>
-
-                                            <div class="date-of-birth">
-                                                <span class="label"><i class="fa-light fa-calendar fa-fw"></i> Date of
-                                                    birth</span>
-                                                <span class="data">25 Dec 1872</span>
-                                            </div>
-
-                                            <div class="date-of-death">
-                                                <span class="label"><i class="fa-light fa-tombstone fa-fw"></i> Date of
-                                                    Death</span>
-                                                <span class="data">05 Aug 1916 (43 Years old)</span>
-                                            </div>
-
-                                            <div class="place-of-birth">
-                                                <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of
-                                                    Birth</span>
-                                                <span class="data">Manchester</span>
-                                            </div>
-                                            <a href="/person.html" title="Look at this record" class="search-link"><i
-                                                    class="fal fa-glasses"></i> Read more</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
+                    <vc:PersonResultsList></vc:PersonResultsList>
                     <div class="pagination-block">
                         <ul>
                             <li><a href="search-results.html"><i class="fa-light fa-chevron-left"></i></a></li>
