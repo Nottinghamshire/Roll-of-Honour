@@ -9,84 +9,14 @@ namespace RollOfHonour.Web.Pages.Search
 {
     public class IndexModel : PageModel
     {
-        private ISuperSearchService _searchService;
 
-        [BindProperty(SupportsGet = false)]
-        [FromQuery]
-        public War War {get; set;}
-
-        [BindProperty(SupportsGet = false)]
-        [FromQuery]
-        public PersonType SelectedPersonType { get; set; }
-
-        [BindProperty(SupportsGet = false)]
-        [FromQuery]
-        public QueryType SelectedQueryType { get; set; }
-        public List<MemorialSearchResult> MemorialSearchResults = new();
-        public List<PersonSearchResult> PersonSearchResults = new();
-        public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
-        public string SearchString = String.Empty;
-
-        public IndexModel(ISuperSearchService searchService)
+        public IndexModel()
         {
-            _searchService = searchService;
         }
 
         public void OnGet()
         {
 
-        }
-
-        public async Task OnPost()
-        {
-            PersonSearchResults = new();
-            MemorialSearchResults = new();
-
-            if (SelectedQueryType == QueryType.Person)
-            {
-                var searchQuery = new PersonQuery
-                {
-                    SearchTerm = SearchString ?? String.Empty, 
-                    SelectedWar = War,
-                    PersonType = SelectedPersonType,
-                };
-
-                Result<List<PersonSearchResult>> results = await _searchService.PersonSearch(searchQuery);
-
-                if (results.IsSuccess is not true)
-                {
-                    // Do something
-                }
-
-                if (!results.Value.Any())
-                {
-                    // Do something
-                }
-
-                PersonSearchResults = results.Value;
-            }
-
-            else if (SelectedQueryType == QueryType.Memorial)
-            {
-                var searchQuery = new MemorialQuery
-                {
-                    SearchTerm = SearchString ?? String.Empty 
-                };
-
-                Result<List<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery);
-
-                if (results.IsSuccess is not true)
-                {
-                    // Do something
-                }
-
-                if (!results.Value.Any())
-                {
-                    // Do something
-                }
-
-                MemorialSearchResults = results.Value;
-            }
         }
     }
 }

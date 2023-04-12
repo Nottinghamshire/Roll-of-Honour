@@ -13,7 +13,7 @@
     </div>
 </div>
 
-<div class="search-block">
+<div class="search-block" style="width: 100%;">
     <div class="form-block" data-aos="fade-up">
         <form id="search-all">
             <div class="columns is-multiline">
@@ -263,53 +263,7 @@
 
     private async Task SearchRollOfHonour()
     {
-        _personSearchResults = new();
-        _memorialSearchResults = new();
-
-        if (_selectedQueryType == QueryType.Person)
-        {
-            var searchQuery = new PersonQuery
-                {
-                    SearchTerm = searchTerm,
-                    SelectedWar = _selectedWar,
-                    PersonType = _selectedPersonType,
-                };
-
-            Result<List<PersonSearchResult>> results = await _searchService.PersonSearch(searchQuery);
-
-            if (results.IsSuccess is not true)
-            {
-                // Do something
-            }
-
-            if (!results.Value.Any())
-            {
-                // Do something
-            }
-
-            _personSearchResults = results.Value;
-        }
-
-        if (_selectedQueryType == QueryType.Memorial)
-        {
-            var searchQuery = new MemorialQuery
-                {
-                    SearchTerm = searchTerm
-                };
-
-            Result<List<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery);
-
-            if (results.IsSuccess is not true)
-            {
-                // Do something
-            }
-
-            if (!results.Value.Any())
-            {
-                // Do something
-            }
-
-            _memorialSearchResults = results.Value;
-        }
+        // TODO form and make request to search Razor page.
+        throw new NotImplementedException();
     }
 }
