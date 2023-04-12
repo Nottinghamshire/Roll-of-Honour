@@ -16,6 +16,12 @@ public class MemorialRepository : IMemorialRepository
         _dbContext = dbContext;
     }
 
+    public int Count() 
+    {
+        var count = _dbContext.WarMemorials.Count();
+        return count;
+    }
+
     public async Task<Memorial?> GetById(int id)
     {
         try
