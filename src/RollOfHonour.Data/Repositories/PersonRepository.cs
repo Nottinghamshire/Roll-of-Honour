@@ -106,4 +106,9 @@ public class PersonRepository : IPersonRepository
         return new PaginatedList<Person>(dbPeople.Select(p => 
             p.ToDomainModel()).ToList(), _dbContext.People.Count(), pageIndex, pageSize);
     }
+
+    public int Count()
+    {
+        return _dbContext.People.Count();
+    }
 }
