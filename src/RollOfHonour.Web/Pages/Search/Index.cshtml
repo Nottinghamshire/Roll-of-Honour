@@ -15,25 +15,32 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/search.html" class="parent"> Search
+                            <a asp-page="/search/index"  class="parent"> Search
                                 <span class="spacer" aria-hidden="true">
                                     <i class="fa-light fa-chevron-right"></i>
                                 </span>
                             </a>
                         </li>
+                        @if (@Model.HasResults)
+                        {
                         <li>
                             <a href="/search-results.html" aria-current="location" class="current">
-                                Search Results for "Search String"
+                                Search Results for "@Model.SearchString"
                             </a>
                         </li>
+                        }
                     </ol>
                 </nav>
             </div>
 
+            @if (!Model.HasResults)
+            {
             <div class="columns is-multiline is-vcentered">
-                <component type="typeof(SearchComponent)" render-mode="Server"/>
+                <component type="typeof(SearchComponent)" render-mode="Server" />
             </div>
-
+            }
+            @if (Model.HasResults)
+            {
             <div class="columns is-multiline">
                 <div class="column is-full-tablet is-8-desktop is-8-widescreen is-8-fullhd">
 
@@ -44,6 +51,7 @@
                             to and the results will update for you.</p>
                     </div>
 
+                    
                     <div class="mobile-search-block">
                         <a href="#jumpto-filters" title="Change or filter these results"><i
                                 class="fal fa-sort-size-down"></i> Change
@@ -122,7 +130,6 @@
                             <li><a href="search-results.html?page=3"><i class="fa-light fa-chevron-right"></i></a></li>
                         </ul>
                     </div>
-
                 </div>
                 <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
                     <aside class="sidebar" id="jumpto-filters">
@@ -301,6 +308,7 @@
                     </aside>
                 </div>
             </div>
+            }
         </div>
     </section>
 }
