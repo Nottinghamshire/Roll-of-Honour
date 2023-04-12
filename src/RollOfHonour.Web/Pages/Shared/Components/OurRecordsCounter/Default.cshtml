@@ -1,0 +1,49 @@
+@model RollOfHonour.Core.Models.RecordCounter
+
+<section class="panel green">
+    <div class="container is-fluid">
+        <div class="text-block dark">
+            <h2 class="aligncenter with-margin-bottom">Look at our records by...</h2>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <a href="/people.html" title="Look at our records by People" class="card with-background bg-people">
+                    <div class="label">
+                        <span class="title">
+                            People
+                        </span>
+                        <span class="data">
+                            @Model.PeopleCount Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <div class="column">
+                <a href="/memorials.html" title="Look at our records by war memorial"
+                    class="card with-background bg-memorials">
+                    <div class="label">
+                        <span class="title">
+                            War Memorials
+                        </span>
+                        <span class="data">
+                            @Model.MemorialCount Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <div class="column">
+                <a href="/timeline.html" title="Look at our records by using a timeline"
+                    class="card with-background bg-timeline">
+                    <div class="label">
+                        <span class="title">
+                            Timeline
+                        </span>
+                        <span class="data">
+                            4000 Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
