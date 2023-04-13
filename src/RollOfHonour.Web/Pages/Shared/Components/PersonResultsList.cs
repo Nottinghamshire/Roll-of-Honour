@@ -11,7 +11,7 @@ public class PersonResultsList : ViewComponent
     {
     }
     
-    public IViewComponentResult Invoke(List<PersonSearchResult> people)
+    public IViewComponentResult Invoke(List<Core.Models.Person> people)
     {
         return View(people);
     }

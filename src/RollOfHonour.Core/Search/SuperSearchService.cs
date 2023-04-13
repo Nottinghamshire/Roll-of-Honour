@@ -52,7 +52,7 @@ public class SuperSearchService : ISuperSearchService
         return memorialResults;
     }
 
-    public async Task<Result<PaginatedList<PersonSearchResult>>> PersonSearch(PersonQuery query, int pageNumber, int pageSize)
+    public async Task<Result<PaginatedList<Core.Models.Person>>> PersonSearch(PersonQuery query, int pageNumber, int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
@@ -63,14 +63,14 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<PaginatedList<PersonSearchResult>>.Invalid(errors);
+            return Result<PaginatedList<Core.Models.Person>>.Invalid(errors);
         }
 
         var peopleResults = await _personRepository.SearchPeople(query.SearchTerm, pageNumber, pageSize);
 
         if (!peopleResults.Any())
         {
-            return Result<PaginatedList<PersonSearchResult>>.NotFound();
+            return Result<PaginatedList<Core.Models.Person>>.NotFound();
         }
 
         return peopleResults;

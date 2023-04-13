@@ -28,7 +28,7 @@ namespace RollOfHonour.Web.Pages.Search
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; } = String.Empty;
         public PaginatedList<MemorialSearchResult> MemorialSearchResults = new();
-        public PaginatedList<PersonSearchResult> PersonSearchResults = new();
+        public PaginatedList<Core.Models.Person> PersonSearchResults = new();
         public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
 
         public ResultsModel(ISuperSearchService searchService)
@@ -49,12 +49,12 @@ namespace RollOfHonour.Web.Pages.Search
             {
                 var searchQuery = new PersonQuery
                 {
-                    SearchTerm = SearchString ?? String.Empty,
+                    SearchTerm = SearchString,
                     SelectedWar = War,
                     PersonType = SelectedPersonType,
                 };
 
-                Result<PaginatedList<PersonSearchResult>> results = await _searchService.PersonSearch(searchQuery, PageIndex, 24);
+                Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, PageIndex, 24);
 
                 if (results.IsSuccess is not true)
                 {
@@ -89,7 +89,6 @@ namespace RollOfHonour.Web.Pages.Search
                 }
 
                 MemorialSearchResults = results.Value;
-
             }
         }
     }
