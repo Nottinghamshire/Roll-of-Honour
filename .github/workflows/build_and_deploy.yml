@@ -65,7 +65,7 @@ jobs:
           
   deploy_PRD:
     runs-on: windows-latest
-    needs: build
+    needs: [deploy_DEV]
     environment:
       name: 'PRD'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
