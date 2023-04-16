@@ -54,7 +54,7 @@ namespace RollOfHonour.Web.Pages.Search
                     PersonType = SelectedPersonType,
                 };
 
-                Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, PageIndex, 24);
+                Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, PageIndex, 20);
 
                 if (results.IsSuccess is not true)
                 {
@@ -76,7 +76,7 @@ namespace RollOfHonour.Web.Pages.Search
                     SearchTerm = SearchString ?? String.Empty
                 };
 
-                Result<PaginatedList<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 24);
+                Result<PaginatedList<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 20);
 
                 if (results.IsSuccess is not true)
                 {

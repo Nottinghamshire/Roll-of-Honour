@@ -258,13 +258,9 @@
     private War _selectedWar = War.WW1;
     private PersonType _selectedPersonType = PersonType.Military;
     private QueryType _selectedQueryType = QueryType.Person;
-    private List<MemorialSearchResult> _memorialSearchResults = new();
-    private List<PersonSearchResult> _personSearchResults = new();
-
 
     private async Task SearchRollOfHonour()
     {
         navManager.NavigateTo($"/Search/Results?s={searchTerm}&w=0&pt=0&qt=0&i=1", true);
-        // TODO form and make request to search Razor page.
     }
 }
