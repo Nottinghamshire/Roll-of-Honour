@@ -95,7 +95,7 @@ public class PersonRepository : IPersonRepository
             throw new NotImplementedException();
         }
 
-        dbPeople = dbPeople.Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking();
+        dbPeople = dbPeople.Skip((pageIndex - 1) * pageSize).Take(pageSize).Distinct().OrderBy(p => p.LastName).AsNoTracking();
 
         //TODO: Add extra fields
         var results = await dbPeople.Select(p => p.ToDomainModel()).ToListAsync();
