@@ -59,9 +59,10 @@
                         <span class="toggle-label">
                             Type of record?
                         </span>
+                        <InputRadioGroup name="search-type" @bind-Value="@_selectedQueryType">
                         <ul>
                             <li>
-                                <input type="radio" name="search-type" id="person" class="input-hidden filter-person"
+                                <InputRadio Value=@QueryType.Person name="search-type" id="person" class="input-hidden filter-person"
                                     checked />
                                 <label for="person" class="radio-label">
                                     <img src="/images/insignia-person.png" alt="People Records" class="radio-image" />
@@ -69,7 +70,7 @@
                                 </label>
                             </li>
                             <li>
-                                <input type="radio" name="search-type" id="memorial"
+                                <InputRadio Value=@QueryType.Memorial name="search-type" id="memorial"
                                     class="input-hidden filter-memorial" />
                                 <label for="memorial" class="radio-label">
                                     <img src="/images/insignia-memorial.png" alt="Memorial Records"
@@ -78,7 +79,7 @@
                                 </label>
                             </li>
                         </ul>
-
+                        </InputRadioGroup>
                     </div>
                 </div>
 
@@ -91,7 +92,6 @@
                                 class="fas fa-chevron-double-down"></i> <span class="expand-text">Show more search
                                 options</span><span class="expand-text hide">Show less search options</span></a>
                     </div>
-
                 </div>
             </div>
 
@@ -261,6 +261,6 @@
 
     private async Task SearchRollOfHonour()
     {
-        navManager.NavigateTo($"/Search/Results?s={searchTerm}&w=0&pt=0&qt=0&i=1", true);
+        navManager.NavigateTo($"/Results?s={searchTerm}&w={(int)_selectedWar}&pt={(int)_selectedPersonType}&qt={(int)_selectedQueryType}&i=1");
     }
 }

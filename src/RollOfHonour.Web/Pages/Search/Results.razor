@@ -1,0 +1,325 @@
+@page "/Results"
+
+@inject RollOfHonour.Core.Search.ISuperSearchService _searchService;
+@using Ardalis.Result;
+@using RollOfHonour.Core.Enums;
+@using RollOfHonour.Core.Models;
+@using RollOfHonour.Core.Models.Search;
+
+<section class="panel with-background bg-app">
+    <div class="container is-fluid">
+        <div class="breadcrumb-block with-margin-bottom">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li>
+                        <a asp-page="/index" class="parent">Home
+                            <span class="spacer" aria-hidden="true">
+                                <i class="fa-light fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/search" class="parent"> Search
+                            <span class="spacer" aria-hidden="true">
+                                <i class="fa-light fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/search-results.html" aria-current="location" class="current">
+                            Search Results for "@SearchString"
+                        </a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
+        @if (HasResults)
+        {
+            <div class="columns is-multiline">
+                <div class="column is-full-tablet is-8-desktop is-8-widescreen is-8-fullhd">
+
+                    <div class="text-block">
+                        <h1>Search results for <span class="highlight">"@SearchString"</span></h1>
+                        <p>The results for your search are listed below. You can make further adjustments to your search if
+                            you need
+                            to and the results will update for you.</p>
+                    </div>
+
+                    <div class="mobile-search-block">
+                        <a href="#jumpto-filters" title="Change or filter these results"><i
+                                class="fal fa-sort-size-down"></i> Change
+                            or filter these search results?</a>
+                    </div>
+                    @if (PersonSearchResults.Any())
+                    {
+                        <vc:person-results-list people=@PersonSearchResults></vc:person-results-list>
+                        <vc:pagination-component current-page=@PageIndex page-count=@PersonSearchResults.TotalPages
+                            slug="/person/index">
+                        </vc:pagination-component>
+                    }
+                    else if (MemorialSearchResults.Any())
+                    {
+                        // memorial results
+                    }
+                </div>
+                <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
+                    <aside class="sidebar" id="jumpto-filters">
+
+                        <div class="search-filter-block">
+                            <div class="form-toggle-block">
+                                <span class="toggle-label">
+                                    Specific War?
+                                </span>
+                                <ul>
+                                    <li>
+                                        <input type="radio" name="war" id="ww1" class="input-hidden ww1" />
+                                        <label for="ww1" class="radio-label">
+                                            <img src="/images/insignia-ww1-search.png" alt="World War 1"
+                                                class="radio-image" />
+                                            <span class="radio-text">World War 1</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="war" id="ww2" class="input-hidden ww2" />
+                                        <label for="ww2" class="radio-label">
+                                            <img src="/images/insignia-ww2-search.png" alt="World War 2"
+                                                class="radio-image" />
+                                            <span class="radio-text">World War 2</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="search-filter-block">
+                            <span class="filter-label">
+                                Search between a specific period
+                            </span>
+                            <ul class="button-list">
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_1">
+                                        <label for="battalion_1">101st Airborne Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_2">
+                                        <label for="battalion_2">1st Armored Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_3">
+                                        <label for="battalion_3">1st Infantry Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_4">
+                                        <label for="battalion_4">2nd Infantry Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_5">
+                                        <label for="battalion_5">3rd Infantry Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_6">
+                                        <label for="battalion_6">4th Armored Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_7">
+                                        <label for="battalion_7">5th Infantry Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_8">
+                                        <label for="battalion_8">7th Armored Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_9">
+                                        <label for="battalion_9">7th Infantry Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_10">
+                                        <label for="battalion_10">10th Mountain Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_11">
+                                        <label for="battalion_11">11th Armored Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_12">
+                                        <label for="battalion_12">12th Armored Division</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="button_checkbox">
+                                        <input type="checkbox" id="battalion_13">
+                                        <label for="battalion_13">17th Airborne Division</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="search-filter-block">
+                            <div class="date-range-block">
+                                <span class="filter-label">
+                                    Search between a specific period
+                                </span>
+
+                                <ul>
+                                    <li>
+                                        <div class="range-slider">
+                                            <input class="range-slider__range" type="range" value="1900" min="1850"
+                                                max="2000" name="birth_date">
+                                            <span class="range-slider__value">0</span>
+                                            <label for="birth_date">Date of Birth</label>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="range-slider">
+                                            <input class="range-slider__range" type="range" value="1950" min="1850"
+                                                max="2000" name="death_date">
+                                            <span class="range-slider__value">0</span>
+                                            <label for="death_date">Date of Death</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="search-filter-block">
+                            <div class="form-toggle-block">
+                                <span class="toggle-label">
+                                    Is this person Civilian or Military?
+                                </span>
+                                <ul>
+                                    <li>
+                                        <input type="radio" name="person-type" id="civilian" class="input-hidden" checked />
+                                        <label for="civilian" class="radio-label">
+                                            <img src="/images/insignia-civilian-search.png" alt="Civilian Records"
+                                                class="radio-image" />
+                                            <span class="radio-text">Civilian</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="person-type" id="military" class="input-hidden" />
+                                        <label for="military" class="radio-label">
+                                            <img src="/images/insignia-military-search.png" alt="Military Records"
+                                                class="radio-image" />
+                                            <span class="radio-text">Military</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <a href="#jumpto-results" class="button primary mobile-results-button"
+                            title="Go back to search results">
+                            See your search results
+                        </a>
+                    </aside>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "s")]
+    public string SearchString { get; set; } = String.Empty;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "i")]
+    public int PageIndex { get; set; } = 1;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "w")]
+    public War SelectedWar { get; set; } = War.WW1;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "pt")]
+    public PersonType SelectedPersonType { get; set; } = PersonType.Military;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "qt")]
+    public QueryType SelectedQueryType { get; set; } = QueryType.Person;
+
+    public PaginatedList<MemorialSearchResult> MemorialSearchResults = new();
+    public PaginatedList<Core.Models.Person> PersonSearchResults = new();
+    public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
+
+    protected override async Task OnInitializedAsync()
+    {
+        PersonSearchResults = new();
+        MemorialSearchResults = new();
+        if (PageIndex == 0)
+        {
+            PageIndex = 1;
+        }
+
+        if (SelectedQueryType == QueryType.Person)
+        {
+            var searchQuery = new PersonQuery
+                {
+                    SearchTerm = SearchString,
+                    SelectedWar = SelectedWar,
+                    PersonType = SelectedPersonType,
+                };
+
+            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, PageIndex, 20);
+
+            if (results.IsSuccess is not true)
+            {
+                // viewbag error probably
+            }
+
+            if (!results.Value.Any())
+            {
+                // I'm not sure this can happen
+            }
+
+            PersonSearchResults = results.Value;
+        }
+
+        else if (SelectedQueryType == QueryType.Memorial)
+        {
+            var searchQuery = new MemorialQuery
+                {
+                    SearchTerm = SearchString ?? String.Empty
+                };
+
+            Result<PaginatedList<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 20);
+
+            if (results.IsSuccess is not true)
+            {
+                // Do something
+            }
+
+            if (!results.Value.Any())
+            {
+                // Do something
+            }
+
+            MemorialSearchResults = results.Value;
+        }
+    }
+}
