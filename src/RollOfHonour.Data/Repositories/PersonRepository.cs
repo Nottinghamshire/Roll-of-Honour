@@ -50,7 +50,7 @@ public class PersonRepository : IPersonRepository
     {
       var people = await _dbContext.People
         .Include(p => p.Photos)
-        .Take(25)
+        //.Take(25)
         .ToListAsync();
 
       return people.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
@@ -71,7 +71,9 @@ public class PersonRepository : IPersonRepository
         for (var i = 0; i <= 2; i++)
         {
             var randomId = random.Next(0, countOfPeople - 1);
-            var person = await _dbContext.People.FirstOrDefaultAsync(p => p.Id == randomId);
+            var person = await _dbContext.People
+                .Include(p => p.Photos)
+                .FirstOrDefaultAsync(p => p.Id == randomId);
             if (person == null)
             {
                 --i;
@@ -86,7 +88,7 @@ public class PersonRepository : IPersonRepository
         return people;
     }
 
-    public async Task<PaginatedList<Core.Models.Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize)
+    public async Task<PaginatedList<Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize)
     {
         var dbPeople = GetPeopleByName(query, pageIndex, pageSize);
         if (filters.IsFiltered)
@@ -101,16 +103,24 @@ public class PersonRepository : IPersonRepository
             throw new NotImplementedException();
         }
 
-        dbPeople = dbPeople.Skip((pageIndex - 1) * pageSize).Take(pageSize).Distinct().OrderBy(p => p.LastName).AsNoTracking();
+        dbPeople = dbPeople
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize).Distinct()
+            .OrderBy(p => p.LastName)
+            .AsNoTracking();
 
         var results = await dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToListAsync();
-        var paginatedResults = new PaginatedList<Core.Models.Person>(results, resultCount, pageIndex, pageSize);
+        var paginatedResults = new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
         return paginatedResults;
     }
 
     public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)
     {
-        var dbPeople = await _dbContext.People.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        var dbPeople = await _dbContext.People
+            .Include(p => p.Photos)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
 
         if (!dbPeople.Any())
         {
@@ -150,7 +160,9 @@ public class PersonRepository : IPersonRepository
     private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query, int pageIndex, int pageSize)
     {
 
-        var dbPeople = _dbContext.People.Include(p => p.Decorations)
+        var dbPeople = _dbContext.People
+              .Include(p => p.Photos)
+              .Include(p => p.Decorations)
               .Include(p => p.RecordedNames)
               .ThenInclude(rn => rn.WarMemorial)
               .Include(p => p.SubUnit)
