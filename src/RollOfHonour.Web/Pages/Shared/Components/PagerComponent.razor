@@ -43,6 +43,11 @@
             SetPageRange();
         }
 
+        protected override void OnParametersSet()
+        {
+            SetPageRange();
+        }
+
         private async Task UpdatePage(int page)
         {
             if (ChangePage.HasDelegate)
@@ -55,6 +60,12 @@
 
         private void SetPageRange()
         {
+            if (PageCount == 1)
+            {
+                this.PageRange = new int[] { 1 };
+                return;
+            }
+
             if (CurrentPage == 1)
             {
                 this.PageRange = Enumerable.Range(1, 9).Append(PageCount).ToArray();
