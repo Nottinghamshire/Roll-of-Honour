@@ -34,13 +34,13 @@
                 @foreach (var person in Model.People)
                 {
                     <div class="column is-12-mobile is-6-tablet is-6-desktop is-4-widescreen is-3-fullhd">
-                            <a asp-page="/Person/Details"
-                                                    asp-route-id="@person.Id" title="Learn about @person.Name" class="index-card">
+                        <a asp-page="/Person/Details"
+                           asp-route-id="@person.Id" title="Learn about @person.Name" class="index-card">
                             <div class="columns is-mobile">
                                 <div class="column is-4-mobile">
                                     <div class="picture-block index-picture">
                                         <div class="picture-border">
-                                            <div class="picture-embed" style="background-image: url(https://secure.nottinghamshire.gov.uk/RollOfHonour/Images/11225/medium.jpg);"></div>
+                                            <div class="picture-embed" style="background-image: url(@person.MainPhoto?.ImageUriMedium);"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -56,9 +56,11 @@
                     </div>
                 }
             </div>
+
             <vc:pagination-component current-page=@Model.PageNumber page-count=@Model.People.TotalPages
-                slug="/person/index">
+                                     slug="/person/index">
             </vc:pagination-component>
+
         </div>
     </div>
 </section>

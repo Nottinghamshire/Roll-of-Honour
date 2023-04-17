@@ -1,220 +1,274 @@
 ﻿@page
 @model RollOfHonour.Web.Pages.Memorial.Details
 
+@{
+
+}
+
 <section class="panel with-background bg-app">
-    <div class="container is-fluid">
-        <div class="breadcrumb-block with-margin-bottom">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="/" class="parent">
-                            Home
-                            <span class="spacer" aria-hidden="true">
-                                <i class="fa-light fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/memorials.html" class="parent">
-                            Search by Memorial
-                            <span class="spacer" aria-hidden="true">
-                                <i class="fa-light fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/memorial.html" aria-current="location" class="current">
-                            About @Model.Memorial?.Name
-                        </a>
-                    </li>
-                </ol>
-            </nav>
-        </div>
+<div class="container is-fluid">
+<div class="breadcrumb-block with-margin-bottom">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li>
+                <a href="/" class="parent">
+                    Home
+                    <span class="spacer" aria-hidden="true">
+                        <i class="fa-light fa-chevron-right"></i>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/memorials.html" class="parent">
+                    Search by Memorial
+                    <span class="spacer" aria-hidden="true">
+                        <i class="fa-light fa-chevron-right"></i>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/memorial.html" aria-current="location" class="current">
+                    About @Model.Memorial.Name
+                </a>
+            </li>
+        </ol>
+    </nav>
+</div>
 
-        <div class="columns is-multiline">
-            <div class="column is-full-tablet is-8-desktop is-8-fullhd">
+<div class="columns is-multiline">
+    <div class="column is-full-tablet is-8-desktop is-8-fullhd">
 
-                <div class="memorial-block">
-                    <span class="memorial-name">@Model.Memorial?.Name</span>
-                    <div class="memorial-description">
-                        <div class="text-block">
-                            <p>@Model.Memorial?.Description</p>
-                        </div>
-
-                        <div class="names-remembered">
-                            <span class="label"><i class="fal fa-monument"></i> Identified casualties</span>
-                            @if (Model.Memorial?.NamesCount < 1)
-                            {
-                                <span class="data"></span>
-                            }
-                            @if (Model.Memorial?.NamesCount == 1)
-                            {
-                                <span class="data">@Model.Memorial?.NamesCount person</span>
-                            }
-                            else
-                            {
-                                <span class="data">@Model.Memorial?.NamesCount people</span>
-                            }
-                        </div>
-
-                    </div>
+        <div class="memorial-block">
+            <span class="memorial-name">@Model.Memorial.Name</span>
+            <div class="memorial-description">
+                <div class="text-block">
+                    <p>@Model.Memorial.Description</p>
                 </div>
 
-                <div class="tabs-block">
-                    <div class="tabList-container">
-                        <ul role="tablist">
-                            <li id="tab-01" role="tab" tabindex="0" aria-selected="true" aria-controls="tabpanel-01">
-                                <i class="fas fa-stream"></i> Names on this memorial
-                            </li>
-                            <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02">
-                                <i class="fas fa-map-marked-alt"></i> Location
-                            </li>
-                            <li id="tab-03" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-03">
-                                <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="tabpanel-01" role="tabpanel">
+                <div class="names-remembered">
+                    <span class="label"><i class="fal fa-monument"></i> Identified casualties</span>
+                    @if (Model.Memorial.NamesCount < 1)
+                    {
+                        <span class="data"></span>
+                    }
+                    @if (Model.Memorial.NamesCount == 1)
+                    {
+                        <span class="data">@Model.Memorial.NamesCount person</span>
+                    }
+                    else
+                    {
+                        <span class="data">@Model.Memorial.NamesCount people</span>
+                    }
+                </div>
 
-                        <div class="tab-title"><i class="fas fa-stream"></i> Names on this memorial</div>
+            </div>
+        </div>
 
-                        <ul class="names-list">
-                            @if (Model.Memorial?.RecordedNames != null)
-                            {
-                                foreach (var recName in Model.Memorial.RecordedNames)
-                                {
-                                    <li>
-                                        <a href="/person/details.html"
-                                            title="Learn more about @recName.AsRecorded">@recName.AsRecorded</a>
-                                    </li>
-                                }
-                            }
-                        </ul>
+        <div class="tabs-block">
+            <div class="tabList-container">
+                <ul role="tablist">
+                    <li id="tab-01"
+                        role="tab"
+                        tabindex="0"
+                        aria-selected="true"
+                        aria-controls="tabpanel-01">
+                        <i class="fas fa-stream"></i> Names on this memorial
+                    </li>
+                    <li
+                        id="tab-02"
+                        role="tab"
+                        tabindex="-1"
+                        aria-selected="false"
+                        aria-controls="tabpanel-02">
+                        <i class="fas fa-map-marked-alt"></i> Location
+                    </li>
+                    <li
+                        id="tab-03"
+                        role="tab"
+                        tabindex="-1"
+                        aria-selected="false"
+                        aria-controls="tabpanel-03">
+                        <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
+                    </li>
+                </ul>
+            </div>
+            <div id="tabpanel-01" role="tabpanel">
 
-                    </div>
+                <div class="tab-title"><i class="fas fa-stream"></i> Names on this memorial</div>
 
-                    <div id="tabpanel-02" role="tabpanel">
+                <ul class="names-list">
+                    @foreach (var recName in Model.Memorial.RecordedNames)
+                    {
+                        <li>
+                            <a href="/person/details.html" title="Learn more about @recName.AsRecorded">@recName.AsRecorded</a>
+                        </li>
+                    }
+                </ul>
 
-                        <div class="tab-title"><i class="fas fa-map-marked-alt"></i> Location</div>
+            </div>
 
-                        <div class="map-block">
-                            <div class="map-container">
-                                <div id="nccMap" style="width: 100%; height: 450px; position: relative;"
-                                    class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
-                                    tabindex="0">
-                                    <div class="leaflet-pane leaflet-map-pane"
-                                        style="transform: translate3d(0px, 0px, 0px);">
-                                        <div class="leaflet-pane leaflet-tile-pane">
-                                            <div class="leaflet-bottom leaflet-left"></div>
-                                            <div class="leaflet-bottom leaflet-right">
-                                                <div
-                                                    class="leaflet-control-attribution leaflet-control esri-truncated-attribution:hover esri-truncated-attribution">
-                                                    <a href="http://leafletjs.com"
-                                                        title="A JS library for interactive maps">Leaflet</a> | Powered
-                                                    by <a href="https://www.esri.com">Esri</a> | <span
-                                                        class="esri-dynamic-attribution">USGS, NOAA</span>
-                                                </div>
-                                            </div>
-                                        </div>
+            <div id="tabpanel-02" role="tabpanel">
+
+                <div class="tab-title"><i class="fas fa-map-marked-alt"></i> Location</div>
+
+                <div class="map-block">
+                    <div class="map-container">
+                        <div id="nccMap" style="width: 100%; height: 450px; position: relative;" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0">
+                            <div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);">
+                                <div class="leaflet-pane leaflet-tile-pane">
+                                    <div class="leaflet-bottom leaflet-left"></div>
+                                    <div class="leaflet-bottom leaflet-right">
+                                        <div class="leaflet-control-attribution leaflet-control esri-truncated-attribution:hover esri-truncated-attribution"><a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | Powered by <a href="https://www.esri.com">Esri</a> | <span class="esri-dynamic-attribution">USGS, NOAA</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-                    <div id="tabpanel-03" role="tabpanel">
-
-                        <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div>
-
-                        <div class="gallery-block">
-                            <div class="columns is-multiline">
-                                <div class="column is-4-desktop">
-                                    <a href="/images/sample-data/memorial-image1.jpeg"
-                                        title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
-                                        <div class="picture-block short styled-alt">
-                                            <div class="picture-border">
-                                                <div class="picture-embed" style="
-												background-image: url(/images/sample-data/memorial-image1.jpeg);
-											  ">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div class="column is-4-desktop">
-                                    <a href="/images/sample-data/memorial-image2.jpeg"
-                                        title="Photo of Reginald Dudley Bawdwen Anderson ">
-                                        <div class="picture-block short styled">
-                                            <div class="picture-border">
-                                                <div class="picture-embed" style="
-												background-image: url(/images/sample-data/memorial-image2.jpeg);
-											  ">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div class="column is-4-desktop">
-                                    <a href="/images/sample-data/memorial-image3.jpeg"
-                                        title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings">
-                                        <div class="picture-block short styled">
-                                            <div class="picture-border">
-                                                <div class="picture-embed" style="
-												background-image: url(/images/sample-data/memorial-image3.jpeg);
-											  ">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div class="column is-4-desktop">
-                                    <a href="/images/sample-data/memorial-image4.jpeg"
-                                        title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings">
-                                        <div class="picture-block short styled">
-                                            <div class="picture-border">
-                                                <div class="picture-embed" style="
-												background-image: url(/images/sample-data/memorial-image4.jpeg);
-											  ">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-
                 </div>
 
-
             </div>
-            <div class="column is-full-tablet is-4-desktop is-4-fullhd">
-                <aside class="sidebar">
-                    <div class="picture-block memorial-picture">
-                        <div class="picture-border">
-                            <div class="picture-embed"
-                                style="background-image: url(/images/sample-data/memorial-image1.jpeg);"></div>
+
+            <div id="tabpanel-03" role="tabpanel">
+
+                <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div>
+
+                <div class="gallery-block">
+                    <div class="columns is-multiline">
+                        <div class="column is-4-desktop">
+                            <a href="/images/sample-data/memorial-image1.jpeg" title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
+                                <div class="picture-block short styled-alt">
+                                    <div class="picture-border">
+                                        <div
+                                            class="picture-embed"
+                                            style="
+												background-image: url(/images/sample-data/memorial-image1.jpeg);
+											  ">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </div>
 
-                    <div class="iwm-link">
-                        <img src="/images/logo-iwm.png" title="Imperial War Museum Logo" />
-                        <a href="https://www.iwm.org.uk/memorials/item/memorial/26840" target="_blank">
-                            WM Reference 26840 <i class="fa-light fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </div>
+                        <div class="column is-4-desktop">
+                            <a href="/images/sample-data/memorial-image2.jpeg" title="Photo of Reginald Dudley Bawdwen Anderson ">
+                                <div class="picture-block short styled">
+                                    <div class="picture-border">
+                                        <div
+                                            class="picture-embed"
+                                            style="
+												background-image: url(/images/sample-data/memorial-image2.jpeg);
+											  ">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
 
-                </aside>
+                        <div class="column is-4-desktop">
+                            <a href="/images/sample-data/memorial-image3.jpeg" title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings">
+                                <div class="picture-block short styled">
+                                    <div class="picture-border">
+                                        <div
+                                            class="picture-embed"
+                                            style="
+												background-image: url(/images/sample-data/memorial-image3.jpeg);
+											  ">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="column is-4-desktop">
+                            <a href="/images/sample-data/memorial-image4.jpeg" title="Commonwealth War Graves Commission headstone marking the grave of Reginald Dudley Bawden Anderson at Redan Ridge Cemetery no 2 Courtesy of Peter Gillings">
+                                <div class="picture-block short styled">
+                                    <div class="picture-border">
+                                        <div
+                                            class="picture-embed"
+                                            style="
+												background-image: url(/images/sample-data/memorial-image4.jpeg);
+											  ">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
+
+
         </div>
 
-    </div>
 
+    </div>
+    <div class="column is-full-tablet is-4-desktop is-4-fullhd">
+        <aside class="sidebar">
+            <div class="picture-block memorial-picture">
+                <div class="picture-border">
+                    <div class="picture-embed" style="background-image: url(/images/sample-data/memorial-image1.jpeg);"></div>
+                </div>
+            </div>
+
+            <div class="iwm-link">
+                <img src="/images/logo-iwm.png" title="Imperial War Museum Logo"/>
+                <a href="https://www.iwm.org.uk/memorials/item/memorial/26840" target="_blank">
+                    WM Reference 26840 <i class="fa-light fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+
+        </aside>
+    </div>
+</div>
+
+</div>
+
+</section>
+
+<section class="panel green">
+    <div class="container is-fluid">
+        <div class="text-block dark">
+            <h2 class="aligncenter with-margin-bottom">Look at our records by...</h2>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <a href="/people.html" title="Look at our records by People" class="card with-background bg-people">
+                    <div class="label">
+                        <span class="title">
+                            People
+                        </span>
+                        <span class="data">
+                            4000 Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <div class="column">
+                <a href="/memorials.html" title="Look at our records by war memorial" class="card with-background bg-memorials">
+                    <div class="label">
+                        <span class="title">
+                            War Memorials
+                        </span>
+                        <span class="data">
+                            4000 Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <div class="column">
+                <a href="/timeline.html" title="Look at our records by using a timeline" class="card with-background bg-timeline">
+                    <div class="label">
+                        <span class="title">
+                            Timeline
+                        </span>
+                        <span class="data">
+                            4000 Records Available
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 </section>

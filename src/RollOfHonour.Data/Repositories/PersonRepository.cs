@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
@@ -8,50 +9,57 @@ namespace RollOfHonour.Data.Repositories;
 
 public class PersonRepository : IPersonRepository
 {
-    private RollOfHonourContext _dbContext { get; set; }
+  private string settingBlobName = "ncc01sarollhonstdlrsdev";
+  private string settingBlobImageContainerName = "images";
 
-    public PersonRepository(RollOfHonourContext dbContext)
+  private RollOfHonourContext _dbContext { get; set; }
+
+  public PersonRepository(RollOfHonourContext dbContext)
+  {
+    _dbContext = dbContext;
+  }
+
+  public async Task<Person?> GetById(int id)
+  {
+    try
     {
-        _dbContext = dbContext;
-    }
+      var dbPerson = await _dbContext.People
+        .Include(p => p.Photos)
+        .Include(p => p.Decorations)
+        .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
+        .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
+        .FirstOrDefaultAsync(p => p.Id == id);
 
-    public async Task<Person?> GetById(int id)
-    {
-        try
-        {
-            var dbPerson = await _dbContext.People
-              .Include(p => p.Decorations)
-              .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
-              .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
-              .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (dbPerson is null)
+        if (dbPerson is null)
             {
+                // TODO: Is this necessary?
                 return null;
             }
-
-            return dbPerson.ToDomainModel();
-        }
-        catch (InvalidOperationException)
-        {
-            // TODO: Is this necessary?
-            return null;
-        }
+      return dbPerson.ToDomainModel(settingBlobName, settingBlobImageContainerName);
     }
-
-    // TODO: Should this return a null rather than an empty enumerable?
-    public async Task<IEnumerable<Person>> GetAll()
+    catch (InvalidOperationException ex)
     {
-        try
-        {
-            var people = await _dbContext.People.OrderByDescending(x => x.Id).Take(25).ToListAsync();
-            return people.Select(p => p.ToDomainModel());
-        }
-        catch (Exception)
-        {
-            return Enumerable.Empty<Person>();
-        }
+      return null;
     }
+  }
+
+  // TODO: Should this return a null rather than an empty enumerable?
+  public async Task<IEnumerable<Person>> GetAll()
+  {
+    try
+    {
+      var people = await _dbContext.People
+        .Include(p => p.Photos)
+        //.Take(25)
+        .ToListAsync();
+
+      return people.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+    }
+    catch (Exception)
+    {
+        return Enumerable.Empty<Person>();
+    }
+  }
 
     public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
     {
@@ -63,7 +71,9 @@ public class PersonRepository : IPersonRepository
         for (var i = 0; i <= 2; i++)
         {
             var randomId = random.Next(0, countOfPeople - 1);
-            var person = await _dbContext.People.FirstOrDefaultAsync(p => p.Id == randomId);
+            var person = await _dbContext.People
+                .Include(p => p.Photos)
+                .FirstOrDefaultAsync(p => p.Id == randomId);
             if (person == null)
             {
                 --i;
@@ -74,11 +84,11 @@ public class PersonRepository : IPersonRepository
             }
         }
 
-        IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel());
+        IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
         return people;
     }
 
-    public async Task<PaginatedList<Core.Models.Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize)
+    public async Task<PaginatedList<Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize)
     {
         var dbPeople = GetPeopleByName(query, pageIndex, pageSize);
         if (filters.IsFiltered)
@@ -93,16 +103,24 @@ public class PersonRepository : IPersonRepository
             throw new NotImplementedException();
         }
 
-        dbPeople = dbPeople.Skip((pageIndex - 1) * pageSize).Take(pageSize).Distinct().OrderBy(p => p.LastName).AsNoTracking();
+        dbPeople = dbPeople
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize).Distinct()
+            .OrderBy(p => p.LastName)
+            .AsNoTracking();
 
-        var results = await dbPeople.Select(p => p.ToDomainModel()).ToListAsync();
-        var paginatedResults = new PaginatedList<Core.Models.Person>(results, resultCount, pageIndex, pageSize);
+        var results = await dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToListAsync();
+        var paginatedResults = new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
         return paginatedResults;
     }
 
     public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)
     {
-        var dbPeople = await _dbContext.People.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        var dbPeople = await _dbContext.People
+            .Include(p => p.Photos)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
 
         if (!dbPeople.Any())
         {
@@ -110,7 +128,7 @@ public class PersonRepository : IPersonRepository
         }
 
         return new PaginatedList<Person>(dbPeople.Select(p =>
-            p.ToDomainModel()).ToList(), _dbContext.People.Count(), pageIndex, pageSize);
+            p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToList(), _dbContext.People.Count(), pageIndex, pageSize);
     }
 
     public int Count()
@@ -142,7 +160,9 @@ public class PersonRepository : IPersonRepository
     private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query, int pageIndex, int pageSize)
     {
 
-        var dbPeople = _dbContext.People.Include(p => p.Decorations)
+        var dbPeople = _dbContext.People
+              .Include(p => p.Photos)
+              .Include(p => p.Decorations)
               .Include(p => p.RecordedNames)
               .ThenInclude(rn => rn.WarMemorial)
               .Include(p => p.SubUnit)

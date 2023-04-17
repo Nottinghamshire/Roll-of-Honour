@@ -6,6 +6,11 @@ namespace RollOfHonour.Core.Models;
 
 public class Memorial : IAggregateRoot
 {
+  public Memorial(int? mainPhotoId)
+  {
+    MainPhotoId = mainPhotoId;
+  }
+
   private readonly List<RecordedName> _recordedNames = new();
 
   public int Id { get; set; }
@@ -21,6 +26,24 @@ public class Memorial : IAggregateRoot
   public int NamesCount { get; set; } //TODO: Might be a better way to do this based on Count of recorded names
   public int? MainPhotoId { get; set; }
   public IEnumerable<RecordedName> RecordedNames => _recordedNames.AsReadOnly();
+
+  public Photo MainPhoto
+  {
+    get
+    {
+      //Photo decision
+      //If main photo null, then use the first of the other images (or a random one)
+      if (MainPhotoId == null && Photos.Any())
+      {
+        //Promote an image to MainPhoto
+        return Photos.FirstOrDefault();
+      }
+
+      return null;
+    }
+  }
+
+  public List<Photo> Photos { get; set; } = new List<Photo>();
 
   public Memorial(string name, Point location)
   {

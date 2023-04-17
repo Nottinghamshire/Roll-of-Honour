@@ -3,8 +3,20 @@ using System.Collections.Generic;
 
 namespace RollOfHonour.Data.Models.DB;
 
-public partial class Photo
+public class Photo
 {
+  public Core.Models.Photo ToDomainModel(string blobServiceName, string blobImagesContainer)
+  {
+    var photo = new Core.Models.Photo(blobServiceName, blobImagesContainer)
+    {
+      Id = this.Id,
+      Name = this.Name?? string.Empty,
+      Description = this.Description?? string.Empty,
+    };
+
+    return photo;
+  }
+  
     public int Id { get; set; }
 
     public string? Name { get; set; }
