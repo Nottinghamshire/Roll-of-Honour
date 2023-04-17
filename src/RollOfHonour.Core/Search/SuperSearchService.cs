@@ -16,11 +16,6 @@ public class SuperSearchService : ISuperSearchService
         _memorialRepository = memorialRepository;
     }
 
-    public Task<Result<List<ISearchResult>>> BasicSearch(string searchString)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Result<PaginatedList<Core.Models.Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
@@ -45,7 +40,7 @@ public class SuperSearchService : ISuperSearchService
         return memorialResults;
     }
 
-    public async Task<Result<PaginatedList<Core.Models.Person>>> PersonSearch(PersonQuery query, int pageNumber, int pageSize)
+    public async Task<Result<PaginatedList<Core.Models.Person>>> PersonSearch(PersonQuery query, Filters filters, int pageNumber, int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
@@ -59,7 +54,7 @@ public class SuperSearchService : ISuperSearchService
             return Result<PaginatedList<Core.Models.Person>>.Invalid(errors);
         }
 
-        var peopleResults = await _personRepository.SearchPeople(query, pageNumber, pageSize);
+        var peopleResults = await _personRepository.SearchPeople(query, filters, pageNumber, pageSize);
 
         if (!peopleResults.Any())
         {

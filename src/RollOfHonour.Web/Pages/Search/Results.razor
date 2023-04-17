@@ -188,18 +188,18 @@
                                 <ul>
                                     <li>
                                         <div class="range-slider">
-                                            <input class="range-slider__range" type="range" value="1900" min="1850"
-                                                max="2000" name="birth_date">
-                                            <span class="range-slider__value">0</span>
+                                            <input class="range-slider__range" type="range" @bind=@_dateOfBirthFilter
+                                                min="1850" max="2000" name="birth_date">
+                                            <span class="range-slider__value">@_dateOfBirthFilter</span>
                                             <label for="birth_date">Date of Birth</label>
                                         </div>
                                     </li>
 
                                     <li>
                                         <div class="range-slider">
-                                            <input class="range-slider__range" type="range" value="1950" min="1850"
-                                                max="2000" name="death_date">
-                                            <span class="range-slider__value">0</span>
+                                            <input class="range-slider__range" type="range" @bind=@_dateOfDeathFilter
+                                                min="1850" max="2000" name="death_date">
+                                            <span class="range-slider__value">@_dateOfDeathFilter</span>
                                             <label for="death_date">Date of Death</label>
                                         </div>
                                     </li>
@@ -232,6 +232,10 @@
                                 </ul>
                             </div>
                         </div>
+
+                        <button title="Look at this record" type="button" @onclick="FilterSearch" class="button primary"><i
+                                class="fal fa-glasses" aria-hidden="true"></i> Filter Search </button>
+
                         <a href="#jumpto-results" class="button primary mobile-results-button"
                             title="Go back to search results">
                             See your search results
@@ -264,9 +268,13 @@
     [SupplyParameterFromQuery(Name = "qt")]
     public int SelectedQueryType { get; set; }
 
-    private QueryType _selectedQueryType { get; set; } = (int)QueryType.Person;
+    private QueryType _selectedQueryType { get; set; } = QueryType.Person;
     private War _selectedWar { get; set; } = (int)War.WW1;
-    private PersonType _selectedPersonType { get; set; } = (int)PersonType.Military;
+    private PersonType _selectedPersonType { get; set; } = PersonType.Military;
+    private int _dateOfDeathFilter { get; set; } = 1900;
+
+    private int _dateOfBirthFilter { get; set; } = 1900;
+
     public PaginatedList<Core.Models.Memorial> MemorialSearchResults = new();
     public PaginatedList<Core.Models.Person> PersonSearchResults = new();
     public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
@@ -283,14 +291,9 @@
 
         if (_selectedQueryType == QueryType.Person)
         {
-            var searchQuery = new PersonQuery
-                {
-                    SearchTerm = SearchString,
-                    SelectedWar = _selectedWar,
-                    PersonType = _selectedPersonType,
-                };
-
-            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, PageIndex, 20);
+            var searchQuery = BuildPersonQuery();
+            var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, new());
+            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, filters, PageIndex, 20);
 
             if (results.IsSuccess is not true)
             {
@@ -307,10 +310,7 @@
 
         else if (_selectedQueryType == QueryType.Memorial)
         {
-            var searchQuery = new MemorialQuery
-                {
-                    SearchTerm = SearchString ?? String.Empty
-                };
+            var searchQuery = BuildMemorialQuery(); 
 
             Result<PaginatedList<Core.Models.Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 20);
 
@@ -326,6 +326,53 @@
 
             MemorialSearchResults = results.Value;
         }
+    }
+
+    private async Task FilterSearch()
+    {
+        if (_selectedQueryType == QueryType.Person)
+        {
+            var query = BuildPersonQuery();
+            // TODO: Implement regiment filters
+            var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, new());
+            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, 1, 20);
+
+            if (results.IsSuccess is not true)
+            {
+                // viewbag error probably
+            }
+
+            if (!results.Value.Any())
+            {
+                // I'm not sure this can happen
+            }
+
+            PersonSearchResults = results.Value;
+            StateHasChanged();
+        }
+    }
+
+    private PersonQuery BuildPersonQuery()
+    {
+
+        var searchQuery = new PersonQuery
+            {
+                SearchTerm = SearchString,
+                SelectedWar = _selectedWar,
+                PersonType = _selectedPersonType,
+            };
+
+        return searchQuery;
+    }
+
+    private MemorialQuery BuildMemorialQuery()
+    {
+        var searchQuery = new MemorialQuery
+            {
+                SearchTerm = SearchString ?? String.Empty
+            };
+
+        return searchQuery;
     }
 
     protected override async Task OnParametersSetAsync()
