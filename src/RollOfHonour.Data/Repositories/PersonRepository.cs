@@ -78,20 +78,26 @@ public class PersonRepository : IPersonRepository
         return people;
     }
 
-    public async Task<IEnumerable<PersonSearchResult>?> FindByName(string nameFragment)
+    public async Task<PaginatedList<Core.Models.Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize)
     {
-        var dbPeople = _dbContext.People.Where(p =>
-          p.FirstNames.Contains(nameFragment) ||
-          p.LastName.Contains(nameFragment)).AsNoTracking();
-
-        if (dbPeople.Count() == 0)
+        var dbPeople = GetPeopleByName(query, pageIndex, pageSize);
+        if (filters.IsFiltered)
         {
-            return null;
+            dbPeople = FilterPeople(dbPeople, filters);
         }
 
-        var results = await dbPeople.Take(25).Select(p => new PersonSearchResult() { Id = p.Id, Name = $"{p.FirstNames} {p.LastName}" }).ToListAsync();
+        var resultCount = dbPeople.Count();
+        if (resultCount == 0)
+        {
+            // return something else
+            throw new NotImplementedException();
+        }
 
-        return results;
+        dbPeople = dbPeople.Skip((pageIndex - 1) * pageSize).Take(pageSize).Distinct().OrderBy(p => p.LastName).AsNoTracking();
+
+        var results = await dbPeople.Select(p => p.ToDomainModel()).ToListAsync();
+        var paginatedResults = new PaginatedList<Core.Models.Person>(results, resultCount, pageIndex, pageSize);
+        return paginatedResults;
     }
 
     public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)
@@ -103,12 +109,47 @@ public class PersonRepository : IPersonRepository
             return new PaginatedList<Person>();
         }
 
-        return new PaginatedList<Person>(dbPeople.Select(p => 
+        return new PaginatedList<Person>(dbPeople.Select(p =>
             p.ToDomainModel()).ToList(), _dbContext.People.Count(), pageIndex, pageSize);
     }
 
     public int Count()
     {
         return _dbContext.People.Count();
+    }
+
+    private IQueryable<Models.DB.Person> FilterPeople(IQueryable<Models.DB.Person> people, Filters filters)
+    {
+        if (filters.DateRangeUsed)
+        {
+            people = DiedBefore(people, filters.DiedBefore);
+            people = BornAfter(people, filters.BornAfter);
+        }
+
+        return people;
+    }
+
+    private IQueryable<Models.DB.Person> DiedBefore(IQueryable<Models.DB.Person> people, DateTime date)
+    {
+        return people.Where(p => p.DateOfDeath <= date);
+    }
+
+    private IQueryable<Models.DB.Person> BornAfter( IQueryable<Models.DB.Person> people, DateTime date)
+    {
+        return people.Where(p => p.DateOfBirth >= date);
+    }
+
+    private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query, int pageIndex, int pageSize)
+    {
+
+        var dbPeople = _dbContext.People.Include(p => p.Decorations)
+              .Include(p => p.RecordedNames)
+              .ThenInclude(rn => rn.WarMemorial)
+              .Include(p => p.SubUnit)
+              .ThenInclude(unit => unit.Regiment)
+              .Where(p => p.FirstNames.Contains(query.SearchTerm)
+                || p.LastName.Contains(query.SearchTerm));
+
+        return dbPeople;
     }
 }

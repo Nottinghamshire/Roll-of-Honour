@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
 
@@ -15,15 +16,8 @@ public class SuperSearchService : ISuperSearchService
         _memorialRepository = memorialRepository;
     }
 
-    public Task<Result<List<ISearchResult>>> BasicSearch(string searchString)
+    public async Task<Result<PaginatedList<Core.Models.Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result<List<MemorialSearchResult>>> MemorialSearch(MemorialQuery query)
-    {
-        List<MemorialSearchResult> results = new List<MemorialSearchResult>();
-
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
             var errors = new List<ValidationError> { new()
@@ -33,28 +27,21 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<List<MemorialSearchResult>>.Invalid(errors);
+            return Result<PaginatedList<Core.Models.Memorial>>.Invalid(errors);
         }
 
-        var memorialResults = await _memorialRepository.FindMemorialByName(query.SearchTerm);
+        var memorialResults = await _memorialRepository.SearchMemorials(query.SearchTerm, pageNumber, pageSize);
 
-        if (memorialResults != null)
+        if (!memorialResults.Any())
         {
-            results.AddRange(memorialResults);
+            return Result<PaginatedList<Core.Models.Memorial>>.NotFound();
         }
 
-        if (!results.Any())
-        {
-            return Result<List<MemorialSearchResult>>.NotFound();
-        }
-
-        return results;
+        return memorialResults;
     }
 
-    public async Task<Result<List<PersonSearchResult>>> PersonSearch(PersonQuery query)
+    public async Task<Result<PaginatedList<Core.Models.Person>>> PersonSearch(PersonQuery query, Filters filters, int pageNumber, int pageSize)
     {
-        List<PersonSearchResult> results = new List<PersonSearchResult>();
-
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
             var errors = new List<ValidationError> { new()
@@ -64,20 +51,16 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<List<PersonSearchResult>>.Invalid(errors);
+            return Result<PaginatedList<Core.Models.Person>>.Invalid(errors);
         }
 
-        var peopleResults = await _personRepository.FindByName(query.SearchTerm);
-        if (peopleResults != null)
+        var peopleResults = await _personRepository.SearchPeople(query, filters, pageNumber, pageSize);
+
+        if (!peopleResults.Any())
         {
-            results.AddRange(peopleResults);
+            return Result<PaginatedList<Core.Models.Person>>.NotFound();
         }
 
-        if (!results.Any())
-        {
-            return Result<List<PersonSearchResult>>.NotFound();
-        }
-
-        return results;
+        return peopleResults;
     }
 }

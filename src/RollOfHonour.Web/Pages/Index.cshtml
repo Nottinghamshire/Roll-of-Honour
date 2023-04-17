@@ -1,5 +1,6 @@
 ﻿@page
 @using Shared.ViewComponents;
+@using Shared.Components;
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -17,23 +18,7 @@
                         project pays homage to the county’s fallen and creates a unique, centralised archive for
                         researchers, historians and the general public.</p>
                 </div>
-
-                <div class="form-block with-margin-bottom with-margin-top" data-aos="fade-up">
-                    <form action="#search-controller" method="post" id="search-all">
-                        <div class="form-row">
-                            <label for="searchquery" id="Query-ariaLabel">Begin your search by entering a name
-                                below:</label>
-                            <input id="searchquery" name="Query" class="input-text" type="text"
-                                aria-labelledby="Query-ariaLabel" title="Enter your search query here..."
-                                placeholder="e.g. Ken Ashford" />
-                        </div>
-                        <div class="form-row">
-                            <button type="submit" class="submit-button" form="search-all"><i
-                                    class="fal fa-file-search"></i> Search our records</button>
-                        </div>
-                    </form>
-
-                </div>
+               <component type="typeof(BasicSearchComponent)" render-mode="Server"/>
             </div>
             <div class="column  is-full-tablet is-5-desktop is-4-fullhd">
                 <aside class="sidebar">
@@ -48,4 +33,3 @@
         </div>
     </div>
 </section>
-<vc:our-records-counter></vc:our-records-counter>

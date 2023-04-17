@@ -9,6 +9,6 @@ public interface IPersonRepository
     Task<IEnumerable<Person>> GetAll();
     Task<IEnumerable<Person>> DiedOnThisDay(DateTime date);
     int Count();
-    Task<IEnumerable<PersonSearchResult>?> FindByName(string nameFragment);
+    Task<PaginatedList<Core.Models.Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize);
     Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize);
 }
