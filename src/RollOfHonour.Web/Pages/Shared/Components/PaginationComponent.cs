@@ -35,6 +35,17 @@ namespace RollOfHonour.Web.Pages.Shared.ViewComponents
 
         private void SetPageRange()
         {
+            if (PageCount == 1)
+            {
+                this.PageRange = new int[] { 1 };
+                return;
+            }
+
+            if (PageCount < 9)
+            {
+                this.PageRange = Enumerable.Range(1, PageCount).ToArray();
+            }
+
             if (CurrentPage == 1)
             {
                 this.PageRange = Enumerable.Range(1, 9).Append(PageCount).ToArray();
