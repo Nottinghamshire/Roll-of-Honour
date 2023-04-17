@@ -81,7 +81,7 @@ public class MemorialRepository : IMemorialRepository
         }
     }
 
-    public async Task<PaginatedList<MemorialSearchResult>> SearchMemorials(string searchString, int pageIndex, int pageSize)
+    public async Task<PaginatedList<Core.Models.Memorial>> SearchMemorials(string searchString, int pageIndex, int pageSize)
     {
         var dbMemorials = _dbContext.WarMemorials.Where(m =>
             m.Name.Contains(searchString));
@@ -98,13 +98,8 @@ public class MemorialRepository : IMemorialRepository
             (pageIndex - 1) * pageSize)
             .Take(pageSize);
 
-        var results = await dbMemorials.Select(m => new MemorialSearchResult()
-        {
-            Id = m.Id,
-            Name = m.Name,
-            Description = m.Description == null ? string.Empty : m.Description
-        }).ToListAsync();
+        var results = await dbMemorials.Select(m => m.ToDomainModel()).ToListAsync();
 
-        return new PaginatedList<MemorialSearchResult>(results, resultCount, pageIndex, pageSize);
+        return new PaginatedList<Core.Models.Memorial>(results, resultCount, pageIndex, pageSize);
     }
 }

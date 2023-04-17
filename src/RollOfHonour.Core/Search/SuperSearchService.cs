@@ -21,10 +21,8 @@ public class SuperSearchService : ISuperSearchService
         throw new NotImplementedException();
     }
 
-    public async Task<Result<PaginatedList<MemorialSearchResult>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
+    public async Task<Result<PaginatedList<Core.Models.Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
     {
-        List<MemorialSearchResult> results = new List<MemorialSearchResult>();
-
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
             var errors = new List<ValidationError> { new()
@@ -34,19 +32,14 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<PaginatedList<MemorialSearchResult>>.Invalid(errors);
+            return Result<PaginatedList<Core.Models.Memorial>>.Invalid(errors);
         }
 
         var memorialResults = await _memorialRepository.SearchMemorials(query.SearchTerm, pageNumber, pageSize);
 
-        if (memorialResults != null)
+        if (!memorialResults.Any())
         {
-            results.AddRange(memorialResults);
-        }
-
-        if (!results.Any())
-        {
-            return Result<PaginatedList<MemorialSearchResult>>.NotFound();
+            return Result<PaginatedList<Core.Models.Memorial>>.NotFound();
         }
 
         return memorialResults;
@@ -66,7 +59,7 @@ public class SuperSearchService : ISuperSearchService
             return Result<PaginatedList<Core.Models.Person>>.Invalid(errors);
         }
 
-        var peopleResults = await _personRepository.SearchPeople(query.SearchTerm, pageNumber, pageSize);
+        var peopleResults = await _personRepository.SearchPeople(query, pageNumber, pageSize);
 
         if (!peopleResults.Any())
         {

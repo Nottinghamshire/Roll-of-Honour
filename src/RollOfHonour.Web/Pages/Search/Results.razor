@@ -61,7 +61,7 @@
                     }
                     else if (MemorialSearchResults.Any())
                     {
-                        // memorial results
+                        <MemorialResults Memorials=@MemorialSearchResults />
                     }
                 </div>
                 <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
@@ -267,12 +267,13 @@
     private QueryType _selectedQueryType { get; set; } = (int)QueryType.Person;
     private War _selectedWar { get; set; } = (int)War.WW1;
     private PersonType _selectedPersonType { get; set; } = (int)PersonType.Military;
-    public PaginatedList<MemorialSearchResult> MemorialSearchResults = new();
+    public PaginatedList<Core.Models.Memorial> MemorialSearchResults = new();
     public PaginatedList<Core.Models.Person> PersonSearchResults = new();
     public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
 
     protected override async Task OnInitializedAsync()
     {
+        SetSearchParamsFromQuery();
         PersonSearchResults = new();
         MemorialSearchResults = new();
         if (PageIndex == 0)
@@ -311,7 +312,7 @@
                     SearchTerm = SearchString ?? String.Empty
                 };
 
-            Result<PaginatedList<MemorialSearchResult>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 20);
+            Result<PaginatedList<Core.Models.Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 20);
 
             if (results.IsSuccess is not true)
             {
@@ -328,6 +329,11 @@
     }
 
     protected override async Task OnParametersSetAsync()
+    {
+        SetSearchParamsFromQuery();
+    }
+
+    private void SetSearchParamsFromQuery()
     {
         _selectedQueryType = (QueryType)SelectedQueryType;
         _selectedPersonType = (PersonType)SelectedPersonType;

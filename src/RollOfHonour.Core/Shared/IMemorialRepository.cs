@@ -8,6 +8,6 @@ public interface IMemorialRepository
     Task<Memorial?> GetById(int id);
     int Count();
     Task<IEnumerable<Memorial>> GetAll();
-    Task<PaginatedList<MemorialSearchResult>> SearchMemorials(string searchString, int pageIndex, int pageSize);
+    Task<PaginatedList<Memorial>> SearchMemorials(string searchString, int pageIndex, int pageSize);
     Task<PaginatedList<Memorial>> GetPageOfMemorials(int pageIndex, int pageSize);
 }

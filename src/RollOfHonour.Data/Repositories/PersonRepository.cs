@@ -78,15 +78,15 @@ public class PersonRepository : IPersonRepository
         return people;
     }
 
-    public async Task<PaginatedList<Core.Models.Person>> SearchPeople(string searchString, int pageIndex, int pageSize)
+    public async Task<PaginatedList<Core.Models.Person>> SearchPeople(PersonQuery query, int pageIndex, int pageSize)
     {
         var dbPeople = _dbContext.People.Include(p => p.Decorations)
               .Include(p => p.RecordedNames)
               .ThenInclude(rn => rn.WarMemorial)
               .Include(p => p.SubUnit)
               .ThenInclude(unit => unit.Regiment)
-              .Where(p => p.FirstNames.Contains(searchString)
-                || p.LastName.Contains(searchString));
+              .Where(p => p.FirstNames.Contains(query.SearchTerm)
+                || p.LastName.Contains(query.SearchTerm));
 
         var resultCount = dbPeople.Count();
         if (resultCount == 0)
