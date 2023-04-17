@@ -14,7 +14,7 @@
     </div>
 </div>
 
-<div class="search-block" style="width: 100%;">
+<div class="search-block" style="width: 100%; margin-bottom: 5%;">
     <div class="form-block" data-aos="fade-up">
         <form id="search-all">
             <div class="columns is-multiline">
@@ -261,6 +261,6 @@
 
     private async Task SearchRollOfHonour()
     {
-        navManager.NavigateTo($"/Search/Results?s={searchTerm}&w={(int)_selectedWar}&pt={(int)_selectedPersonType}&qt={(int)_selectedQueryType}&i=1");
+        navManager.NavigateTo($"/Results?s={searchTerm}&w={(int)_selectedWar}&pt={(int)_selectedPersonType}&qt={(int)_selectedQueryType}&i=1");
     }
 }
