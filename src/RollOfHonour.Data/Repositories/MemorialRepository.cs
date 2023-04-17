@@ -64,9 +64,11 @@ public class MemorialRepository : IMemorialRepository
         }
     }
 
-    public async Task<PaginatedList<Core.Models.Memorial>> SearchMemorials(string searchString, int pageIndex, int pageSize)
+    public async Task<PaginatedList<Memorial>> SearchMemorials(string searchString, int pageIndex, int pageSize)
     {
-        var dbMemorials = _dbContext.WarMemorials.Where(m =>
+        var dbMemorials = _dbContext.WarMemorials
+            .Include(m => m.Photos)
+            .Where(m =>
             m.Name.Contains(searchString));
 
         var resultCount = dbMemorials.Count();
@@ -83,7 +85,7 @@ public class MemorialRepository : IMemorialRepository
 
         var results = await dbMemorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToListAsync();
 
-        return new PaginatedList<Core.Models.Memorial>(results, resultCount, pageIndex, pageSize);
+        return new PaginatedList<Memorial>(results, resultCount, pageIndex, pageSize);
     }
 
     public int Count() 
@@ -94,7 +96,9 @@ public class MemorialRepository : IMemorialRepository
 
     public async Task<PaginatedList<Memorial>> GetPageOfMemorials(int pageIndex, int pageSize)
     {
-        var dbMemorials = await _dbContext.WarMemorials.Skip(
+        var dbMemorials = await _dbContext.WarMemorials
+            .Include(m => m.Photos)
+            .Skip(
             (pageIndex - 1) * pageSize)
             .Take(pageSize).ToListAsync();
 
