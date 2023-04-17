@@ -55,9 +55,7 @@
                     @if (PersonSearchResults.Any())
                     {
                         <PersonResults People=@PersonSearchResults />
-                        <vc:pagination-component current-page=@PageIndex page-count=@PersonSearchResults.TotalPages
-                            slug="/person/index">
-                        </vc:pagination-component>
+                        <PagerComponent CurrentPage="@PageIndex" PageCount="@PersonSearchResults.TotalPages" ChangePage="@ChangePage"></PagerComponent>
                     }
                     else if (MemorialSearchResults.Any())
                     {
@@ -252,8 +250,6 @@
     [SupplyParameterFromQuery(Name = "s")]
     public string SearchString { get; set; } = String.Empty;
 
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "i")]
     public int PageIndex { get; set; } = 1;
 
     [Parameter]
@@ -284,14 +280,10 @@
         SetSearchParamsFromQuery();
         PersonSearchResults = new();
         MemorialSearchResults = new();
-        if (PageIndex == 0)
-        {
-            PageIndex = 1;
-        }
 
         if (_selectedQueryType == QueryType.Person)
         {
-            await QueryPeople(false);
+            await QueryPeople(false, PageIndex, 20);
         }
 
         else if (_selectedQueryType == QueryType.Memorial)
@@ -319,14 +311,14 @@
         SetSearchParamsFromQuery();
     }
 
-    private async Task QueryPeople(bool stateChangeNeeded)
+    private async Task QueryPeople(bool stateChangeNeeded, int pageIndex, int pageSize)
     {
         if (_selectedQueryType == QueryType.Person)
         {
             var query = BuildPersonQuery();
             // TODO: Implement regiment filters
             var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, new());
-            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, 1, 20);
+            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, 20);
 
             if (results.IsSuccess is not true)
             {
@@ -348,7 +340,13 @@
 
     private async Task FilterSearch()
     {
-        await QueryPeople(true);
+        await QueryPeople(true, 1, 20);
+    }
+
+    private async Task ChangePage(int page)
+    {
+        PageIndex = page;
+        await QueryPeople(true, PageIndex, 20);
     }
 
     private PersonQuery BuildPersonQuery()
