@@ -1,6 +1,7 @@
 @page "/Results"
 
 @inject RollOfHonour.Core.Search.ISuperSearchService _searchService;
+@inject IJSRuntime JSRuntime;
 @using Ardalis.Result;
 @using RollOfHonour.Core.Enums;
 @using RollOfHonour.Core.Models;
@@ -38,7 +39,7 @@
         @if (HasResults)
         {
             <div class="columns is-multiline">
-                <div class="column is-full-tablet is-8-desktop is-8-widescreen is-8-fullhd">
+                <div id="results-jump-to" class="column is-full-tablet is-8-desktop is-8-widescreen is-8-fullhd">
 
                     <div class="text-block">
                         <h1>Search results for <span class="highlight">"@SearchString"</span></h1>
@@ -347,6 +348,7 @@
     {
         PageIndex = page;
         await QueryPeople(true, PageIndex, 20);
+        _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
     }
 
     private PersonQuery BuildPersonQuery()
