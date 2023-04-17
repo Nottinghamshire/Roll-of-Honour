@@ -52,6 +52,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapBlazorHub();
-app.MapControllers();
+app.MapFallbackToPage("/_Host");
 
 app.Run();

@@ -261,6 +261,6 @@
 
     private async Task SearchRollOfHonour()
     {
-        navManager.NavigateTo($"/Results?s={searchTerm}&w={(int)_selectedWar}&pt={(int)_selectedPersonType}&qt={(int)_selectedQueryType}&i=1");
+        navManager.NavigateTo($"/Search/Results?s={searchTerm}&w={(int)_selectedWar}&pt={(int)_selectedPersonType}&qt={(int)_selectedQueryType}&i=1");
     }
 }

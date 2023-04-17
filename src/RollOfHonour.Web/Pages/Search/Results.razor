@@ -1,10 +1,11 @@
-@page "/Results"
+@page "/Search/Results"
 
 @inject RollOfHonour.Core.Search.ISuperSearchService _searchService;
 @using Ardalis.Result;
 @using RollOfHonour.Core.Enums;
 @using RollOfHonour.Core.Models;
 @using RollOfHonour.Core.Models.Search;
+@using RollOfHonour.Web.Pages.Shared.Components;
 
 <section class="panel with-background bg-app">
     <div class="container is-fluid">
@@ -53,7 +54,7 @@
                     </div>
                     @if (PersonSearchResults.Any())
                     {
-                        <vc:person-results-list people=@PersonSearchResults></vc:person-results-list>
+                        <PersonResults People=@PersonSearchResults />
                         <vc:pagination-component current-page=@PageIndex page-count=@PersonSearchResults.TotalPages
                             slug="/person/index">
                         </vc:pagination-component>
@@ -253,16 +254,19 @@
 
     [Parameter]
     [SupplyParameterFromQuery(Name = "w")]
-    public War SelectedWar { get; set; } = War.WW1;
+    public int SelectedWar { get; set; }
 
     [Parameter]
     [SupplyParameterFromQuery(Name = "pt")]
-    public PersonType SelectedPersonType { get; set; } = PersonType.Military;
+    public int SelectedPersonType { get; set; }
 
     [Parameter]
     [SupplyParameterFromQuery(Name = "qt")]
-    public QueryType SelectedQueryType { get; set; } = QueryType.Person;
+    public int SelectedQueryType { get; set; }
 
+    private QueryType _selectedQueryType { get; set; } = (int)QueryType.Person;
+    private War _selectedWar { get; set; } = (int)War.WW1;
+    private PersonType _selectedPersonType { get; set; } = (int)PersonType.Military;
     public PaginatedList<MemorialSearchResult> MemorialSearchResults = new();
     public PaginatedList<Core.Models.Person> PersonSearchResults = new();
     public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
@@ -276,13 +280,13 @@
             PageIndex = 1;
         }
 
-        if (SelectedQueryType == QueryType.Person)
+        if (_selectedQueryType == QueryType.Person)
         {
             var searchQuery = new PersonQuery
                 {
                     SearchTerm = SearchString,
-                    SelectedWar = SelectedWar,
-                    PersonType = SelectedPersonType,
+                    SelectedWar = _selectedWar,
+                    PersonType = _selectedPersonType,
                 };
 
             Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, PageIndex, 20);
@@ -300,7 +304,7 @@
             PersonSearchResults = results.Value;
         }
 
-        else if (SelectedQueryType == QueryType.Memorial)
+        else if (_selectedQueryType == QueryType.Memorial)
         {
             var searchQuery = new MemorialQuery
                 {
@@ -321,5 +325,12 @@
 
             MemorialSearchResults = results.Value;
         }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _selectedQueryType = (QueryType)SelectedQueryType;
+        _selectedPersonType = (PersonType)SelectedPersonType;
+        _selectedWar = (War)SelectedWar;
     }
 }

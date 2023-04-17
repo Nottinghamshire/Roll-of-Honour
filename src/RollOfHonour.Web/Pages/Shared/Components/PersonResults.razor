@@ -1,9 +1,9 @@
-@model List<RollOfHonour.Core.Models.Person>
+@using System.Collections;
 
 <div class="search-results-block" id="jumpto-results">
     <ul>
         <li>
-            @foreach (var person in Model)
+            @foreach (var person in People)
             {
                 <div class="search-result-block">
                     <div class="war-label">
@@ -61,3 +61,8 @@
         </li>
     </ul>
 </div>
+
+@code {
+    [Parameter]
+    public List<Core.Models.Person> People { get; set; } = new();
+}
