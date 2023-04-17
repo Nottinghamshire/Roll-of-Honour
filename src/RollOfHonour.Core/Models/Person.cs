@@ -19,8 +19,8 @@ public class Person
 
   public string ServiceNumber { get; set; } = string.Empty;
 
-  public string Unit { get; set; }
-  public string Regiment { get; set; }
+  public string Unit { get; set; } = string.Empty;
+  public string Regiment { get; set; } = string.Empty;
 
   public string UnitRegimentString
   {

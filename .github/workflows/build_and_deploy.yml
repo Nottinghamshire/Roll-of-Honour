@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - APP-RollOfHonour-DEV-UKS
+name: Build and deploy Roll of Honour to DEV and PRD if valid
 
 on:
   push:
@@ -64,4 +61,26 @@ jobs:
           app-name: 'APP-RollOfHonour-DEV-UKS'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_962F9BCB182E48269A190417EFBAC78B }}
+          package: .          
+          
+  deploy_PRD:
+    runs-on: windows-latest
+    needs: [deploy_DEV]
+    environment:
+      name: 'PRD'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'APP-RollOfHonour-PRD-UKS'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3E2EC3ECD1AC4FEE8D7F49648756DD4C }}
           package: .

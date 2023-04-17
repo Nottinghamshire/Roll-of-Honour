@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using RollOfHonour.Core.BasicSearch;
+using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;
@@ -28,6 +28,11 @@ builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration,
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
+builder.Services.AddSignalR().AddAzureSignalR(options =>
+{
+    options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required;
+});
+
 builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
@@ -49,5 +54,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapBlazorHub();
 app.MapControllers();
+app.MapFallbackToPage("/_Host");
 
 app.Run();

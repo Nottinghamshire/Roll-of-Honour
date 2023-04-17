@@ -2,29 +2,30 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RollOfHonour.Core.Shared;
 
-namespace RollOfHonour.Web.Pages.Person;
-
-public class Details : PageModel
+namespace RollOfHonour.Web.Pages.Person
 {
-  public Core.Models.Person Person { get; set; }
-
-  private IPersonRepository _personRepository { get; set; } = null!;
-
-  public Details(IPersonRepository personRepository)
+  public class Details : PageModel
   {
-    _personRepository = personRepository;
-  }
+    public Core.Models.Person Person { get; set; }
 
-  public async Task<IActionResult> OnGet(int id)
-  {
-    var person = await _personRepository.GetById(id);
+    private IPersonRepository _personRepository { get; set; } = null!;
 
-    if (person == null)
+    public Details(IPersonRepository personRepository)
     {
-      return NotFound();
+      _personRepository = personRepository;
     }
 
-    Person = person;
-    return Page();
+    public async Task<IActionResult> OnGet(int id)
+    {
+      var person = await _personRepository.GetById(id);
+
+      if (person == null)
+      {
+        return NotFound();
+      }
+
+      Person = person;
+      return Page();
+    }
   }
 }

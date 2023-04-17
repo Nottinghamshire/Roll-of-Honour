@@ -24,8 +24,8 @@ public class Person
       DateOfBirth = this.DateOfBirth,
       DateOfDeath = this.DateOfDeath,
       PlaceOfBirth = this.PlaceOfBirth,
-      Unit = this.SubUnit?.Name,
-      Regiment = this.SubUnit?.Regiment?.Name
+      Unit = this.SubUnit?.Name == null ? string.Empty : this.SubUnit.Name,
+      Regiment = this.SubUnit?.Regiment?.Name == null ? string.Empty : this.SubUnit.Regiment.Name
     };
 
     foreach (var decoration in this.Decorations)

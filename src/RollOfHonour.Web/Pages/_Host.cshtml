@@ -1,0 +1,10 @@
+@page "/blazor"
+@using Shared;
+ 
+@{
+    Layout = "_Layout";
+}
+ 
+<app>
+    @(await Html.RenderComponentAsync<App>(RenderMode.Server))
+</app>

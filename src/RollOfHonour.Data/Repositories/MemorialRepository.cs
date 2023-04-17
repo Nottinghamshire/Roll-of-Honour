@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
@@ -26,27 +26,84 @@ public class MemorialRepository : IMemorialRepository
         .Include(m => m.Photos)
         .FirstAsync(p => p.Id == id);
 
+        if (dbMemorial == null)
+        {
+            return null;
+        }
+
       return dbMemorial.ToDomainModel(settingBlobName, settingBlobImageContainerName);
     }
     catch (InvalidOperationException)
     {
+      // TODO: Understand if this is even possible 
       return null;
     }
   }
-
-  public async Task<IEnumerable<Memorial>> GetAll()
-  {
-    try
+  
+  // TODO: Should this return be nullable, if there were no memorials rather than an empty list?
+    public async Task<IEnumerable<Memorial>> GetAll()
     {
-      var memorials = await _dbContext.WarMemorials
-        .Include(m => m.Photos)
-        .Take(80).ToListAsync();
+        try
+        {
+            var memorials = _dbContext.WarMemorials
+                .Include(m => m.Photos)
+                .Take(80);
 
-      return memorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+            if (!memorials.Any())
+            {
+                return Enumerable.Empty<Memorial>();
+            }
+
+        return memorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+
+        }
+        catch (Exception ex)
+        {
+            // TODO: Handle exceptions 
+            throw ex;
+        }
     }
-    catch (Exception e)
+
+    public async Task<PaginatedList<Core.Models.Memorial>> SearchMemorials(string searchString, int pageIndex, int pageSize)
     {
-      return null;
+        var dbMemorials = _dbContext.WarMemorials.Where(m =>
+            m.Name.Contains(searchString));
+
+        var resultCount = dbMemorials.Count();
+
+        if (resultCount == 0)
+        {
+            //TODO: handle case where there are none
+            throw new NotImplementedException();
+        }
+
+        dbMemorials = dbMemorials.Skip(
+            (pageIndex - 1) * pageSize)
+            .Take(pageSize);
+
+        var results = await dbMemorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToListAsync();
+
+        return new PaginatedList<Core.Models.Memorial>(results, resultCount, pageIndex, pageSize);
     }
-  }
+
+    public int Count() 
+    {
+        var count = _dbContext.WarMemorials.Count();
+        return count;
+    }
+
+    public async Task<PaginatedList<Memorial>> GetPageOfMemorials(int pageIndex, int pageSize)
+    {
+        var dbMemorials = await _dbContext.WarMemorials.Skip(
+            (pageIndex - 1) * pageSize)
+            .Take(pageSize).ToListAsync();
+
+        if (!dbMemorials.Any())
+        {
+            return new PaginatedList<Memorial>();
+        }
+
+        return new PaginatedList<Memorial>(dbMemorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToList(), _dbContext.WarMemorials.Count(), pageIndex, pageSize);
+    }
+
 }
