@@ -5,6 +5,7 @@
         <li>
             @foreach (var person in People)
             {
+                var personDetailSlug = $"/Person/Details?id={person.Id}";
                 <div class="search-result-block">
                     <div class="war-label">
                         <img class="ww-insignia" src="/images/insignia-ww1.png" alt="This data is related to World War 1" />
@@ -52,7 +53,7 @@
                                     Birth</span>
                                 <span class="data">@person.PlaceOfBirth</span>
                             </div>
-                            <a href="/person.html" title="Look at this record" class="search-link"><i
+                            <a href="@personDetailSlug" title="Look at this record" class="search-link"><i
                                     class="fal fa-glasses"></i> Read more</a>
                         </div>
                     </div>
