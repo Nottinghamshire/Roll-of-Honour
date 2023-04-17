@@ -291,26 +291,12 @@
 
         if (_selectedQueryType == QueryType.Person)
         {
-            var searchQuery = BuildPersonQuery();
-            var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, new());
-            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(searchQuery, filters, PageIndex, 20);
-
-            if (results.IsSuccess is not true)
-            {
-                // viewbag error probably
-            }
-
-            if (!results.Value.Any())
-            {
-                // I'm not sure this can happen
-            }
-
-            PersonSearchResults = results.Value;
+            await QueryPeople(false);
         }
 
         else if (_selectedQueryType == QueryType.Memorial)
         {
-            var searchQuery = BuildMemorialQuery(); 
+            var searchQuery = BuildMemorialQuery();
 
             Result<PaginatedList<Core.Models.Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 20);
 
@@ -328,7 +314,12 @@
         }
     }
 
-    private async Task FilterSearch()
+    protected override async Task OnParametersSetAsync()
+    {
+        SetSearchParamsFromQuery();
+    }
+
+    private async Task QueryPeople(bool stateChangeNeeded)
     {
         if (_selectedQueryType == QueryType.Person)
         {
@@ -348,8 +339,16 @@
             }
 
             PersonSearchResults = results.Value;
-            StateHasChanged();
+            if (stateChangeNeeded)
+            {
+                StateHasChanged();
+            }
         }
+    }
+
+    private async Task FilterSearch()
+    {
+        await QueryPeople(true);
     }
 
     private PersonQuery BuildPersonQuery()
@@ -375,10 +374,6 @@
         return searchQuery;
     }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        SetSearchParamsFromQuery();
-    }
 
     private void SetSearchParamsFromQuery()
     {
