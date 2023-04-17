@@ -8,7 +8,7 @@ public class Filters
     public PersonType SelectedPersonType { get; }
     public List<int> Regiments { get; }
 
-    public bool DateRangeUsed => DiedBefore.Year != 1900 && BornAfter.Year != 1900;
+    public bool DateRangeUsed => DiedBefore.Year != 1900 || BornAfter.Year != 1900;
     public bool HasRegiments => Regiments.Count() != 0;
 
     public bool IsFiltered => HasRegiments || DateRangeUsed;
