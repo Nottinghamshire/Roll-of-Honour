@@ -216,13 +216,7 @@
         if (_selectedQueryType == QueryType.Person)
         {
             await QueryPeople(false, PageIndex, 20);
-
-            _regimentFilters = PersonSearchResults
-            .Where(p => p.RegimentId != null)
-            // Will never be null but coalesced to prevent warning
-            .Select(p => new RegimentFilter(p.RegimentId ?? 0, p.Regiment))
-            .DistinctBy(r => r.RegimentId)
-            .ToList();
+            _regimentFilters = await _searchService.GetRegimentFiltersForSearch(BuildPersonQuery());
         }
 
         else if (_selectedQueryType == QueryType.Memorial)

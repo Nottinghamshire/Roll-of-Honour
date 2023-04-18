@@ -11,4 +11,5 @@ public interface IPersonRepository
     int Count();
     Task<PaginatedList<Core.Models.Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize);
     Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize);
+    Task<List<RegimentFilter>> GetRegimentFiltersForSearch(PersonQuery query);
 }

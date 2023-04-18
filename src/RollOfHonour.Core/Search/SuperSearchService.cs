@@ -16,6 +16,11 @@ public class SuperSearchService : ISuperSearchService
         _memorialRepository = memorialRepository;
     }
 
+    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearch(PersonQuery query)
+    {
+        return await _personRepository.GetRegimentFiltersForSearch(query);
+    }
+
     public async Task<Result<PaginatedList<Core.Models.Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
