@@ -162,6 +162,10 @@
                 </div>
             </div>
         }
+        else
+        {
+            <h1>Your query returned no results.</h1>
+        }
     </div>
 </section>
 
@@ -215,13 +219,11 @@
 
             if (results.IsSuccess is not true)
             {
-                // There were no results found so return
                 return;
             }
 
             if (!results.Value.Any())
             {
-                // There were no results found so return
                 return;
             }
 
