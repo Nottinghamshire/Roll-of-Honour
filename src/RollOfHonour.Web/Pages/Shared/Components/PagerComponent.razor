@@ -34,11 +34,16 @@
     [Parameter]
     public int CurrentPage { get; set; }
     [Parameter]
-    public int PageCount { get; set; }
-    [Parameter]
     public EventCallback<int> CurrentPageChanged { get; set; }
     [Parameter]
+    public int PageCount { get; set; }
+    [Parameter]
     public EventCallback<int> ChangePage { get; set; }
+
+    [Parameter]
+    public bool IsLoading { get; set; } = true;
+    [Parameter]
+    public EventCallback<bool> IsLoadingChanged { get; set; }
 
     protected override void OnInitialized()
     {
@@ -52,7 +57,7 @@
 
     private async Task UpdatePage(int page)
     {
-        if (ChangePage.HasDelegate)
+        if (ChangePage.HasDelegate && !IsLoading)
         {
             await ChangePage.InvokeAsync(page);
         }
@@ -68,7 +73,7 @@
             return;
         }
 
-        if (PageCount < 9)
+        if (PageCount <= 9)
         {
             this.PageRange = Enumerable.Range(1, PageCount).ToArray();
             return;

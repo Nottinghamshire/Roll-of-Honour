@@ -52,7 +52,8 @@
                     <ResultsListComponent 
                         @bind-PersonSearchResults="PersonSearchResults" 
                         @bind-MemorialSearchResults="MemorialSearchResults" 
-                        @bind-PageIndex="PageIndex" 
+                        @bind-PageIndex="PageIndex"
+                        @bind-IsLoading="_isLoading" 
                         ChangePage="@ChangePage"
                     />
                 </div>
@@ -194,6 +195,7 @@
     private int _dateOfBirthFilter { get; set; } = 1900;
     private List<RegimentFilter> _regimentFilters { get; set; } = new();
     private bool _isLoading = true;
+    private const int _pageSize = 10;
     public PaginatedList<Core.Models.Memorial> MemorialSearchResults = new();
     public PaginatedList<Core.Models.Person> PersonSearchResults = new();
     public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
@@ -206,7 +208,7 @@
 
         if (_selectedQueryType == QueryType.Person)
         {
-            await QueryPeople(false, PageIndex, 20);
+            await QueryPeople(false, PageIndex);
             _regimentFilters = await _searchService.GetRegimentFiltersForSearch(BuildPersonQuery());
         }
 
@@ -214,7 +216,7 @@
         {
             var searchQuery = BuildMemorialQuery();
 
-            Result<PaginatedList<Core.Models.Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, 20);
+            Result<PaginatedList<Core.Models.Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, _pageSize);
 
             if (results.IsSuccess is not true)
             {
@@ -236,13 +238,14 @@
         SetSearchParamsFromQuery();
     }
 
-    private async Task QueryPeople(bool stateChangeNeeded, int pageIndex, int pageSize)
+    private async Task QueryPeople(bool stateChangeNeeded, int pageIndex)
     {
+        PersonSearchResults = new();
         if (_selectedQueryType == QueryType.Person)
         {
             var query = BuildPersonQuery();
             var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
-            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, 5);
+            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, _pageSize);
 
             if (results.IsSuccess is not true)
             {
@@ -268,7 +271,7 @@
         _isLoading = true;
         PageIndex = 1;
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
-        await QueryPeople(true, PageIndex, 20);
+        await QueryPeople(true, PageIndex);
         _isLoading = false;
     }
 
@@ -289,7 +292,7 @@
         _isLoading = true;
         PageIndex = page;
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
-        await QueryPeople(true, PageIndex, 20);
+        await QueryPeople(true, PageIndex);
         _isLoading = false;
     }
 
