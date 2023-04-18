@@ -141,7 +141,7 @@
                             </div>
                         </div>
 
-                        <button title="Look at this record" type="button" @onclick="FilterSearch" class="button primary"><i
+                        <button title="Look at this record" type="button" disabled="@_isLoading" @onclick="FilterSearch" class="button primary"><i
                                 class="fal fa-glasses" aria-hidden="true"></i> Filter Search
                         </button>
 
@@ -265,9 +265,11 @@
 
     private async Task FilterSearch()
     {
+        _isLoading = true;
         PageIndex = 1;
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
         await QueryPeople(true, PageIndex, 20);
+        _isLoading = false;
     }
 
     private void ToggleRegiment(int regimentId)
