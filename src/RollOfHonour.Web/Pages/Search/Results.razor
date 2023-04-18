@@ -40,6 +40,7 @@
         @if (HasResults)
         {
             <div class="columns is-multiline">
+
                 <div id="results-jump-to" class="column is-full-tablet is-8-desktop is-8-widescreen is-8-fullhd">
 
                     <div class="text-block">
@@ -48,26 +49,10 @@
                             you need
                             to and the results will update for you.</p>
                     </div>
-
-                    <div class="mobile-search-block">
-                        <a href="#jumpto-filters" title="Change or filter these results"><i
-                                class="fal fa-sort-size-down"></i> Change
-                            or filter these search results?</a>
-                    </div>
-                    @if (PersonSearchResults.Any())
-                    {
-                        <PersonResults People=@PersonSearchResults />
-                        <PagerComponent CurrentPage="@PageIndex" PageCount="@PersonSearchResults.TotalPages"
-                    ChangePage="@ChangePage"></PagerComponent>
-                    }
-                    else if (MemorialSearchResults.Any())
-                    {
-                        <MemorialResults Memorials=@MemorialSearchResults />
-                    }
+                    <ResultsListComponent PersonSearchResults="@PersonSearchResults" MemorialSearchResults="@MemorialSearchResults" ChangePage="@ChangePage"/>
                 </div>
                 <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
                     <aside class="sidebar" id="jumpto-filters">
-
                         <div class="search-filter-block">
                             <div class="form-toggle-block">
                                 <span class="toggle-label">
@@ -165,7 +150,6 @@
         }
         else
         {
-
             <div class="form-block with-margin-bottom with-margin-top" data-aos="fade-up">
                 <div class="form-row">
                     <h1>Your query returned no results.</h1>

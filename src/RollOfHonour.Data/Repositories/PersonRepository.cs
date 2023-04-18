@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
@@ -132,7 +132,6 @@ public class PersonRepository : IPersonRepository
 
         return regiments;
     }
-
 
     public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)
     {
