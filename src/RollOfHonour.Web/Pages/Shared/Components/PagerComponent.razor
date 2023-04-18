@@ -38,7 +38,7 @@
         [Parameter] 
         public EventCallback<int> ChangePage { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             SetPageRange();
         }
@@ -69,6 +69,7 @@
             if (PageCount < 9)
             {
                 this.PageRange = Enumerable.Range(1, PageCount).ToArray();
+                return;
             }
 
             if (CurrentPage == 1)
