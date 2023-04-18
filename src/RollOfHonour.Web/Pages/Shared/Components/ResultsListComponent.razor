@@ -7,29 +7,38 @@
 @if (PersonSearchResults.Any())
 {
     <PersonResults People=@PersonSearchResults />
-    <PagerComponent CurrentPage="@PageIndex" PageCount="@PersonSearchResults.TotalPages" ChangePage="@UpdatePage">
+    <PagerComponent @bind-CurrentPage="PageIndex" PageCount="@PersonSearchResults.TotalPages" ChangePage="@UpdatePage">
     </PagerComponent>
 }
 else if (MemorialSearchResults.Any())
 {
     <MemorialResults Memorials=@MemorialSearchResults />
 }
+else
+{
+    <i class="fas fa-spinner fa-pulse"></i>
+}
 
 @code
 {
     [Parameter]
-    public PaginatedList<Core.Models.Memorial> MemorialSearchResults { get; set; } = new();
+    public PaginatedList<Memorial> MemorialSearchResults { get; set; } = new();
     [Parameter]
-    public PaginatedList<Core.Models.Person> PersonSearchResults { get; set; } = new();
+    public PaginatedList<Person> PersonSearchResults { get; set; } = new();
     [Parameter]
     public int PageIndex { get; set; } = 1;
-
+    [Parameter]
+    public EventCallback<PaginatedList<Person>> PersonSearchResultsChanged { get; set; }  
+    [Parameter]
+    public EventCallback<PaginatedList<Memorial>> MemorialSearchResultsChanged { get; set; }  
+    [Parameter]
+    public EventCallback<int> PageIndexChanged { get; set; }    
     [Parameter]
     public EventCallback<int> ChangePage { get; set; }
 
     private async Task UpdatePage(int page)
     {
-        if(ChangePage.HasDelegate)
+        if (ChangePage.HasDelegate)
         {
             await ChangePage.InvokeAsync(page);
         }

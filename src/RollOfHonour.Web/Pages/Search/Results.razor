@@ -37,7 +37,7 @@
             </nav>
         </div>
 
-        @if (HasResults)
+        @if (HasResults || _isLoading)
         {
             <div class="columns is-multiline">
 
@@ -49,7 +49,12 @@
                             you need
                             to and the results will update for you.</p>
                     </div>
-                    <ResultsListComponent PersonSearchResults="@PersonSearchResults" MemorialSearchResults="@MemorialSearchResults" ChangePage="@ChangePage"/>
+                    <ResultsListComponent 
+                        @bind-PersonSearchResults="PersonSearchResults" 
+                        @bind-MemorialSearchResults="MemorialSearchResults" 
+                        @bind-PageIndex="PageIndex" 
+                        ChangePage="@ChangePage"
+                    />
                 </div>
                 <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
                     <aside class="sidebar" id="jumpto-filters">
@@ -188,6 +193,7 @@
     private int _dateOfDeathFilter { get; set; } = 1900;
     private int _dateOfBirthFilter { get; set; } = 1900;
     private List<RegimentFilter> _regimentFilters { get; set; } = new();
+    private bool _isLoading = true;
     public PaginatedList<Core.Models.Memorial> MemorialSearchResults = new();
     public PaginatedList<Core.Models.Person> PersonSearchResults = new();
     public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
@@ -222,6 +228,7 @@
 
             MemorialSearchResults = results.Value;
         }
+        _isLoading = false;
     }
 
     protected override void OnParametersSet()
@@ -258,7 +265,9 @@
 
     private async Task FilterSearch()
     {
-        await QueryPeople(true, 1, 20);
+        PageIndex = 1;
+        _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
+        await QueryPeople(true, PageIndex, 20);
     }
 
     private void ToggleRegiment(int regimentId)
@@ -275,9 +284,11 @@
 
     private async Task ChangePage(int page)
     {
+        _isLoading = true;
         PageIndex = page;
-        await QueryPeople(true, PageIndex, 20);
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
+        await QueryPeople(true, PageIndex, 20);
+        _isLoading = false;
     }
 
     private PersonQuery BuildPersonQuery()
