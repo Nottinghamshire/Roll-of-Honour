@@ -2,6 +2,7 @@
 
 @inject RollOfHonour.Core.Search.ISuperSearchService _searchService;
 @inject IJSRuntime JSRuntime;
+@inject NavigationManager navManager;
 @using Ardalis.Result;
 @using RollOfHonour.Core.Enums;
 @using RollOfHonour.Core.Models;
@@ -164,7 +165,15 @@
         }
         else
         {
-            <h1>Your query returned no results.</h1>
+
+            <div class="form-block with-margin-bottom with-margin-top" data-aos="fade-up">
+                <div class="form-row">
+                    <h1>Your query returned no results.</h1>
+                    <button type="button" @onclick="ReturnToSearch" class="submit-button centered" form="search-all"><i
+                            class="fal fa-file-search"></i> Search our
+                        records</button>
+                </div>
+            </div>
         }
     </div>
 </section>
@@ -270,14 +279,14 @@
 
     private void ToggleRegiment(int regimentId)
     {
-       if (_regimentIds.Contains(regimentId))
-       {
+        if (_regimentIds.Contains(regimentId))
+        {
             _regimentIds.Remove(regimentId);
-       }
-       else
-       {
+        }
+        else
+        {
             _regimentIds.Add(regimentId);
-       }
+        }
     }
 
     private async Task ChangePage(int page)
@@ -316,5 +325,10 @@
         _selectedQueryType = (QueryType)SelectedQueryType;
         _selectedPersonType = (PersonType)SelectedPersonType;
         _selectedWar = (War)SelectedWar;
+    }
+
+    private void ReturnToSearch()
+    {
+        navManager.NavigateTo($"/Search", false);
     }
 }
