@@ -20,7 +20,9 @@ public class Person
   public string ServiceNumber { get; set; } = string.Empty;
 
   public string Unit { get; set; } = string.Empty;
+  public int? UnitId { get; set; }
   public string Regiment { get; set; } = string.Empty;
+  public int? RegimentId { get; set; }
 
   public string UnitRegimentString
   {

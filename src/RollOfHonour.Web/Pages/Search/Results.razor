@@ -56,7 +56,8 @@
                     @if (PersonSearchResults.Any())
                     {
                         <PersonResults People=@PersonSearchResults />
-                        <PagerComponent CurrentPage="@PageIndex" PageCount="@PersonSearchResults.TotalPages" ChangePage="@ChangePage"></PagerComponent>
+                        <PagerComponent CurrentPage="@PageIndex" PageCount="@PersonSearchResults.TotalPages"
+                    ChangePage="@ChangePage"></PagerComponent>
                     }
                     else if (MemorialSearchResults.Any())
                     {
@@ -91,97 +92,26 @@
                                 </ul>
                             </div>
                         </div>
-
                         <div class="search-filter-block">
                             <span class="filter-label">
-                                Search between a specific period
+                                Filter by regiment
                             </span>
-                            <ul class="button-list">
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_1">
-                                        <label for="battalion_1">101st Airborne Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_2">
-                                        <label for="battalion_2">1st Armored Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_3">
-                                        <label for="battalion_3">1st Infantry Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_4">
-                                        <label for="battalion_4">2nd Infantry Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_5">
-                                        <label for="battalion_5">3rd Infantry Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_6">
-                                        <label for="battalion_6">4th Armored Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_7">
-                                        <label for="battalion_7">5th Infantry Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_8">
-                                        <label for="battalion_8">7th Armored Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_9">
-                                        <label for="battalion_9">7th Infantry Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_10">
-                                        <label for="battalion_10">10th Mountain Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_11">
-                                        <label for="battalion_11">11th Armored Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_12">
-                                        <label for="battalion_12">12th Armored Division</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="button_checkbox">
-                                        <input type="checkbox" id="battalion_13">
-                                        <label for="battalion_13">17th Airborne Division</label>
-                                    </div>
-                                </li>
+                            <ul class="button-list"> 
+                                @foreach (var regiment in _regimentFilters)
+                                {
+                                    <li>
+                                        <div class="button_checkbox">
+                                            <input type="checkbox" @onchange="(e => ToggleRegiment(regiment.RegimentId))" id="@regiment.Regiment">
+                                            <label for="@regiment.Regiment">@regiment.Regiment</label>
+                                        </div>
+                                    </li>
+                                }
                             </ul>
                         </div>
-
                         <div class="search-filter-block">
                             <div class="date-range-block">
                                 <span class="filter-label">
-                                    Search between a specific period
+                                    Filter between a specific period
                                 </span>
 
                                 <ul>
@@ -233,7 +163,8 @@
                         </div>
 
                         <button title="Look at this record" type="button" @onclick="FilterSearch" class="button primary"><i
-                                class="fal fa-glasses" aria-hidden="true"></i> Filter Search </button>
+                                class="fal fa-glasses" aria-hidden="true"></i> Filter Search
+                        </button>
 
                         <a href="#jumpto-results" class="button primary mobile-results-button"
                             title="Go back to search results">
@@ -268,10 +199,10 @@
     private QueryType _selectedQueryType { get; set; } = QueryType.Person;
     private War _selectedWar { get; set; } = (int)War.WW1;
     private PersonType _selectedPersonType { get; set; } = PersonType.Military;
+    private HashSet<int> _regimentIds { get; set; } = new();
     private int _dateOfDeathFilter { get; set; } = 1900;
-
     private int _dateOfBirthFilter { get; set; } = 1900;
-
+    private List<RegimentFilter> _regimentFilters { get; set; } = new();
     public PaginatedList<Core.Models.Memorial> MemorialSearchResults = new();
     public PaginatedList<Core.Models.Person> PersonSearchResults = new();
     public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
@@ -285,6 +216,13 @@
         if (_selectedQueryType == QueryType.Person)
         {
             await QueryPeople(false, PageIndex, 20);
+
+            _regimentFilters = PersonSearchResults
+            .Where(p => p.RegimentId != null)
+            // Will never be null but coalesced to prevent warning
+            .Select(p => new RegimentFilter(p.RegimentId ?? 0, p.Regiment))
+            .DistinctBy(r => r.RegimentId)
+            .ToList();
         }
 
         else if (_selectedQueryType == QueryType.Memorial)
@@ -295,19 +233,21 @@
 
             if (results.IsSuccess is not true)
             {
-                // Do something
+                // There were no results found so return
+                return;
             }
 
             if (!results.Value.Any())
             {
-                // Do something
+                // There were no results found so return
+                return;
             }
 
             MemorialSearchResults = results.Value;
         }
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         SetSearchParamsFromQuery();
     }
@@ -317,19 +257,19 @@
         if (_selectedQueryType == QueryType.Person)
         {
             var query = BuildPersonQuery();
-            // TODO: Implement regiment filters
-            var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, new());
-            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, 20);
+            var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
+            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, 5);
 
             if (results.IsSuccess is not true)
             {
-                // viewbag error probably
+                return;
             }
 
             if (!results.Value.Any())
             {
-                // I'm not sure this can happen
+                return;
             }
+
 
             PersonSearchResults = results.Value;
             if (stateChangeNeeded)
@@ -342,6 +282,18 @@
     private async Task FilterSearch()
     {
         await QueryPeople(true, 1, 20);
+    }
+
+    private void ToggleRegiment(int regimentId)
+    {
+       if (_regimentIds.Contains(regimentId))
+       {
+            _regimentIds.Remove(regimentId);
+       }
+       else
+       {
+            _regimentIds.Add(regimentId);
+       }
     }
 
     private async Task ChangePage(int page)

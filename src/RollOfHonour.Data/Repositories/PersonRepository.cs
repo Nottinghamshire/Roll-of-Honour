@@ -99,8 +99,7 @@ public class PersonRepository : IPersonRepository
         var resultCount = dbPeople.Count();
         if (resultCount == 0)
         {
-            // return something else
-            throw new NotImplementedException();
+            return new PaginatedList<Person>();
         }
 
         dbPeople = dbPeople
@@ -144,7 +143,17 @@ public class PersonRepository : IPersonRepository
             people = BornAfter(people, filters.BornAfter);
         }
 
+        if (filters.HasRegiments)
+        {
+            people = ByRegiment(people, filters.Regiments);
+        }
+
         return people;
+    }
+
+    private IQueryable<Models.DB.Person> ByRegiment(IQueryable<Models.DB.Person> people, HashSet<int> regimentIds)
+    {
+        return people.Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && regimentIds.Contains((int)p.SubUnit.RegimentId));
     }
 
     private IQueryable<Models.DB.Person> DiedBefore(IQueryable<Models.DB.Person> people, DateTime date)
