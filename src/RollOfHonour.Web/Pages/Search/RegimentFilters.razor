@@ -1,0 +1,35 @@
+@using RollOfHonour.Core.Models.Search;
+
+<div class="search-filter-block">
+    <span class="filter-label">
+        Filter by regiment
+    </span>
+    <ul class="button-list">
+        @foreach (var regiment in Regiments)
+        {
+            <li>
+                <div class="button_checkbox">
+                    <input type="checkbox" @onchange="(e => UpdateRegiment(regiment.RegimentId))" id="@regiment.Regiment">
+                    <label for="@regiment.Regiment">@regiment.Regiment</label>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+
+@code
+{
+    [Parameter]
+    public List<RegimentFilter> Regiments { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<int> ToggleRegiment { get; set; }
+
+    private async Task UpdateRegiment(int regimentId)
+    {
+        if (ToggleRegiment.HasDelegate)
+        {
+            await ToggleRegiment.InvokeAsync(regimentId);
+        }
+    }
+}

@@ -92,22 +92,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="search-filter-block">
-                            <span class="filter-label">
-                                Filter by regiment
-                            </span>
-                            <ul class="button-list"> 
-                                @foreach (var regiment in _regimentFilters)
-                                {
-                                    <li>
-                                        <div class="button_checkbox">
-                                            <input type="checkbox" @onchange="(e => ToggleRegiment(regiment.RegimentId))" id="@regiment.Regiment">
-                                            <label for="@regiment.Regiment">@regiment.Regiment</label>
-                                        </div>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
+                        @if (_regimentFilters.Any())
+                        {
+                            <RegimentFilters ToggleRegiment="ToggleRegiment" Regiments="_regimentFilters" />
+                        }
                         <div class="search-filter-block">
                             <div class="date-range-block">
                                 <span class="filter-label">
