@@ -43,24 +43,6 @@ public class PersonRepository : IPersonRepository
         }
     }
 
-    // TODO: Should this return a null rather than an empty enumerable?
-    public async Task<IEnumerable<Person>> GetAll()
-    {
-        try
-        {
-            var people = await _dbContext.People
-              .Include(p => p.Photos)
-              //.Take(25)
-              .ToListAsync();
-
-            return people.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
-        }
-        catch (Exception)
-        {
-            return Enumerable.Empty<Person>();
-        }
-    }
-
     public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
     {
         var countOfPeople = _dbContext.People.Count();
