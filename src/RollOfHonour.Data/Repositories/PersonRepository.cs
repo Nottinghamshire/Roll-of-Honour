@@ -78,14 +78,6 @@ public class PersonRepository : IPersonRepository
         {
             dbPeople = FilterPeople(dbPeople, filters);
         }
-        else
-        {
-            var regiments = dbPeople
-                .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null && !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
-                .Select(p => new RegimentFilter((int)p.SubUnit!.RegimentId!, p.SubUnit!.Regiment!.Name!))
-                .Distinct()
-                .ToList();
-        }
 
         var resultCount = dbPeople.Count();
         if (resultCount == 0)
