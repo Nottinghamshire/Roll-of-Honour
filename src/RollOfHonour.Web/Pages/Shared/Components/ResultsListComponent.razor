@@ -1,0 +1,50 @@
+@using RollOfHonour.Core.Models;
+
+<div class="mobile-search-block">
+    <a href="#jumpto-filters" title="Change or filter these results"><i class="fal fa-sort-size-down"></i> Change
+        or filter these search results?</a>
+</div>
+@if (PersonSearchResults.Any())
+{
+    <PersonResults People=@PersonSearchResults />
+    <PagerComponent @bind-CurrentPage="PageIndex" @bind-IsLoading="IsLoading" PageCount="@PersonSearchResults.TotalPages" ChangePage="@UpdatePage">
+    </PagerComponent>
+}
+else if (MemorialSearchResults.Any())
+{
+    <MemorialResults Memorials=@MemorialSearchResults />
+}
+else
+{
+    <i class="fas fa-spinner fa-pulse"></i>
+}
+
+@code
+{
+    [Parameter]
+    public PaginatedList<Memorial> MemorialSearchResults { get; set; } = new();
+    [Parameter]
+    public PaginatedList<Person> PersonSearchResults { get; set; } = new();
+    [Parameter]
+    public EventCallback<PaginatedList<Person>> PersonSearchResultsChanged { get; set; }
+    [Parameter]
+    public EventCallback<PaginatedList<Memorial>> MemorialSearchResultsChanged { get; set; }
+    [Parameter]
+    public int PageIndex { get; set; } = 1;
+    [Parameter]
+    public EventCallback<int> PageIndexChanged { get; set; }
+    [Parameter]
+    public EventCallback<int> ChangePage { get; set; }
+    [Parameter]
+    public bool IsLoading { get; set; } = true;
+    [Parameter]
+    public EventCallback<bool> IsLoadingChanged { get; set; }
+
+    private async Task UpdatePage(int page)
+    {
+        if (ChangePage.HasDelegate)
+        {
+            await ChangePage.InvokeAsync(page);
+        }
+    }
+}

@@ -75,8 +75,7 @@ public class MemorialRepository : IMemorialRepository
 
         if (resultCount == 0)
         {
-            //TODO: handle case where there are none
-            throw new NotImplementedException();
+            return new PaginatedList<Memorial>();
         }
 
         dbMemorials = dbMemorials.Skip(

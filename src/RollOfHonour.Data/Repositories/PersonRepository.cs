@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
@@ -9,57 +9,39 @@ namespace RollOfHonour.Data.Repositories;
 
 public class PersonRepository : IPersonRepository
 {
-  private string settingBlobName = "ncc01sarollhonstdlrsdev";
-  private string settingBlobImageContainerName = "images";
+    private string settingBlobName = "ncc01sarollhonstdlrsdev";
+    private string settingBlobImageContainerName = "images";
 
-  private RollOfHonourContext _dbContext { get; set; }
+    private RollOfHonourContext _dbContext { get; set; }
 
-  public PersonRepository(RollOfHonourContext dbContext)
-  {
-    _dbContext = dbContext;
-  }
-
-  public async Task<Person?> GetById(int id)
-  {
-    try
+    public PersonRepository(RollOfHonourContext dbContext)
     {
-      var dbPerson = await _dbContext.People
-        .Include(p => p.Photos)
-        .Include(p => p.Decorations)
-        .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
-        .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
-        .FirstOrDefaultAsync(p => p.Id == id);
+        _dbContext = dbContext;
+    }
 
-        if (dbPerson is null)
+    public async Task<Person?> GetById(int id)
+    {
+        try
+        {
+            var dbPerson = await _dbContext.People
+              .Include(p => p.Photos)
+              .Include(p => p.Decorations)
+              .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
+              .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
+              .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (dbPerson is null)
             {
                 // TODO: Is this necessary?
                 return null;
             }
-      return dbPerson.ToDomainModel(settingBlobName, settingBlobImageContainerName);
+            return dbPerson.ToDomainModel(settingBlobName, settingBlobImageContainerName);
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
-    catch (InvalidOperationException ex)
-    {
-      return null;
-    }
-  }
-
-  // TODO: Should this return a null rather than an empty enumerable?
-  public async Task<IEnumerable<Person>> GetAll()
-  {
-    try
-    {
-      var people = await _dbContext.People
-        .Include(p => p.Photos)
-        //.Take(25)
-        .ToListAsync();
-
-      return people.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
-    }
-    catch (Exception)
-    {
-        return Enumerable.Empty<Person>();
-    }
-  }
 
     public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
     {
@@ -90,7 +72,8 @@ public class PersonRepository : IPersonRepository
 
     public async Task<PaginatedList<Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize)
     {
-        var dbPeople = GetPeopleByName(query, pageIndex, pageSize);
+        var dbPeople = GetPeopleByName(query);
+
         if (filters.IsFiltered)
         {
             dbPeople = FilterPeople(dbPeople, filters);
@@ -99,8 +82,7 @@ public class PersonRepository : IPersonRepository
         var resultCount = dbPeople.Count();
         if (resultCount == 0)
         {
-            // return something else
-            throw new NotImplementedException();
+            return new PaginatedList<Person>();
         }
 
         dbPeople = dbPeople
@@ -110,8 +92,20 @@ public class PersonRepository : IPersonRepository
             .AsNoTracking();
 
         var results = await dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToListAsync();
-        var paginatedResults = new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
-        return paginatedResults;
+        return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
+    }
+
+    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearch(PersonQuery query)
+    {
+        var dbPeople = GetPeopleByName(query);
+        var regiments = await dbPeople
+            .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null && !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
+            .Select(p => new RegimentFilter((int)p.SubUnit!.RegimentId!, p.SubUnit!.Regiment!.Name!))
+            .AsNoTracking()
+            .Distinct()
+            .ToListAsync();
+
+        return regiments;
     }
 
     public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)
@@ -120,6 +114,7 @@ public class PersonRepository : IPersonRepository
             .Include(p => p.Photos)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
+            .AsNoTracking()
             .ToListAsync();
 
         if (!dbPeople.Any())
@@ -144,7 +139,17 @@ public class PersonRepository : IPersonRepository
             people = BornAfter(people, filters.BornAfter);
         }
 
+        if (filters.HasRegiments)
+        {
+            people = ByRegiment(people, filters.Regiments);
+        }
+
         return people;
+    }
+
+    private IQueryable<Models.DB.Person> ByRegiment(IQueryable<Models.DB.Person> people, HashSet<int> regimentIds)
+    {
+        return people.Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && regimentIds.Contains((int)p.SubUnit.RegimentId));
     }
 
     private IQueryable<Models.DB.Person> DiedBefore(IQueryable<Models.DB.Person> people, DateTime date)
@@ -152,12 +157,12 @@ public class PersonRepository : IPersonRepository
         return people.Where(p => p.DateOfDeath <= date);
     }
 
-    private IQueryable<Models.DB.Person> BornAfter( IQueryable<Models.DB.Person> people, DateTime date)
+    private IQueryable<Models.DB.Person> BornAfter(IQueryable<Models.DB.Person> people, DateTime date)
     {
         return people.Where(p => p.DateOfBirth >= date);
     }
 
-    private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query, int pageIndex, int pageSize)
+    private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query)
     {
 
         var dbPeople = _dbContext.People
@@ -167,8 +172,8 @@ public class PersonRepository : IPersonRepository
               .ThenInclude(rn => rn.WarMemorial)
               .Include(p => p.SubUnit)
               .ThenInclude(unit => unit.Regiment)
-              .Where(p => p.FirstNames.Contains(query.SearchTerm)
-                || p.LastName.Contains(query.SearchTerm));
+              .Where(p => p.Deleted == false && (p.FirstNames.Contains(query.SearchTerm)
+                || p.LastName.Contains(query.SearchTerm)));
 
         return dbPeople;
     }
