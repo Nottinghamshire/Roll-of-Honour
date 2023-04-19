@@ -127,6 +127,7 @@ public class PersonRepository : IPersonRepository
         var regiments = await dbPeople
             .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null && !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
             .Select(p => new RegimentFilter((int)p.SubUnit!.RegimentId!, p.SubUnit!.Regiment!.Name!))
+            .AsNoTracking()
             .Distinct()
             .ToListAsync();
 
@@ -139,6 +140,7 @@ public class PersonRepository : IPersonRepository
             .Include(p => p.Photos)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
+            .AsNoTracking()
             .ToListAsync();
 
         if (!dbPeople.Any())
