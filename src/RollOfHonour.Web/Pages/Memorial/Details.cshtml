@@ -1,10 +1,6 @@
 ﻿@page
 @model RollOfHonour.Web.Pages.Memorial.Details
 
-@{
-
-}
-
 <section class="panel with-background bg-app">
     <div class="container is-fluid">
         <div class="breadcrumb-block with-margin-bottom">
@@ -28,13 +24,12 @@
                     </li>
                     <li>
                         <a href="/memorial.html" aria-current="location" class="current">
-                            About @Model.Memorial.Name
+                            About @Model.Memorial!.Name
                         </a>
                     </li>
                 </ol>
             </nav>
         </div>
-
         <div class="columns is-multiline">
             <div class="column is-full-tablet is-8-desktop is-8-fullhd">
 
@@ -63,7 +58,6 @@
 
                     </div>
                 </div>
-
                 <div class="tabs-block">
                     <div class="tabList-container">
                         <ul role="tablist">
@@ -79,15 +73,13 @@
                         </ul>
                     </div>
                     <div id="tabpanel-01" role="tabpanel">
-
                         <div class="tab-title"><i class="fas fa-stream"></i> Names on this memorial</div>
-
                         <ul class="names-list">
                             @foreach (var recName in Model.Memorial.RecordedNames)
                             {
                                 <li>
-                                        <a asp-page="/person/Details" asp-route-id="@recName.PersonId"
-                                            title="Learn more about @recName.AsRecorded">@recName.AsRecorded</a>
+                                    <a asp-page="/person/Details" asp-route-id="@recName.PersonId"
+                                        title="Learn more about @recName.AsRecorded">@recName.AsRecorded</a>
                                 </li>
                             }
                         </ul>
@@ -136,9 +128,8 @@
                                             title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
                                             <div class="picture-block short styled-alt">
                                                 <div class="picture-border">
-                                                    <div class="picture-embed" style="
-												background-image: url(@photo.ImageUriOriginal);
-											  ">
+                                                    <div class="picture-embed"
+                                                        style="background-image: url(@photo.ImageUriOriginal);">
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,7 +149,6 @@
                                 style="background-image: url(@Model.Memorial.MainPhoto?.ImageUriMedium);"></div>
                         </div>
                     </div>
-
                     @if (!String.IsNullOrEmpty(Model.Memorial.UKNIWMRef))
                     {
                         <div class="iwm-link">
