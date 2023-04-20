@@ -10,7 +10,7 @@
             <div class="column">
                 <div class="text-block">
                     <h1>War Memorials</h1>
-                    <p>Our database includes a list of all the war memorials in and around Nottinghamshire. You can use this page to view our records alphabetically, or use our <a href="/search.html" title="Search our records">Search</a> page to narrow down your search.</p>
+                    <p>Our database includes a list of all the war memorials in and around Nottinghamshire. You can use this page to view our records alphabetically, or use our <a href="/search" title="Search our records">Search</a> page to narrow down your search.</p>
                 </div>
             </div>
             @(await Html.RenderComponentAsync<IndexSearchComponent>(RenderMode.ServerPrerendered, new { SelectedQueryType = QueryType.Memorial }))
@@ -68,52 +68,6 @@
                 slug="/memorial/index">
             </vc:pagination-component>
 
-        </div>
-    </div>
-</section>
-
-<section class="panel green">
-    <div class="container is-fluid">
-        <div class="text-block dark">
-            <h2 class="aligncenter with-margin-bottom">Look at our records by...</h2>
-        </div>
-        <div class="columns">
-            <div class="column">
-                <a href="/people.html" title="Look at our records by People" class="card with-background bg-people">
-                    <div class="label">
-                        <span class="title">
-                            People
-                        </span>
-                        <span class="data">
-                            4000 Records Available
-                        </span>
-                    </div>
-                </a>
-            </div>
-            <div class="column">
-                <a href="/memorials.html" title="Look at our records by war memorial" class="card with-background bg-memorials">
-                    <div class="label">
-                        <span class="title">
-                            War Memorials
-                        </span>
-                        <span class="data">
-                            4000 Records Available
-                        </span>
-                    </div>
-                </a>
-            </div>
-            <div class="column">
-                <a href="/timeline.html" title="Look at our records by using a timeline" class="card with-background bg-timeline">
-                    <div class="label">
-                        <span class="title">
-                            Timeline
-                        </span>
-                        <span class="data">
-                            4000 Records Available
-                        </span>
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
 </section>
