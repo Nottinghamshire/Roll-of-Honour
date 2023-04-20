@@ -170,13 +170,15 @@
                 </div>
             </div>
 
+            @if (!String.IsNullOrEmpty(Model.Memorial.UKNIWMRef))
+            {
             <div class="iwm-link">
                 <img src="/images/logo-iwm.png" title="Imperial War Museum Logo"/>
-                <a href="https://www.iwm.org.uk/memorials/item/memorial/26840" target="_blank">
-                    WM Reference 26840 <i class="fa-light fa-arrow-up-right-from-square"></i>
+                <a href="https://www.iwm.org.uk/memorials/item/memorial/@Model.Memorial.UKNIWMRef" target="_blank">
+                    WM Reference @Model.Memorial.UKNIWMRef<i class="fa-light fa-arrow-up-right-from-square"></i>
                 </a>
             </div>
-
+            }
         </aside>
     </div>
 </div>
