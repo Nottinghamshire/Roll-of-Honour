@@ -8,7 +8,7 @@ namespace RollOfHonour.Web.Pages.Memorial;
 
 public class IndexModel : PageModel
 {
-    public PaginatedList<Core.Models.Memorial> Memorials { get; set; }
+    public PaginatedList<Core.Models.Memorial>? Memorials { get; set; }
 
     private IMemorialRepository _memorialRepository { get; set; } = null!;
 
@@ -28,7 +28,7 @@ public class IndexModel : PageModel
 
         var memorials = await _memorialRepository.GetPageOfMemorials(PageNumber, 24);
 
-        if (!memorials.Any())
+        if (!memorials.Any() || memorials is null)
         {
             return NotFound();
         }

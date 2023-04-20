@@ -7,7 +7,7 @@ namespace RollOfHonour.Web.Pages.Person;
 
 public class PeopleModel : PageModel
 {
-    public PaginatedList<Core.Models.Person> People { get; set; }
+    public PaginatedList<Core.Models.Person>? People { get; set; }
     private IPersonRepository _personRepository { get; set; } = null!;
 
     public int PageNumber { get; set; } = 1;
@@ -26,7 +26,7 @@ public class PeopleModel : PageModel
 
         var people = await _personRepository.GetPageOfPeople(PageNumber, 24);
 
-        if (!people.Any())
+        if (!people.Any() || people is null)
         {
             return NotFound();
         }
