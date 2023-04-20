@@ -17,7 +17,7 @@
 
 @code {
     private string SearchTerm = "";
-    private async Task SearchRollOfHonour()
+    private void SearchRollOfHonour()
     {
         navManager.NavigateTo($"/Results?s={SearchTerm}&w=0&pt=0&qt=0", true);
     }
