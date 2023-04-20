@@ -1,7 +1,7 @@
 @page
+@using Core.Enums;
+@using Shared.Components;
 @model RollOfHonour.Web.Pages.Memorial.IndexModel
-@{
-}
 
 <section class="panel with-background bg-app">
     <div class="container is-fluid">
@@ -13,22 +13,10 @@
                     <p>Our database includes a list of all the war memorials in and around Nottinghamshire. You can use this page to view our records alphabetically, or use our <a href="/search.html" title="Search our records">Search</a> page to narrow down your search.</p>
                 </div>
             </div>
-            <div class="column">
-                <div class="form-block compact alignright">
-                    <form action="#search-controller" method="post" id="search-all">
-                        <div class="form-row">
-                            <label for="searchquery" id="Query-ariaLabel">Search by entering a name:</label>
-                            <input id="searchquery" name="Query" class="input-text" type="text" aria-labelledby="Query-ariaLabel" title="Enter your search query here..." placeholder="e.g. The City War Memorial"/>
-                            <button type="submit" class="submit-button" form="search-all"><i class="fal fa-file-search"></i> Search</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
+            @(await Html.RenderComponentAsync<IndexSearchComponent>(RenderMode.ServerPrerendered, new { SelectedQueryType = QueryType.Memorial }))
         </div>
 
         <div class="index-block">
-
             <div class="columns is-multiline">
                 @foreach (var memorial in Model.Memorials)
                 {
