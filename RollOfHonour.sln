@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RollOfHonour.DataImport.WW2", "src\RollOfHonour.DataImport.WW2\RollOfHonour.DataImport.WW2.csproj", "{827AD5C8-003F-4C7B-BA54-B8D7CD60045A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{B791095D-1D47-4E71-A46A-A08D553A0BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B791095D-1D47-4E71-A46A-A08D553A0BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B791095D-1D47-4E71-A46A-A08D553A0BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{827AD5C8-003F-4C7B-BA54-B8D7CD60045A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{827AD5C8-003F-4C7B-BA54-B8D7CD60045A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{827AD5C8-003F-4C7B-BA54-B8D7CD60045A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{827AD5C8-003F-4C7B-BA54-B8D7CD60045A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{BD2ED68D-75D3-43C0-BC4C-BB6756751EFE} = {96C866D0-FAE0-4889-B56C-8E0A7F623D3B}
 		{E579467D-FFA7-4103-A51F-2071C4493642} = {96C866D0-FAE0-4889-B56C-8E0A7F623D3B}
 		{B791095D-1D47-4E71-A46A-A08D553A0BA9} = {96C866D0-FAE0-4889-B56C-8E0A7F623D3B}
+		{827AD5C8-003F-4C7B-BA54-B8D7CD60045A} = {96C866D0-FAE0-4889-B56C-8E0A7F623D3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F127E8A6-37A6-4802-8430-C2466588215C}
