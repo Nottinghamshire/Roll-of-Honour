@@ -24,13 +24,10 @@ public class WW2ImportRepository : IWW2ImportRepository
     public List<WW2Data> ProperWW2Data()
     {
         List<WW2Data> ww2Data = new List<WW2Data>();
-        using (IDbConnection db = new SqlConnection(_context.Database.GetConnectionString()))
-        {
-
-            ww2Data = db.Query<WW2Data>(
-                    $"SELECT [FirstName] ,[Initials] ,[Last_Name] ,[Age_at_Death] ,[Date_of_Death] ,[Rank] ,[Regiment] ,[Sub_Unit] ,[Memorial_Location_Description] ,[Service_Number] ,[Memorial_Name] ,[DescriptiveLocation] ,[FamilyInfo] ,[MaybeCWGCRef] ,[OtherNotes] FROM [WW2Data]"
-                ).ToList();
-        }
+        using IDbConnection db = new SqlConnection(_context.Database.GetConnectionString());
+        ww2Data = db.Query<WW2Data>(
+            $"SELECT [FirstName] ,[Initials] ,[Last_Name] ,[Age_at_Death] ,[Date_of_Death] ,[Rank] ,[Regiment] ,[Sub_Unit] ,[Memorial_Location_Description] ,[Service_Number] ,[Memorial_Name] ,[DescriptiveLocation] ,[FamilyInfo] ,[MaybeCWGCRef] ,[OtherNotes] FROM [WW2Data]"
+        ).ToList();
 
         return ww2Data;
 
