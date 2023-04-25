@@ -42,8 +42,21 @@ IDataInsertService? ww2DataInsertService = host.Services.GetService<IDataInsertS
 List<WW2Data> results = ww2DataFetchService.ProperWW2Data();
 if (results.Any())
 {
-    await ww2DataInsertService?.AddMissingData(results)!;
-}
+    var errorRows = await ww2DataInsertService?.AddMissingData(results)!;
 
+    if (errorRows.Any())
+    {
+        Console.WriteLine("Press a key to list Errors");
+        Console.ReadLine();
+        
+        Console.WriteLine("ERRORS:");
+        foreach (var errorRow in errorRows)
+        {
+            Console.WriteLine(errorRow.Service_Number?.ToString());
+        }
+
+        Console.ReadLine();
+    }
+}
 
 await host.RunAsync();

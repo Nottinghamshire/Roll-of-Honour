@@ -6,7 +6,7 @@ public class WW2Data
     
     public string? Last_Name { get; set; }
     public string? Age_at_Death { get; set; }
-    public DateTime Date_of_Death { get; set; }
+    public DateTime? Date_of_Death { get; set; }
     public string? Rank { get; set; }
     public string? Regiment { get; set; }
     public string? Sub_Unit { get; set; }
@@ -17,5 +17,4 @@ public class WW2Data
     public string? FamilyInfo { get; set; }
     public string? MaybeCWGCRef { get; set; }
     public string? OtherNotes { get; set; }
-
 }
