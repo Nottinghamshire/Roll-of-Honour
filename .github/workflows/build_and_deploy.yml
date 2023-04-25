@@ -45,14 +45,12 @@ jobs:
         with:
           name: .net-app
 
-      #- name: Azure App Service Settings
-        #uses: Azure/appservice-settings@v1
-        #with:
-          ## Name of the Azure Web App
-          #app-name: 'APP-RollOfHonour-DEV-UKS'
-          ## app-settings-json:
-          #connection-strings-json: '${{ secrets.CONNECTION_STRINGS }}' 
-          #mask-inputs: true 
+      - name: Substitute appsettings.json
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'appsettings.json'
+        env:
+          ConnectionStrings.AzureAppConfiguration: ${{ secrets.APP_CONFIG_CONNECTION }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -75,6 +73,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
+          
+      - name: Substitute appsettings.json
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'appsettings.json'
+        env:
+          ConnectionStrings.AzureAppConfiguration: ${{ secrets.APP_CONFIG_CONNECTION }}     
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
