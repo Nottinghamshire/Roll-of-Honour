@@ -43,27 +43,43 @@ public class PersonRepository : IPersonRepository
         }
     }
 
-    public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
+    public async Task<IEnumerable<Person>> DiedOnDay(DateTime date)
     {
-        var countOfPeople = _dbContext.People.Count();
-        var random = new Random((int)date.Ticks);
+        var diedOnDate = _dbContext.People
+            .Where(p => 
+                p.DateOfDeath.HasValue && 
+                    (p.DateOfDeath.Value.Day == date.Day && p.DateOfDeath.Value.Month == date.Month))
+            .AsNoTracking();
 
+        var deathCount = diedOnDate.Count();
         var dbPeople = new List<Models.DB.Person>();
 
-        for (var i = 0; i <= 2; i++)
+        if (deathCount < 4)
         {
-            var randomId = random.Next(0, countOfPeople - 1);
-            var person = await _dbContext.People
-                .Include(p => p.Photos)
-                .FirstOrDefaultAsync(p => p.Id == randomId);
-            if (person == null)
+            var countOfPeople = deathCount;
+            var totalIds = Count() - 1;
+            var random = new Random((int)date.Ticks);
+
+            while (countOfPeople < 4)
             {
-                --i;
+                var randomId = random.Next(0, totalIds);
+                var person = await _dbContext.People
+                    .Include(p => p.Photos)
+                    .FirstOrDefaultAsync(p => p.Id == randomId && p.Deleted == false);
+                if (person is not null)
+                {
+                    dbPeople.Add(person);
+                    countOfPeople++;
+                }
             }
-            else
-            {
-                dbPeople.Add(person);
-            }
+        }
+        else if (deathCount > 4)
+        {
+            dbPeople.AddRange(diedOnDate.Take(4).ToList());
+        }
+        else
+        {
+            dbPeople.AddRange(diedOnDate.ToList());
         }
 
         IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
