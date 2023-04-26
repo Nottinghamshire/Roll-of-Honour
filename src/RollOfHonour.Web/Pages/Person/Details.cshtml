@@ -157,23 +157,26 @@
             <span class="lived">@Model.Person.LivedFromUntilString</span>
         </div>
 
+        @if (Model.Person.Decorations.Any())
+        {
+            <div class="decorations-block">
+                <h3>Decorations</h3>
+
+                <ul>
+
+                    @foreach (var decoration in Model.Person.Decorations)
+                    {
+                        <li>
+                            @* <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">@decoration.Name</span> *@
+                            <span class="title">@decoration.Name</span>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+
+        }
         
-        <div class="decorations-block">
-            <h3>Decorations</h3>
-
-            <ul>
-
-                @foreach (var decoration in Model.Person.Decorations)
-                {
-                    <li>
-                        @* <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">@decoration.Name</span> *@
-                        <span class="title">@decoration.Name</span>
-                    </li>
-                }
-
-            </ul>
-        </div>
-
         <div class="remembered-on-block with-margin-top">
             <h3>Remembered on...</h3>
 
