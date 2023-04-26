@@ -45,8 +45,12 @@ public class PersonRepository : IPersonRepository
 
     public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
     {
-        var diedToday = _dbContext.People.Where(p => p.DateOfDeath != null)
-        .AsNoTracking();
+        var diedToday = _dbContext.People
+            .Where(p => 
+                p.DateOfDeath.HasValue && 
+                    (p.DateOfDeath.Value.Day == date.Day && p.DateOfDeath.Value.Month == date.Month))
+            .AsNoTracking();
+
         var diedTodayCount = diedToday.Count();
         var dbPeople = new List<Models.DB.Person>();
 
@@ -69,8 +73,15 @@ public class PersonRepository : IPersonRepository
                 }
             }
         }
+        else if (diedTodayCount > 4)
+        {
+            dbPeople.AddRange(diedToday.Take(4).ToList());
+        }
+        else
+        {
+            dbPeople.AddRange(diedToday.ToList());
+        }
 
-        dbPeople.AddRange(diedToday.ToList());
         IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
         return people;
     }
