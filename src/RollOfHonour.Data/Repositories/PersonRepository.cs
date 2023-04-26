@@ -49,6 +49,7 @@ public class PersonRepository : IPersonRepository
             .Where(p => 
                 p.DateOfDeath.HasValue && 
                     (p.DateOfDeath.Value.Day == date.Day && p.DateOfDeath.Value.Month == date.Month))
+            .Include(p => p.Photos)
             .AsNoTracking();
 
         var deathCount = diedOnDate.Count();
