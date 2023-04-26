@@ -1,4 +1,4 @@
-name: Build and deploy Roll of Honour to DEV and PRD if valid
+name: Build and deploy Roll of Honour
 
 on:
   push:
