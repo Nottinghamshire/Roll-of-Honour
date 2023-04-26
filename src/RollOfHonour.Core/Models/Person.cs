@@ -17,7 +17,8 @@ public class Person
     public string Rank { get; set; } =
         string.Empty; //TODO: This needs cleaning up - so many similar entries. Autopicker/Prompt perhaps
 
-    public string ServiceNumber { get; set; } = string.Empty;
+    public string ServiceNumber { private get; set; } = "Unknown";
+    public string ServiceNumberString => !string.IsNullOrEmpty(ServiceNumber) ? ServiceNumber : "Unknown";
 
     public string Unit { get; set; } = string.Empty;
     public int? UnitId { get; set; }
@@ -42,9 +43,9 @@ public class Person
         }
     }
 
-    public DateTime? DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { private get; set; }
     public string DateOfBirthString => DateOfBirth.HasValue ? DateOfBirth.Value.ToString("dd MMM yyyy") : "Unknown";
-    public DateTime? DateOfDeath { get; set; }
+    public DateTime? DateOfDeath { private get; set; }
     public string DateOfDeathString => DateOfDeath.HasValue ? DateOfDeath.Value.ToString("dd MMM yyyy") : "Unknown";
     public int? AgeAtDeath { get; set; }
 
@@ -95,12 +96,19 @@ public class Person
 
     public string? AddressAtEnlistment { get; set; }
     public int? Cwgc { get; set; }
-    public string? PlaceOfBirth { get; set; }
-    public string? EmploymentHobbies { get; set; }
-    public string? FamilyHistory { get; set; }
-    public string? MilitaryHistory { get; set; }
-    public string? ExtraInfo { get; set; }
+    public string? PlaceOfBirth { private get; set; }
+    public string PlaceOfBirthString => !string.IsNullOrEmpty(PlaceOfBirth) ? PlaceOfBirth : "Unknown";
+    public string? EmploymentHobbies { private get; set; }
+    public string EmploymentHobbiesString => !string.IsNullOrEmpty(EmploymentHobbies) ? EmploymentHobbies : "Unknown";
 
+    public string? FamilyHistory { private get; set; }
+    public string FamilyHistoryString => !string.IsNullOrEmpty(FamilyHistory) ? FamilyHistory : "Unknown";
+
+    public string? MilitaryHistory { private get; set; }
+    public string MilitaryHistoryString => !string.IsNullOrEmpty(MilitaryHistory) ? MilitaryHistory : "Unknown";
+    public string? ExtraInfo { private get; set; }
+
+    public string ExtraInfoString => !string.IsNullOrEmpty(ExtraInfo) ? ExtraInfo : "Unknown";
     public int? MainPhotoId { get; private set; }
 
     public string Name => string.IsNullOrEmpty(FirstNames)
