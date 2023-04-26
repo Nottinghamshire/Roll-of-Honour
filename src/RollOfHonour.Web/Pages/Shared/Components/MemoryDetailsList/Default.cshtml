@@ -7,15 +7,22 @@
             <div class="memory-block">
                 <div class="memory-picture">
                     <div class="picture-border">
-                        <div class="picture-embed" style="background-image: url(/images/sample-data/picture1.jpeg);"></div>
+                        @if (person.MainPhoto is not null)
+                        {
+                            <div class="picture-embed" style="background-image: url(@person.MainPhoto?.ImageUriMedium);"></div>
+                        }
+                        else
+                        {
+                            <div class="picture-embed" style="background-image: url(./images/poppy.jpg);"></div>
+                        }
                     </div>
                 </div>
                 <div class="memory-details">
                     <span class="name">@person.Name</span>
                     <!-- fix date formatting and work out what to do when there is no dates -->
                     <span class="lived">@person.DateOfBirthString - @person.DateOfDeathString</span>
-                    <a asp-page="/Person/Details"
-                        asp-route-id="@person.Id" title="Read about @person.Name" class="button secondary">
+                    <a asp-page="/Person/Details" asp-route-id="@person.Id" title="Read about @person.Name"
+                        class="button secondary">
                         <i class="fal fa-glasses"></i> Read about @person.Name</a>
                 </div>
             </div>
