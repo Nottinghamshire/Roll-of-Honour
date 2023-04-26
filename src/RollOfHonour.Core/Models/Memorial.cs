@@ -31,14 +31,14 @@ public class Memorial : IAggregateRoot
     {
         get
         {
-            if (MainPhotoId.HasValue)
+            if (MainPhotoId.HasValue && Photos.Exists(p => p.Id == MainPhotoId))
             {
                 return Photos.Single(p => p.Id == MainPhotoId);
             }
 
             //Photo decision
             //If main photo null, then use the first of the other images (or a random one)
-            if (MainPhotoId == null && Photos.Any())
+            if (Photos.Any())
             {
                 //Promote an image to MainPhoto
                 return Photos.First();
