@@ -25,7 +25,7 @@
                     <div class="text-block">
                         <h3 class="aligncenter">Today we remember...</h3>
                     </div>
-                    @await Component.InvokeAsync(nameof(MemoryDetailsList))
+                    @await Component.InvokeAsync(nameof(MemoryDetailsList), RenderMode.ServerPrerendered)
                     <a asp-page="/person/index" title="Look at all our records" class="button primary"><i
                             class="fal fa-folder-open"></i> Look at all our records</a>
                 </aside>

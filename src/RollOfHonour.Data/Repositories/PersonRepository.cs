@@ -45,27 +45,31 @@ public class PersonRepository : IPersonRepository
 
     public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
     {
-        var countOfPeople = _dbContext.People.Count();
-        var random = new Random((int)date.Ticks);
-
+        var diedToday = _dbContext.People.Where(p => p.DateOfDeath != null && (p.DateOfDeath == date));
+        var diedTodayCount = diedToday.Count();
         var dbPeople = new List<Models.DB.Person>();
 
-        for (var i = 0; i <= 2; i++)
+        if (diedTodayCount < 4)
         {
-            var randomId = random.Next(0, countOfPeople - 1);
-            var person = await _dbContext.People
-                .Include(p => p.Photos)
-                .FirstOrDefaultAsync(p => p.Id == randomId);
-            if (person == null)
+            var countOfPeople = diedTodayCount;
+            var totalIds = Count() - 1;
+            var random = new Random((int)date.Ticks);
+
+            while (countOfPeople < 4)
             {
-                --i;
-            }
-            else
-            {
-                dbPeople.Add(person);
+                var randomId = random.Next(0, totalIds);
+                var person = await _dbContext.People
+                    .Include(p => p.Photos)
+                    .FirstOrDefaultAsync(p => p.Id == randomId);
+                if (person is not null)
+                {
+                    dbPeople.Add(person);
+                    countOfPeople++;
+                }
             }
         }
 
+        dbPeople.AddRange(diedToday.ToList());
         IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
         return people;
     }
