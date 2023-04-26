@@ -12,8 +12,8 @@ public class Photo
   }
   
   public int Id { get; set; }
-  public string Name { get; set; }
-  public string Description { get; set; }
+  public string Name { get; set; } = String.Empty;
+  public string Description { get; set; } = String.Empty;
 
   public Uri ImageUriOriginal => new Uri($"https://{_blobServiceName}.blob.core.windows.net/{_blobContainer}/{Id}/original.jpg");  
   public Uri ImageUriTiny => new Uri($"https://{_blobServiceName}.blob.core.windows.net/{_blobContainer}/{Id}/tiny.jpg");  

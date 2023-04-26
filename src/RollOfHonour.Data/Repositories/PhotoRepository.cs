@@ -7,43 +7,43 @@ namespace RollOfHonour.Data.Repositories;
 
 public class PhotoRepository : IPhotoRepository
 {
-  //https://ncc01sarollhonstdlrsdev.blob.core.windows.net/images/10002/original.jpg
-  private string settingBlobName = "ncc01sarollhonstdlrsdev";
-  private string settingBlobImageContainerName = "images";
+    //https://ncc01sarollhonstdlrsdev.blob.core.windows.net/images/10002/original.jpg
+    private string settingBlobName = "ncc01sarollhonstdlrsdev";
+    private string settingBlobImageContainerName = "images";
 
-  private RollOfHonourContext _dbContext { get; set; }
+    private RollOfHonourContext _dbContext { get; set; }
 
-  public PhotoRepository(RollOfHonourContext dbContext)
-  {
-    _dbContext = dbContext;
-  }
-
-
-  public async Task<IEnumerable<Photo>> PersonPhotos(int personId)
-  {
-    try
+    public PhotoRepository(RollOfHonourContext dbContext)
     {
-      var photo = await _dbContext.Photos.Where(p => p.PersonId == personId).ToListAsync();
+        _dbContext = dbContext;
+    }
 
-      return photo.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
-    }
-    catch (Exception e)
-    {
-      return new List<Photo>();
-    }
-  }
 
-  public async Task<IEnumerable<Photo>> MemorialPhotos(int memoriald)
-  {
-    try
+    public async Task<IEnumerable<Photo>> PersonPhotos(int personId)
     {
-      var photo = await _dbContext.Photos.Where(p => p.WarMemorialId == memoriald).ToListAsync();
+        try
+        {
+            var photo = await _dbContext.Photos.Where(p => p.PersonId == personId).ToListAsync();
 
-      return photo.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+            return photo.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+        }
+        catch (Exception)
+        {
+            return new List<Photo>();
+        }
     }
-    catch (Exception e)
+
+    public async Task<IEnumerable<Photo>> MemorialPhotos(int memoriald)
     {
-      return new List<Photo>();
+        try
+        {
+            var photo = await _dbContext.Photos.Where(p => p.WarMemorialId == memoriald).ToListAsync();
+
+            return photo.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+        }
+        catch (Exception)
+        {
+            return new List<Photo>();
+        }
     }
-  }
 }
