@@ -20,7 +20,7 @@ public class Memorial : IAggregateRoot
 
     //public int Easting { get; set; }
     //public int Northing { get; set; }
-    public Point Location { get; set; }
+    public Point Location { get; set; } = new Point(52.9364, 1.1358);
     public string? District { get; set; }
     public string? Postcode { get; set; }
     public int NamesCount { get; set; } //TODO: Might be a better way to do this based on Count of recorded names

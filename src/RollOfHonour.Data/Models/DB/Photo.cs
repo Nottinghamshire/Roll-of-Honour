@@ -10,8 +10,8 @@ public class Photo
     var photo = new Core.Models.Photo(blobServiceName, blobImagesContainer)
     {
       Id = this.Id,
-      Name = this.Name?? string.Empty,
-      Description = this.Description?? string.Empty,
+      Name = this.Name ?? string.Empty,
+      Description = this.Description ?? string.Empty,
     };
 
     return photo;

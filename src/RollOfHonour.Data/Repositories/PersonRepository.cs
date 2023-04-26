@@ -27,7 +27,7 @@ public class PersonRepository : IPersonRepository
               .Include(p => p.Photos)
               .Include(p => p.Decorations)
               .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
-              .Include(p => p.SubUnit).ThenInclude(unit => unit.Regiment)
+              .Include(p => p.SubUnit).ThenInclude(unit => unit!.Regiment)
               .FirstOrDefaultAsync(p => p.Id == id);
 
             if (dbPerson is null)
@@ -164,16 +164,15 @@ public class PersonRepository : IPersonRepository
 
     private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query)
     {
-
         var dbPeople = _dbContext.People
               .Include(p => p.Photos)
               .Include(p => p.Decorations)
               .Include(p => p.RecordedNames)
               .ThenInclude(rn => rn.WarMemorial)
               .Include(p => p.SubUnit)
-              .ThenInclude(unit => unit.Regiment)
-              .Where(p => p.Deleted == false && (p.FirstNames.Contains(query.SearchTerm)
-                || p.LastName.Contains(query.SearchTerm)));
+              .ThenInclude(unit => unit!.Regiment)
+              .Where(p => p.Deleted == false && (p.FirstNames!.Contains(query.SearchTerm)
+                || p.LastName!.Contains(query.SearchTerm)));
 
         return dbPeople;
     }
