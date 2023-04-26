@@ -45,7 +45,8 @@ public class PersonRepository : IPersonRepository
 
     public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
     {
-        var diedToday = _dbContext.People.Where(p => p.DateOfDeath != null && (p.DateOfDeath == date));
+        var diedToday = _dbContext.People.Where(p => p.DateOfDeath != null)
+        .AsNoTracking();
         var diedTodayCount = diedToday.Count();
         var dbPeople = new List<Models.DB.Person>();
 
@@ -60,7 +61,7 @@ public class PersonRepository : IPersonRepository
                 var randomId = random.Next(0, totalIds);
                 var person = await _dbContext.People
                     .Include(p => p.Photos)
-                    .FirstOrDefaultAsync(p => p.Id == randomId);
+                    .FirstOrDefaultAsync(p => p.Id == randomId && p.Deleted == false);
                 if (person is not null)
                 {
                     dbPeople.Add(person);
