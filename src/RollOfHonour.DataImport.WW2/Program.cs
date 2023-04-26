@@ -26,6 +26,7 @@ var host = Host.CreateDefaultBuilder()
         services.AddDbContext<RollOfHonourContext>(options =>
         {
             //             options.UseSqlServer(appSettingsConfig.GetConnectionString("ConnectionStrings:DefaultConnection"))
+            // options.UseSqlServer(hostContext.Configuration[@"Server=tcp:asql-corp-prd-01.database.windows.net,1433;Initial Catalog=SQLDB-RollOfHonour-PRD;Persist Security Info=False;User ID=RollOfHonour;Password=hFXoW3KBGwyNaKTRdAnr;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"]);
             options.UseSqlServer(hostContext.Configuration["ConnectionStrings:DefaultConnection"]);
             //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }, ServiceLifetime.Transient);
