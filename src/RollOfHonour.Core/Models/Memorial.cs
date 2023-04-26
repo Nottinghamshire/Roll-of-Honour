@@ -31,6 +31,11 @@ public class Memorial : IAggregateRoot
     {
         get
         {
+            if (MainPhotoId.HasValue)
+            {
+                return Photos.Single(p => p.Id == MainPhotoId);
+            }
+
             //Photo decision
             //If main photo null, then use the first of the other images (or a random one)
             if (MainPhotoId == null && Photos.Any())

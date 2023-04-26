@@ -15,7 +15,7 @@ public class Person
     public string LastName { get; set; } = string.Empty;
 
     public string Rank { get; set; } =
-      string.Empty; //TODO: This needs cleaning up - so many similar entries. Autopicker/Prompt perhaps
+        string.Empty; //TODO: This needs cleaning up - so many similar entries. Autopicker/Prompt perhaps
 
     public string ServiceNumber { get; set; } = string.Empty;
 
@@ -104,8 +104,8 @@ public class Person
     public int? MainPhotoId { get; private set; }
 
     public string Name => string.IsNullOrEmpty(FirstNames)
-      ? string.IsNullOrEmpty(Initials) ? $"{LastName}" : $"{Initials} {LastName}"
-      : $"{FirstNames} {LastName}";
+        ? string.IsNullOrEmpty(Initials) ? $"{LastName}" : $"{Initials} {LastName}"
+        : $"{FirstNames} {LastName}";
 
     public List<Decoration> Decorations { get; set; } = new List<Decoration>();
     public Dictionary<int, string> Memorials { get; set; } = new Dictionary<int, string>();
@@ -114,6 +114,11 @@ public class Person
     {
         get
         {
+            if (MainPhotoId.HasValue)
+            {
+                return Photos.Single(p => p.Id == MainPhotoId);
+            }
+
             //Photo decision
             //If main photo null, then use the first of the other images (or a random one)
             if (MainPhotoId == null && Photos.Any())
