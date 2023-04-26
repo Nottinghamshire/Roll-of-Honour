@@ -128,9 +128,7 @@
                                             title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
                                             <div class="picture-block short styled-alt">
                                                 <div class="picture-border">
-                                                    <div class="picture-embed"
-                                                        style="background-image: url(@photo.ImageUriOriginal);">
-                                                    </div>
+                                                    <div class="picture-embed" style="background-image: url(@photo.ImageUriOriginal);"></div>
                                                 </div>
                                             </div>
                                         </a>
@@ -145,8 +143,13 @@
                 <aside class="sidebar">
                     <div class="picture-block memorial-picture">
                         <div class="picture-border">
-                            <div class="picture-embed"
-                                style="background-image: url(@Model.Memorial.MainPhoto?.ImageUriMedium);"></div>
+                            @if(@Model.Memorial.MainPhoto is not null)
+                            {
+                                <div class="picture-embed" style="background-image: url(@Model.Memorial.MainPhoto.ImageUriOriginal);"></div>
+                            }
+                            else {
+                                <div class="picture-embed" style="background-image: url(../images/poppy-grey.jpg);"></div>
+                            }
                         </div>
                     </div>
                     @if (!String.IsNullOrEmpty(Model.Memorial.UKNIWMRef))

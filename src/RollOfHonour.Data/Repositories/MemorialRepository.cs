@@ -17,7 +17,7 @@ public class MemorialRepository : IMemorialRepository
     _dbContext = dbContext;
   }
 
-  public async Task<Memorial> GetById(int id)
+  public async Task<Memorial?> GetById(int id)
   {
     try
     {

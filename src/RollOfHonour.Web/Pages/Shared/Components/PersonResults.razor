@@ -14,9 +14,18 @@
                         <div class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-2-fullhd">
                             <div class="picture-block search-picture">
                                 <div class="picture-border">
-                                    <div class="picture-embed"
-                                        style="background-image: url(@person.MainPhoto?.ImageUriMedium);">
-                                    </div>
+                                    @if (person.MainPhoto is null)
+                                    {
+                                        <div class="picture-embed" 
+                                            style="background-image: url(./images/poppy.jpg);">
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="picture-embed"
+                                            style="background-image: url(@person.MainPhoto?.ImageUriMedium);">
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
