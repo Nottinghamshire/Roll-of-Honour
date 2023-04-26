@@ -15,7 +15,7 @@ public class MemoryDetailsList : ViewComponent
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var today = DateTime.Now;
-        var people = await _personRepo.DiedOnThisDay(today);
+        var people = await _personRepo.DiedOnDay(today);
         return View(people);
     }
 }

@@ -43,20 +43,20 @@ public class PersonRepository : IPersonRepository
         }
     }
 
-    public async Task<IEnumerable<Person>> DiedOnThisDay(DateTime date)
+    public async Task<IEnumerable<Person>> DiedOnDay(DateTime date)
     {
-        var diedToday = _dbContext.People
+        var diedOnDate = _dbContext.People
             .Where(p => 
                 p.DateOfDeath.HasValue && 
                     (p.DateOfDeath.Value.Day == date.Day && p.DateOfDeath.Value.Month == date.Month))
             .AsNoTracking();
 
-        var diedTodayCount = diedToday.Count();
+        var deathCount = diedOnDate.Count();
         var dbPeople = new List<Models.DB.Person>();
 
-        if (diedTodayCount < 4)
+        if (deathCount < 4)
         {
-            var countOfPeople = diedTodayCount;
+            var countOfPeople = deathCount;
             var totalIds = Count() - 1;
             var random = new Random((int)date.Ticks);
 
@@ -73,13 +73,13 @@ public class PersonRepository : IPersonRepository
                 }
             }
         }
-        else if (diedTodayCount > 4)
+        else if (deathCount > 4)
         {
-            dbPeople.AddRange(diedToday.Take(4).ToList());
+            dbPeople.AddRange(diedOnDate.Take(4).ToList());
         }
         else
         {
-            dbPeople.AddRange(diedToday.ToList());
+            dbPeople.AddRange(diedOnDate.ToList());
         }
 
         IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
