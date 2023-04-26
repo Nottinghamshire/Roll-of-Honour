@@ -17,7 +17,8 @@ public class Person
     public string Rank { get; set; } =
         string.Empty; //TODO: This needs cleaning up - so many similar entries. Autopicker/Prompt perhaps
 
-    public string ServiceNumber { get; set; } = string.Empty;
+    public string ServiceNumber { get; set; } = "Unknown";
+    public string ServiceNumberString => !string.IsNullOrEmpty(ServiceNumber) ? ServiceNumber : "Unknown";
 
     public string Unit { get; set; } = string.Empty;
     public int? UnitId { get; set; }
@@ -96,7 +97,10 @@ public class Person
     public string? AddressAtEnlistment { get; set; }
     public int? Cwgc { get; set; }
     public string? PlaceOfBirth { get; set; }
+    public string PlaceOfBirthString => !string.IsNullOrEmpty(PlaceOfBirth) ? PlaceOfBirth : "Unknown";
     public string? EmploymentHobbies { get; set; }
+    public string EmploymentHobbiesString => !string.IsNullOrEmpty(EmploymentHobbies) ? EmploymentHobbies : "Unknown";
+
     public string? FamilyHistory { get; set; }
     public string? MilitaryHistory { get; set; }
     public string? ExtraInfo { get; set; }

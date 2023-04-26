@@ -39,7 +39,7 @@
 
         <div class="service-number">
             <span class="label"><i class="fa-light fa-hashtag fa-fw"></i> Service Number</span>
-            <span class="data">@Model.Person.ServiceNumber</span>
+            <span class="data">@Model.Person.ServiceNumberString</span>
         </div>
 
         <div class="military-unit">
@@ -59,12 +59,12 @@
 
         <div class="place-of-birth">
             <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of Birth</span>
-            <span class="data">@Model.Person.PlaceOfBirth</span>
+            <span class="data">@Model.Person.PlaceOfBirthString</span>
         </div>
 
         <div class="employment">
             <span class="label"><i class="fa-light fa-timeline fa-fw"></i> Employment, Education or Hobbies</span>
-            <span class="data">@Model.Person.EmploymentHobbies</span>
+            <span class="data">@Model.Person.EmploymentHobbiesString</span>
         </div>
     </div>
 
@@ -157,6 +157,7 @@
             <span class="lived">@Model.Person.LivedFromUntilString</span>
         </div>
 
+        
         <div class="decorations-block">
             <h3>Decorations</h3>
 
