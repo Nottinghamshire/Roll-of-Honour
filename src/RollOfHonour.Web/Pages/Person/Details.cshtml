@@ -1,9 +1,6 @@
 ﻿@page
 @model RollOfHonour.Web.Pages.Person.Details
 
-@{
-
-}
 <section class="panel with-background bg-app">
 <div class="container is-fluid">
 <div class="breadcrumb-block with-margin-bottom">
@@ -27,7 +24,7 @@
             </li>
             <li>
                 <a href="/person.html" aria-current="location" class="current">
-                    About @Model.Person.Name
+                    About @Model.Person!.Name
                 </a>
             </li>
         </ol>
@@ -35,189 +32,193 @@
 </div>
 
 <div class="columns is-multiline">
-<div class="column is-full-tablet is-8-desktop is-8-fullhd">
-    <div class="person-block">
-        <span class="rank">@Model.Person.Rank</span>
-        <h1 class="name">@Model.Person.Name</h1>
+    <div class="column is-full-tablet is-8-desktop is-8-fullhd">
+        <div class="person-block">
+            <span class="rank">@Model.Person.Rank</span>
+            <h1 class="name">@Model.Person.Name</h1>
 
-        <div class="service-number">
-            <span class="label"><i class="fa-light fa-hashtag fa-fw"></i> Service Number</span>
-            <span class="data">@Model.Person.ServiceNumber</span>
-        </div>
-
-        <div class="military-unit">
-            <span class="label"><i class="fa-light fa-flag fa-fw"></i> Military Unit</span>
-            <span class="data">@Model.Person.UnitRegimentString</span>
-        </div>
-
-        <div class="date-of-birth">
-            <span class="label"><i class="fa-light fa-calendar fa-fw"></i> Date of birth</span>
-            <span class="data">@Model.Person.DateOfBirthString</span>
-        </div>
-
-        <div class="date-of-death">
-            <span class="label"><i class="fa-light fa-tombstone fa-fw"></i> Date of Death</span>
-            <span class="data">@Model.Person.DateOfDeathString (@Model.Person.AgeAtDeathString)</span>
-        </div>
-
-        <div class="place-of-birth">
-            <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of Birth</span>
-            <span class="data">@Model.Person.PlaceOfBirth</span>
-        </div>
-
-        <div class="employment">
-            <span class="label"><i class="fa-light fa-timeline fa-fw"></i> Employment, Education or Hobbies</span>
-            <span class="data">@Model.Person.EmploymentHobbies</span>
-        </div>
-    </div>
-
-    <div class="person-details-block">
-        <div class="tabs-block">
-            <div class="tabList-container">
-                <ul role="tablist">
-                    <li id="tab-01" role="tab" tabindex="0" aria-selected="true" aria-controls="tabpanel-01">
-                        <i class="fa-light fa-family"></i> Family History
-                    </li>
-                    <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02">
-                        <i class="fa-light fa-person-military-rifle"></i> Military History
-                    </li>
-                    <li id="tab-03" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-03">
-                        <i class="fa-light fa-circle-info"></i> Extra Information
-                    </li>
-                    <li id="tab-04" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-04">
-                        <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
-                    </li>
-                </ul>
+            <div class="service-number">
+                <span class="label"><i class="fa-light fa-hashtag fa-fw"></i> Service Number</span>
+                <span class="data">@Model.Person.ServiceNumberString</span>
             </div>
-            <div id="tabpanel-01" role="tabpanel">
 
-                <div class="tab-title"><i class="fa-light fa-family"></i> Family History</div>
+            <div class="military-unit">
+                <span class="label"><i class="fa-light fa-flag fa-fw"></i> Military Unit</span>
+                <span class="data">@Model.Person.UnitRegimentString</span>
+            </div>
 
-                <div class="text-block">
-                    <p>
-                        @Model.Person.FamilyHistory
-                    </p>
+            <div class="date-of-birth">
+                <span class="label"><i class="fa-light fa-calendar fa-fw"></i> Date of birth</span>
+                <span class="data">@Model.Person.DateOfBirthString</span>
+            </div>
+
+            <div class="date-of-death">
+                <span class="label"><i class="fa-light fa-tombstone fa-fw"></i> Date of Death</span>
+                <span class="data">@Model.Person.DateOfDeathString (@Model.Person.AgeAtDeathString)</span>
+            </div>
+
+            <div class="place-of-birth">
+                <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of Birth</span>
+                <span class="data">@Model.Person.PlaceOfBirthString</span>
+            </div>
+
+            <div class="employment">
+                <span class="label"><i class="fa-light fa-timeline fa-fw"></i> Employment, Education or Hobbies</span>
+                <span class="data">@Model.Person.EmploymentHobbiesString</span>
+            </div>
+        </div>
+
+        <div class="person-details-block">
+            <div class="tabs-block">
+                <div class="tabList-container">
+                    <ul role="tablist">
+                        <li id="tab-01" role="tab" tabindex="0" aria-selected="true" aria-controls="tabpanel-01">
+                            <i class="fa-light fa-family"></i> Family History
+                        </li>
+                        <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02">
+                            <i class="fa-light fa-person-military-rifle"></i> Military History
+                        </li>
+                        <li id="tab-03" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-03">
+                            <i class="fa-light fa-circle-info"></i> Extra Information
+                        </li>
+                        <li id="tab-04" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-04">
+                            <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
+                        </li>
+                    </ul>
                 </div>
-
-            </div>
-
-            <div id="tabpanel-02" role="tabpanel" class="hide">
-
-                <div class="tab-title"><i class="fa-light fa-person-military-rifle"></i> Military History</div>
-
-                <div class="text-block">
-                    <p>
-                        @Model.Person.MilitaryHistory
-                    </p>
-                </div>
-
-            </div>
-
-            <div id="tabpanel-03" role="tabpanel" class="hide">
-
-                <div class="tab-title"><i class="fa-light fa-circle-info"></i> Extra Information</div>
-                <div class="text-block">
-                    <p>
-                        @Model.Person.ExtraInfo
-                    </p>
-                </div>
-
-            </div>
-
-            <div id="tabpanel-04" role="tabpanel">
-
-                <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div>
-
-                <div class="gallery-block">
-                    <div class="columns is-multiline">
-
-                        @foreach (var photo in Model.Person.Photos)
-                        {
-                            <div class="column is-4-desktop">
-                                <a href="@photo.ImageUriMedium" title="@photo.Description">
-                                    <div class="picture-block short styled-alt">
-                                        <div class="picture-border">
-                                            <div
-                                                class="picture-embed"
-                                                style="background-image: url(@photo.ImageUriOriginal);            											      ">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        }
-
+                <div id="tabpanel-01" role="tabpanel">
+                    <div class="tab-title"><i class="fa-light fa-family"></i> Family History</div>
+                    <div class="text-block">
+                        <p>
+                            @Model.Person.FamilyHistoryString
+                        </p>
                     </div>
                 </div>
 
-            </div>
+                <div id="tabpanel-02" role="tabpanel" class="hide">
+                    <div class="tab-title"><i class="fa-light fa-person-military-rifle"></i> Military History</div>
+                    <div class="text-block">
+                        <p>
+                            @Model.Person.MilitaryHistoryString
+                        </p>
+                    </div>
+                </div>
 
-        </div>
+                <div id="tabpanel-03" role="tabpanel" class="hide">
+                    <div class="tab-title"><i class="fa-light fa-circle-info"></i> Extra Information</div>
+                    <div class="text-block">
+                        <p>
+                            @Model.Person.ExtraInfoString
+                        </p>
+                    </div>
+                </div>
 
-    </div>
-</div>
-<div class="column is-full-tablet is-4-desktop is-4-fullhd">
-    <aside class="sidebar">
-        <div class="picture-block profile-picture">
-            <div class="picture-border">
-                <div class="picture-embed" style="
-                        background-image: url(@Model.Person.MainPhoto?.ImageUriMedium);
-                      "></div>
-            </div>
-        </div>
+                <div id="tabpanel-04" role="tabpanel">
+                    <div class="tab-title"><i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs</div>
+                    @if (Model.Person.Photos.Any())
+                    {
+                        <div class="gallery-block">
+                            <div class="columns is-multiline">
 
-        <div class="plaque-block with-margin-bottom with-margin-top">
-            <span class="subtitle">Remembering</span>
-            <span class="name">@Model.Person.Name</span>
+                                @foreach (var photo in Model.Person.Photos)
+                                {
+                                    <div class="column is-4-desktop">
+                                        <a href="@photo.ImageUriMedium" title="@photo.Description">
+                                            <div class="picture-block short styled-alt">
+                                                <div class="picture-border">
+                                                    <div class="picture-embed" style="background-image: url(@photo.ImageUriOriginal);"></div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                }
 
-            <span class="lived">@Model.Person.LivedFromUntilString</span>
-        </div>
 
-        <div class="decorations-block">
-            <h3>Decorations</h3>
-
-            <ul>
-
-                @foreach (var decoration in Model.Person.Decorations)
-                {
-                    <li>
-                        @* <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">@decoration.Name</span> *@
-                        <span class="title">@decoration.Name</span>
-                    </li>
-                }
-
-            </ul>
-        </div>
-
-        <div class="remembered-on-block with-margin-top">
-            <h3>Remembered on...</h3>
-
-            <ul>
-                @foreach (var memorial in Model.Person.Memorials)
-                {
-                    <li>
-                        <div class="bg-icon">
-                            <i class="fa-light fa-monument"></i>
+                            </div>
                         </div>
-                        <a asp-page="/Memorial/Details"
-                           asp-route-id="@memorial.Key" title="Learn about @memorial.Value">
-                            @memorial.Value
-                        </a>
-                    </li>
-                }
-            </ul>
-
-            <div class="cwgc-link">
-                <img src="/images/logo-cwgc.png" title="Commonwealth War Graves Commission">
-                <a href="https://www.cwgc.org/find-war-dead/casualty/@Model.Person.Cwgc/" target="_blank">
-                    Grave Number @Model.Person.Cwgc <i class="fa-light fa-arrow-up-right-from-square"></i>
-                </a>
+                    }
+                    else
+                    {
+                        <div class="text-block">
+                            <p>
+                                No Photos
+                            </p>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
+    </div>
+    <div class="column is-full-tablet is-4-desktop is-4-fullhd">
+        <aside class="sidebar">
+            <div class="picture-block profile-picture">
+                <div class="picture-border">
+                    @if (@Model.Person.MainPhoto is not null)
+                    {
+                        <div class="picture-embed" style="background-image: url(@Model.Person.MainPhoto.ImageUriOriginal);"></div>
+                    }
+                    else
+                    {
+                        <div class="picture-embed" style="background-image: url(../images/poppy.jpg);"></div>
+                    }
+                </div>
+            </div>
+
+            <div class="plaque-block with-margin-bottom with-margin-top">
+                <span class="subtitle">Remembering</span>
+                <span class="name">@Model.Person.Name</span>
+
+                <span class="lived">@Model.Person.LivedFromUntilString</span>
+            </div>
+
+            @if (Model.Person.Decorations.Any())
+            {
+                <div class="decorations-block">
+                    <h3>Decorations</h3>
+
+                    <ul>
+
+                        @foreach (var decoration in Model.Person.Decorations)
+                        {
+                            <li>
+                                @* <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">@decoration.Name</span> *@
+                                <span class="title">@decoration.Name</span>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            }
+
+            <div class="remembered-on-block with-margin-top">
+                <h3>Remembered on...</h3>
+
+                <ul>
+                    @foreach (var memorial in Model.Person.Memorials)
+                    {
+                        <li>
+                            <div class="bg-icon">
+                                <i class="fa-light fa-monument"></i>
+                            </div>
+                            <a asp-page="/Memorial/Details"
+                               asp-route-id="@memorial.Key" title="Learn about @memorial.Value">
+                                @memorial.Value
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <div class="cwgc-link">
+                    <img src="/images/logo-cwgc.png" title="Commonwealth War Graves Commission">
+                    <a href="https://www.cwgc.org/find-war-dead/casualty/@Model.Person.Cwgc/" target="_blank">
+                        Grave Number @Model.Person.Cwgc <i class="fa-light fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
 
 
-    </aside>
-</div>
+        </aside>
+    </div>
 </div>
 
 </div>

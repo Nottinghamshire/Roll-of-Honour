@@ -7,60 +7,36 @@ namespace RollOfHonour.Data.Repositories;
 
 public class MemorialRepository : IMemorialRepository
 {
-  private string settingBlobName = "ncc01sarollhonstdlrsdev";
-  private string settingBlobImageContainerName = "images";
+    private string settingBlobName = "ncc01sarollhonstdlrsdev";
+    private string settingBlobImageContainerName = "images";
 
-  public RollOfHonourContext _dbContext { get; set; }
+    public RollOfHonourContext _dbContext { get; set; }
 
-  public MemorialRepository(RollOfHonourContext dbContext)
-  {
-    _dbContext = dbContext;
-  }
-
-  public async Task<Memorial> GetById(int id)
-  {
-    try
+    public MemorialRepository(RollOfHonourContext dbContext)
     {
-      var dbMemorial = await _dbContext.WarMemorials
-        .Include(m => m.RecordedNames)
-        .Include(m => m.Photos)
-        .FirstAsync(p => p.Id == id);
-
-        if (dbMemorial == null)
-        {
-            return null;
-        }
-
-      return dbMemorial.ToDomainModel(settingBlobName, settingBlobImageContainerName);
+        _dbContext = dbContext;
     }
-    catch (InvalidOperationException)
-    {
-      // TODO: Understand if this is even possible 
-      return null;
-    }
-  }
-  
-  // TODO: Should this return be nullable, if there were no memorials rather than an empty list?
-    public async Task<IEnumerable<Memorial>> GetAll()
+
+    public async Task<Memorial?> GetById(int id)
     {
         try
         {
-            var memorials = _dbContext.WarMemorials
-                .Include(m => m.Photos)
-                .Take(80);
+            var dbMemorial = await _dbContext.WarMemorials
+              .Include(m => m.RecordedNames)
+              .Include(m => m.Photos)
+              .FirstAsync(p => p.Id == id);
 
-            if (!memorials.Any())
+            if (dbMemorial == null)
             {
-                return Enumerable.Empty<Memorial>();
+                return null;
             }
 
-        return memorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName));
-
+            return dbMemorial.ToDomainModel(settingBlobName, settingBlobImageContainerName);
         }
-        catch (Exception ex)
+        catch (InvalidOperationException)
         {
-            // TODO: Handle exceptions 
-            throw ex;
+            // TODO: Understand if this is even possible 
+            return null;
         }
     }
 
@@ -87,7 +63,7 @@ public class MemorialRepository : IMemorialRepository
         return new PaginatedList<Memorial>(results, resultCount, pageIndex, pageSize);
     }
 
-    public int Count() 
+    public int Count()
     {
         var count = _dbContext.WarMemorials.Count();
         return count;

@@ -8,15 +8,24 @@
                 var personDetailSlug = $"/Person/Details?id={person.Id}";
                 <div class="search-result-block">
                     <div class="war-label">
-                        <img class="ww-insignia" src="/images/insignia-ww1.png" alt="This data is related to World War 1" />
+                        <img class="ww-insignia" src="/images/insignia-ww1.png" alt="This data is related to World War 1"/>
                     </div>
                     <div class="columns is-mobile">
                         <div class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-2-fullhd">
                             <div class="picture-block search-picture">
                                 <div class="picture-border">
-                                    <div class="picture-embed"
-                                        style="background-image: url(@person.MainPhoto?.ImageUriMedium);">
-                                    </div>
+                                    @if (person.MainPhoto is null)
+                                    {
+                                        <div class="picture-embed"
+                                             style="background-image: url(./images/poppy.jpg);">
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="picture-embed"
+                                             style="background-image: url(@person.MainPhoto?.ImageUriMedium);">
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -25,36 +34,49 @@
                             <h1 class="name">@person.Name</h1>
 
                             <div class="service-number">
-                                <span class="label"><i class="fa-light fa-hashtag fa-fw"></i> Service
-                                    Number</span>
-                                <span class="data">@person.ServiceNumber</span>
+                                <span class="label">
+                                    <i class="fa-light fa-hashtag fa-fw"></i> Service
+                                    Number
+                                </span>
+                                <span class="data">@person.ServiceNumberString</span>
                             </div>
 
                             <div class="military-unit">
-                                <span class="label"><i class="fa-light fa-flag fa-fw"></i> Military
-                                    Unit</span>
+                                <span class="label">
+                                    <i class="fa-light fa-flag fa-fw"></i> Military
+                                    Unit
+                                </span>
                                 <span class="data">@person.UnitRegimentString</span>
                             </div>
 
                             <div class="date-of-birth">
-                                <span class="label"><i class="fa-light fa-calendar fa-fw"></i> Date of
-                                    birth</span>
+                                <span class="label">
+                                    <i class="fa-light fa-calendar fa-fw"></i> Date of
+                                    birth
+                                </span>
                                 <span class="data">@person.DateOfBirthString</span>
                             </div>
 
                             <div class="date-of-death">
-                                <span class="label"><i class="fa-light fa-tombstone fa-fw"></i> Date of
-                                    Death</span>
+                                <span class="label">
+                                    <i class="fa-light fa-tombstone fa-fw"></i> Date of
+                                    Death
+                                </span>
                                 <span class="data">@person.DateOfDeathString</span>
                             </div>
 
                             <div class="place-of-birth">
-                                <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of
-                                    Birth</span>
-                                <span class="data">@person.PlaceOfBirth</span>
+                                <span class="label">
+                                    <i class="fa-light fa-location-dot fa-fw"></i> Place of
+                                    Birth
+                                </span>
+                                <span class="data">@person.PlaceOfBirthString</span>
                             </div>
-                            <a href="@personDetailSlug" title="Look at this record" class="search-link"><i
-                                    class="fal fa-glasses"></i> Read more</a>
+                            <a href="@personDetailSlug" title="Look at this record" class="search-link">
+                                <i
+                                    class="fal fa-glasses">
+                                </i> Read more
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -64,6 +86,8 @@
 </div>
 
 @code {
+
     [Parameter]
     public List<Core.Models.Person> People { get; set; } = new();
+
 }

@@ -1,0 +1,36 @@
+@inject NavigationManager navManager;
+@using RollOfHonour.Core.Enums;
+
+<div class="column">
+    <div class="form-block compact alignright">
+        <form id="search-all" action="javascript:void(0);">
+            <div class="form-row">
+                <label for="searchquery" id="Query-ariaLabel">Search by entering a name:</label>
+                @if (SelectedQueryType == QueryType.Person)
+                {
+                <input id="searchquery" @bind="@SearchTerm" name="Query" class="input-text" type="text"
+                    aria-labelledby="Query-ariaLabel" title="Enter your search query here..."
+                    placeholder="e.g. Ken Ashford" />
+                }
+                else 
+                {
+                    <input id="searchquery" @bind="@SearchTerm" name="Query" class="input-text" type="text"
+                        aria-labelledby="Query-ariaLabel" title="Enter your search query here..." placeholder="e.g. The City War Memorial"/>
+                }
+                <button type="submit" @onclick="SearchRollOfHonour" class="submit-button" form="search-all"><i
+                        class="fal fa-file-search"></i>Search</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public QueryType SelectedQueryType { get; set; } = QueryType.Person;
+    private string SearchTerm = "";
+    private void SearchRollOfHonour()
+    {
+        navManager.NavigateTo($"/Results?s={SearchTerm}&w=0&pt=0&qt={(int)SelectedQueryType}", true);
+    }
+}

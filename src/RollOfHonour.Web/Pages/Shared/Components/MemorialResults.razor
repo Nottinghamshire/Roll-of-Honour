@@ -14,9 +14,13 @@
                         <div class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-2-fullhd">
                             <div class="picture-block search-picture">
                                 <div class="picture-border">
-                                    <div class="picture-embed"
-                                        style="background-image: url(@memorial.MainPhoto?.ImageUriMedium);">
-                                    </div>
+                                            @if(memorial.MainPhoto is not null)
+                                            {
+                                                <div class="picture-embed" style="background-image: url(@memorial.MainPhoto?.ImageUriMedium);"></div>
+                                            }
+                                            else {
+                                                <div class="picture-embed" style="background-image: url(./images/poppy-grey.jpg);"></div>
+                                            }
                                 </div>
                             </div>
                         </div>

@@ -1,71 +1,74 @@
-﻿namespace RollOfHonour.Data.Models.DB;
+﻿using NetTopologySuite.Geometries;
+
+namespace RollOfHonour.Data.Models.DB;
 
 public partial class WarMemorial
 {
-  public Core.Models.Memorial ToDomainModel(string blobServiceName, string blobImagesContainer)
-  {
-    var domainRecordedNames = this.RecordedNames.Select(recordedName => new Core.Models.RecordedName(recordedName.AsRecorded)
-      {
-        Id = recordedName.Id,
-        PersonId = recordedName.PersonId,
-        Initials = recordedName.Initials,
-        FirstName = recordedName.FirstName,
-        LastName = recordedName.LastName,
-        ServiceNumber = recordedName.ServiceNumber,
-        Rank = recordedName.Rank,
-        Sex = recordedName.Sex,
-        IWMNameRefNo = recordedName.IwmnameRefNo
-      })
-      .ToList();
-
-    var memorial = new Core.Models.Memorial(this.Name, domainRecordedNames)
+    public Core.Models.Memorial ToDomainModel(string blobServiceName, string blobImagesContainer)
     {
-      Id = this.Id,
-      UKNIWMRef = this.Ukniwmref,
-      Description = this.Description,
-      //Location = //TODO: Convert to LatLong from East/North 
-      MainPhotoId = this.MainPhotoId,
-      NamesCount = this.NamesCount,
-      District = this.District,
-      Postcode = this.Postcode,
-    };
+        var domainRecordedNames = this.RecordedNames.Select(recordedName => new Core.Models.RecordedName(recordedName.AsRecorded!)
+        {
+            Id = recordedName.Id,
+            PersonId = recordedName.PersonId ?? null,
+            Initials = recordedName.Initials ?? string.Empty, 
+            FirstName = recordedName.FirstName ?? string.Empty,
+            LastName = recordedName.LastName ?? string.Empty,
+            ServiceNumber = recordedName.ServiceNumber,
+            Rank = recordedName.Rank,
+            Sex = recordedName.Sex,
+            IWMNameRefNo = recordedName.IwmnameRefNo
+        })
+          .ToList();
 
-    foreach (var photo in this.Photos)
-    {
-      memorial.Photos.Add(photo.ToDomainModel(blobServiceName, blobImagesContainer));
+        var memorial = new Core.Models.Memorial(this.Name, domainRecordedNames)
+        {
+            Id = this.Id,
+            UKNIWMRef = this.Ukniwmref,
+            Description = this.Description,
+            //Location = //TODO: Convert to LatLong from East/North 
+            MainPhotoId = this.MainPhotoId,
+            NamesCount = this.NamesCount,
+            District = this.District,
+            Postcode = this.Postcode,
+        };
+
+        foreach (var photo in this.Photos)
+        {
+            memorial.Photos.Add(photo.ToDomainModel(blobServiceName, blobImagesContainer));
+        }
+
+
+        return memorial;
     }
 
+    public int Id { get; set; }
+
+    public string? Ukniwmref { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public string? Description { get; set; }
+
+    public int Easting { get; set; }
+
+    public int Northing { get; set; }
     
-    return memorial;
-  }
+    public Geometry? Location { get; set; } //= new Point(52.9364, 1.1358);
+    public int? MainPhotoId { get; set; }
 
-  public int Id { get; set; }
+    public int NamesCount { get; set; }
 
-  public string? Ukniwmref { get; set; }
+    public string? District { get; set; }
 
-  public string Name { get; set; } = null!;
+    public string? Postcode { get; set; }
 
-  public string? Description { get; set; }
+    public virtual ICollection<PhotoModeration> PhotoModerations { get; } = new List<PhotoModeration>();
 
-  public int Easting { get; set; }
+    public virtual ICollection<Photo> Photos { get; } = new List<Photo>();
 
-  public int Northing { get; set; }
+    public virtual ICollection<RecordedName> RecordedNames { get; } = new List<RecordedName>();
 
-  public int? MainPhotoId { get; set; }
+    public virtual ICollection<WarMemorialAuditItem> WarMemorialAuditItems { get; } = new List<WarMemorialAuditItem>();
 
-  public int NamesCount { get; set; }
-
-  public string? District { get; set; }
-
-  public string? Postcode { get; set; }
-
-  public virtual ICollection<PhotoModeration> PhotoModerations { get; } = new List<PhotoModeration>();
-
-  public virtual ICollection<Photo> Photos { get; } = new List<Photo>();
-
-  public virtual ICollection<RecordedName> RecordedNames { get; } = new List<RecordedName>();
-
-  public virtual ICollection<WarMemorialAuditItem> WarMemorialAuditItems { get; } = new List<WarMemorialAuditItem>();
-
-  public virtual ICollection<UserProfile> UserProfileUsers { get; } = new List<UserProfile>();
+    public virtual ICollection<UserProfile> UserProfileUsers { get; } = new List<UserProfile>();
 }

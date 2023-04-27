@@ -18,7 +18,7 @@
                         project pays homage to the county’s fallen and creates a unique, centralised archive for
                         researchers, historians and the general public.</p>
                 </div>
-               <component type="typeof(BasicSearchComponent)" render-mode="Server"/>
+               <component type="typeof(BasicSearchComponent)" render-mode="ServerPrerendered"/>
             </div>
             <div class="column  is-full-tablet is-5-desktop is-4-fullhd">
                 <aside class="sidebar">
@@ -26,7 +26,7 @@
                         <h3 class="aligncenter">Today we remember...</h3>
                     </div>
                     @await Component.InvokeAsync(nameof(MemoryDetailsList))
-                    <a href="/search.html" title="Look at all our records" class="button primary"><i
+                    <a asp-page="/person/index" title="Look at all our records" class="button primary"><i
                             class="fal fa-folder-open"></i> Look at all our records</a>
                 </aside>
             </div>
