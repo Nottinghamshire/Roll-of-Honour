@@ -1,4 +1,6 @@
-﻿namespace RollOfHonour.Data.Models.DB;
+﻿using NetTopologySuite.Geometries;
+
+namespace RollOfHonour.Data.Models.DB;
 
 public partial class WarMemorial
 {
@@ -50,7 +52,8 @@ public partial class WarMemorial
     public int Easting { get; set; }
 
     public int Northing { get; set; }
-
+    
+    public Geometry? Location { get; set; } //= new Point(52.9364, 1.1358);
     public int? MainPhotoId { get; set; }
 
     public int NamesCount { get; set; }

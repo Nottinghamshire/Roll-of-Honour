@@ -26,7 +26,6 @@ public partial class RollOfHonourContext : DbContext
 
     public virtual DbSet<Decoration> Decorations { get; set; }
 
-    public virtual DbSet<MigrationHistory> MigrationHistories { get; set; }
 
     public virtual DbSet<Person> People { get; set; }
 
@@ -149,15 +148,6 @@ public partial class RollOfHonourContext : DbContext
                     });
         });
 
-        modelBuilder.Entity<MigrationHistory>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("__MigrationHistory");
-
-            entity.Property(e => e.MigrationId).HasMaxLength(255);
-            entity.Property(e => e.ProductVersion).HasMaxLength(32);
-        });
 
         modelBuilder.Entity<Person>(entity =>
         {
