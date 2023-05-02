@@ -1,4 +1,6 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using RollOfHonour.Core.Models
 @model RollOfHonour.Web.Pages.Person.Details
 
 <section class="panel with-background bg-app">
@@ -34,6 +36,17 @@
 <div class="columns is-multiline">
     <div class="column is-full-tablet is-8-desktop is-8-fullhd">
         <div class="person-block">
+            <div class="war-label">
+                @if (Model.Person.War == WarNumber.WW1)
+                {
+                    <img class="ww-insignia" src="/images/insignia-ww1.png" alt="This data is related to World War 1">
+                }
+                else
+                {
+                    <img class="ww-insignia" src="/images/insignia-ww2.png" alt="This data is related to World War 2"/>
+                }
+            </div>
+
             <span class="rank">@Model.Person.Rank</span>
             <h1 class="name">@Model.Person.Name</h1>
 
