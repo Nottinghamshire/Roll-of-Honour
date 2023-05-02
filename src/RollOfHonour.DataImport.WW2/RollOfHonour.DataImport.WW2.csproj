@@ -22,6 +22,7 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" />
+      <PackageReference Include="IeuanWalker.GeoUK" />
       <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" />
       <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
       <PackageReference Include="Microsoft.Extensions.Hosting" />
