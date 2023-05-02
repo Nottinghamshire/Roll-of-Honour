@@ -27,7 +27,8 @@ public class Person
             Unit = this.SubUnit?.Name == null ? string.Empty : this.SubUnit.Name,
             UnitId = this.SubUnitId == null ? null : this.SubUnitId,
             Regiment = this.SubUnit?.Regiment?.Name == null ? string.Empty : this.SubUnit.Regiment.Name,
-            RegimentId = this.SubUnit?.RegimentId
+            RegimentId = this.SubUnit?.RegimentId,
+            WarId = WarId ?? 0
         };
 
         foreach (var decoration in this.Decorations)

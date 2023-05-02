@@ -141,6 +141,9 @@ public class Person
 
     public List<Photo> Photos { get; set; } = new List<Photo>();
 
+    public int WarId { private get; set; }
+    public WarNumber War => WarId == 1 ? WarNumber.WW1 : WarNumber.WW2;
+
     private int AgeCalculator(DateTime dateOfBirth, DateTime dateOfDeath)
     {
         int age = dateOfDeath.Year - dateOfBirth.Year;
@@ -151,4 +154,10 @@ public class Person
 
         return age;
     }
+}
+
+public enum WarNumber
+{
+    WW1 = 1,
+    WW2 = 2
 }
