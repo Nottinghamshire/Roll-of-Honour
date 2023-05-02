@@ -17,12 +17,19 @@ internal class DataInsertService : IDataInsertService
         ErrorRows = new List<WW2Data>();
     }
 
-    public async Task<List<WW2Data>> AddMissingData(List<WW2Data> results)
+    public async Task<List<WW2Data>> AddMissingMilitaryData(List<WW2Data> results)
     {
         await AddMissingRegiments(results);
         await AddMissingSubUnits(results);
         await AddMissingMemorials(results);
         await AddPeopleAndRecordedNames(results);
+        await UpdateNamesCountOnMemorials();
+        return ErrorRows;
+    }
+
+    public async Task<List<WW2Data>> AddMissingCivilianData(List<WW2Data> results)
+    {
+        await AddCivilianPeopleAndRecordedNames(results);
         await UpdateNamesCountOnMemorials();
         return ErrorRows;
     }
@@ -109,28 +116,32 @@ internal class DataInsertService : IDataInsertService
         /* Person, RecName, Link to Mem, Link to SubUnit */
         foreach (var row in results)
         {
-            Person? person = await FindExistingPersonMatch(row);
-            if (person == null)
+            try
             {
-                ErrorRows.Add(row);
+                Person? person = await FindExistingMilitaryPersonMatch(row);
+
+                WarMemorial? memorial = FindMemorial(memorials, row);
+                SubUnit? subUnit = FindSubUnit(regimentsWithSubUnits, row);
+                person ??= await AddMilitaryPerson(row, subUnit?.Id, memorial);
             }
-            WarMemorial? memorial = FindMemorial(memorials, row);
-            SubUnit? subUnit = FindSubUnit(regimentsWithSubUnits, row);
-            if (person == null)
+            catch (Exception e)
             {
-                person = await AddPerson(row, subUnit?.Id, memorial);
+                Console.WriteLine(e);
+                ErrorRows.Add(row);
             }
         }
     }
 
-    private async Task<Person?> FindExistingPersonMatch(WW2Data row)
+    private async Task<Person?> FindExistingMilitaryPersonMatch(WW2Data row)
     {
-         Person? existingPerson = null;
-    
+        Person? existingPerson = null;
+
         // CWGC Grave Ref and Service ID
-        if (existingPerson == null && !string.IsNullOrEmpty(row.MaybeCWGCRef) &&!string.IsNullOrEmpty(row.Service_Number))
+        if (existingPerson == null && !string.IsNullOrEmpty(row.MaybeCWGCRef) &&
+            !string.IsNullOrEmpty(row.Service_Number))
         {
-            existingPerson = await _context.People.FirstOrDefaultAsync(p => p.Cwgc.ToString() == row.MaybeCWGCRef && p.ServiceNumber == row.Service_Number);
+            existingPerson = await _context.People.FirstOrDefaultAsync(p =>
+                p.Cwgc.ToString() == row.MaybeCWGCRef && p.ServiceNumber == row.Service_Number);
         }
 
         //Name with Date of Death
@@ -170,7 +181,7 @@ internal class DataInsertService : IDataInsertService
         return existingSU;
     }
 
-    private async Task<Person?> AddPerson(WW2Data row, int? subUnitId, WarMemorial? warMemorial)
+    private async Task<Person?> AddMilitaryPerson(WW2Data row, int? subUnitId, WarMemorial? warMemorial)
     {
         var sbAsRec = new StringBuilder();
         if (!string.IsNullOrEmpty(row.FirstName))
@@ -257,5 +268,113 @@ internal class DataInsertService : IDataInsertService
         }
 
         await _context.SaveChangesAsync();
+    }
+
+    private async Task AddCivilianPeopleAndRecordedNames(List<WW2Data> results)
+    {
+        /* Person, RecName, Link to Mem, Link to SubUnit */
+        foreach (var row in results)
+        {
+            try
+            {
+                // if (person == null)
+                // {
+                //     ErrorRows.Add(row);
+                // }
+                Person? person = await FindExistingCivilianMatch(row) ?? await AddCivilianPerson(row);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ErrorRows.Add(row);
+            }
+        }
+    }
+
+    private async Task<Person?> FindExistingCivilianMatch(WW2Data row)
+    {
+        Person? existingPerson = null;
+
+        // CWGC Grave Ref and Service ID
+        if (existingPerson == null && !string.IsNullOrEmpty(row.MaybeCWGCRef))
+        {
+            existingPerson = await _context.People.FirstOrDefaultAsync(p =>
+                p.Cwgc.ToString() == row.MaybeCWGCRef);
+        }
+
+        //Name with Date of Death
+        if (existingPerson == null &&
+            !string.IsNullOrEmpty(row.Last_Name) && !string.IsNullOrEmpty(row.FirstName) &&
+            !string.IsNullOrEmpty(row.Initials) && row.Date_of_Death.HasValue)
+        {
+            existingPerson = await _context.People.FirstOrDefaultAsync(p =>
+                p.LastName == row.Last_Name &&
+                p.FirstNames == row.FirstName &&
+                p.Initials == row.Initials &&
+                p.DateOfDeath == row.Date_of_Death
+            );
+        }
+
+        return existingPerson;
+    }
+
+    private async Task<Person?> AddCivilianPerson(WW2Data row)
+    {
+        var sbAsRec = new StringBuilder();
+        if (!string.IsNullOrEmpty(row.FirstName))
+            sbAsRec.Append(row.FirstName);
+
+        if (!string.IsNullOrEmpty(row.Initials))
+            sbAsRec.AppendFormat($" {row.Initials}");
+
+        if (!string.IsNullOrEmpty(row.Last_Name))
+            sbAsRec.AppendFormat($" {row.Last_Name}");
+
+        // var recordedName = new RecordedName
+        // {
+        //     AsRecorded = sbAsRec.ToString(),
+        //     FirstName = row.FirstName,
+        //     Initials = row.Initials,
+        //     LastName = row.Last_Name,
+        //     Rank = row.Rank,
+        //     Sex = null,
+        //     ServiceNumber = null,
+        //     WarMemorialId = null,
+        //     WarId = 2,
+        //     SubUnitId = null,
+        //     ArmedServiceId = null
+        // };
+
+
+        var person = new Person
+        {
+            WarId = 2,
+            ServiceNumber = null,
+            FirstNames = row.FirstName,
+            LastName = row.Last_Name,
+            Initials = row.Initials,
+            AgeAtDeath = row.Age_at_Death == null ? null : int.Parse(row.Age_at_Death),
+            DateOfDeath = row.Date_of_Death,
+            Rank = null,
+            SubUnitId = null,
+            FamilyHistory = row.FamilyInfo,
+            Cwgc = row.MaybeCWGCRef == null ? null : int.Parse(row.MaybeCWGCRef),
+            Comments = row.OtherNotes,
+            DateOfBirth = null,
+            MainPhotoId = null,
+            ArmedServiceId = null,
+            Deleted = false,
+            AddressAtEnlistment = row.Service_Number,
+            PlaceOfBirth = null,
+            EmploymentHobbies = null,
+            MilitaryHistory = null,
+            ExtraInfo = null,
+            //RecordedNames = { recordedName }
+        };
+
+        await _context.People.AddAsync(person);
+        await _context.SaveChangesAsync();
+
+        return person;
     }
 }

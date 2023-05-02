@@ -40,24 +40,46 @@ var host = Host.CreateDefaultBuilder()
 IWW2ImportRepository ww2DataFetchService = host.Services.GetService<IWW2ImportRepository>()!;
 IDataInsertService? ww2DataInsertService = host.Services.GetService<IDataInsertService>();
 
-List<WW2Data> results = ww2DataFetchService.ProperWW2Data();
-if (results.Any())
+// List<WW2Data> militaryResults = ww2DataFetchService.ProperWW2Data();
+// if (militaryResults.Any())
+// {
+//     var errorRows = await ww2DataInsertService?.AddMissingData(militaryResults)!;
+//
+//     if (errorRows.Any())
+//     {
+//         Console.WriteLine("Press a key to list Errors");
+//         Console.ReadLine();
+//         
+//         Console.WriteLine("ERRORS:");
+//         foreach (var errorRow in errorRows)
+//         {
+//             Console.WriteLine(errorRow.Service_Number?.ToString());
+//         }
+//
+//         Console.ReadLine();
+//     }
+// }
+
+
+List<WW2Data> civilianResults = ww2DataFetchService.CivilianWarDeadWW2Data();
+if (civilianResults.Any())
 {
-    var errorRows = await ww2DataInsertService?.AddMissingData(results)!;
+    var errorRows = await ww2DataInsertService?.AddMissingCivilianData(civilianResults)!;
 
     if (errorRows.Any())
     {
         Console.WriteLine("Press a key to list Errors");
         Console.ReadLine();
-        
+
         Console.WriteLine("ERRORS:");
         foreach (var errorRow in errorRows)
         {
-            Console.WriteLine(errorRow.Service_Number?.ToString());
+            Console.WriteLine(errorRow.MaybeCWGCRef + "'. " + errorRow.FamilyInfo?.ToString());
         }
 
         Console.ReadLine();
     }
 }
+
 
 await host.RunAsync();
