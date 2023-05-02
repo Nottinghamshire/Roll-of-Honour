@@ -30,7 +30,7 @@ internal class DataInsertService : IDataInsertService
     public async Task<List<WW2Data>> AddMissingCivilianData(List<WW2Data> results)
     {
         await AddCivilianPeopleAndRecordedNames(results);
-        await UpdateNamesCountOnMemorials();
+
         return ErrorRows;
     }
 
@@ -277,10 +277,6 @@ internal class DataInsertService : IDataInsertService
         {
             try
             {
-                // if (person == null)
-                // {
-                //     ErrorRows.Add(row);
-                // }
                 Person? person = await FindExistingCivilianMatch(row) ?? await AddCivilianPerson(row);
             }
             catch (Exception e)
@@ -330,22 +326,6 @@ internal class DataInsertService : IDataInsertService
         if (!string.IsNullOrEmpty(row.Last_Name))
             sbAsRec.AppendFormat($" {row.Last_Name}");
 
-        // var recordedName = new RecordedName
-        // {
-        //     AsRecorded = sbAsRec.ToString(),
-        //     FirstName = row.FirstName,
-        //     Initials = row.Initials,
-        //     LastName = row.Last_Name,
-        //     Rank = row.Rank,
-        //     Sex = null,
-        //     ServiceNumber = null,
-        //     WarMemorialId = null,
-        //     WarId = 2,
-        //     SubUnitId = null,
-        //     ArmedServiceId = null
-        // };
-
-
         var person = new Person
         {
             WarId = 2,
@@ -369,7 +349,6 @@ internal class DataInsertService : IDataInsertService
             EmploymentHobbies = null,
             MilitaryHistory = null,
             ExtraInfo = null,
-            //RecordedNames = { recordedName }
         };
 
         await _context.People.AddAsync(person);
