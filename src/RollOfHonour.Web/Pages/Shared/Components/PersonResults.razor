@@ -9,7 +9,7 @@
                 var personDetailSlug = $"/Person/Details?id={person.Id}";
                 <div class="search-result-block">
                     <div class="war-label">
-                        @if (person.War == WarNumber.WW1)
+                        @if (person.War == Core.Enums.War.WW1)
                         {
                             <img class="ww-insignia" src="/images/insignia-ww1.png" alt="This data is related to World War 1"/>
                         }

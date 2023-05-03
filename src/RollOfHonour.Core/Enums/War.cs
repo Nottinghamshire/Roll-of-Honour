@@ -2,7 +2,7 @@ namespace RollOfHonour.Core.Enums
 {
     public enum War
     {
-        WW1, 
-        WW2
+        WW1 = 1, 
+        WW2 = 2
     }
 }
