@@ -7,7 +7,6 @@ public class Person
     public Person(int? mainPhotoId)
     {
         MainPhotoId = mainPhotoId;
-        this.PersonType = string.IsNullOrEmpty(this.Regiment) ? PersonType.Civilian : PersonType.Military;
     }
 
     public int Id { get; set; }
@@ -96,7 +95,9 @@ public class Person
     public bool Deleted { get; set; }
 
     public string? AddressAtEnlistment { private get; set; }
-    public string AddressAtEnlistmentString => !string.IsNullOrEmpty(AddressAtEnlistment) ? AddressAtEnlistment : "Unknown";
+
+    public string AddressAtEnlistmentString =>
+        !string.IsNullOrEmpty(AddressAtEnlistment) ? AddressAtEnlistment : "Unknown";
 
     public int? Cwgc { get; set; }
     public string? PlaceOfBirth { private get; set; }
@@ -146,7 +147,8 @@ public class Person
 
     public int WarId { private get; set; }
     public Enums.War War => WarId == 1 ? Enums.War.WW1 : Enums.War.WW2;
-    public PersonType PersonType { get; }
+
+    public PersonType PersonType => string.IsNullOrEmpty(this.Regiment) ? PersonType.Civilian : PersonType.Military;
 
     private int AgeCalculator(DateTime dateOfBirth, DateTime dateOfDeath)
     {
