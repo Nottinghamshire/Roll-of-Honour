@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RollOfHonour.Core.Enums;
 using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
@@ -157,6 +158,9 @@ public class PersonRepository : IPersonRepository
 
     private IQueryable<Models.DB.Person> FilterPeople(IQueryable<Models.DB.Person> people, Filters filters)
     {
+        // Default is Military
+        people = PersonTypeFilter(people, filters.SelectedPersonType);
+
         if (filters.DateRangeUsed)
         {
             people = DiedBefore(people, filters.DiedBefore);
@@ -170,6 +174,7 @@ public class PersonRepository : IPersonRepository
 
         return people;
     }
+
 
     private IQueryable<Models.DB.Person> ByRegiment(IQueryable<Models.DB.Person> people, HashSet<int> regimentIds)
     {
@@ -200,5 +205,24 @@ public class PersonRepository : IPersonRepository
                                                || p.LastName!.Contains(query.SearchTerm)));
 
         return dbPeople;
+    }
+
+    private IQueryable<Models.DB.Person> PersonTypeFilter(IQueryable<Models.DB.Person> people,
+        PersonType filtersSelectedPersonType)
+    {
+        if (filtersSelectedPersonType == PersonType.Civilian)
+        {
+            // Criteria to determine a civilian
+            return people
+                    .Where(p => p.Rank == null || p.Rank.Equals(""))
+                    .Where(p => !p.SubUnitId.HasValue)
+                ;
+        }
+
+        // Default is Military
+        return people
+                .Where(p => p.Rank != null && !p.Rank.Equals(""))
+                .Where(p => p.SubUnitId.HasValue)
+            ;
     }
 }

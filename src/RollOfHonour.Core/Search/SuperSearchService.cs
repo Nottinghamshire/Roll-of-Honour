@@ -21,14 +21,17 @@ public class SuperSearchService : ISuperSearchService
         return await _personRepository.GetRegimentFiltersForSearch(query);
     }
 
-    public async Task<Result<PaginatedList<Core.Models.Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
+    public async Task<Result<PaginatedList<Core.Models.Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber,
+        int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
-            var errors = new List<ValidationError> { new()
+            var errors = new List<ValidationError>
+            {
+                new()
                 {
-                Identifier = nameof(query.SearchTerm),
-                ErrorMessage = $"{nameof(query.SearchTerm)} is required."
+                    Identifier = nameof(query.SearchTerm),
+                    ErrorMessage = $"{nameof(query.SearchTerm)} is required."
                 }
             };
 
@@ -45,14 +48,17 @@ public class SuperSearchService : ISuperSearchService
         return memorialResults;
     }
 
-    public async Task<Result<PaginatedList<Core.Models.Person>>> PersonSearch(PersonQuery query, Filters filters, int pageNumber, int pageSize)
+    public async Task<Result<PaginatedList<Core.Models.Person>>> PersonSearch(PersonQuery query, Filters filters,
+        int pageNumber, int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
-            var errors = new List<ValidationError> { new()
+            var errors = new List<ValidationError>
+            {
+                new()
                 {
-                Identifier = nameof(query.SearchTerm),
-                ErrorMessage = $"{nameof(query.SearchTerm)} is required."
+                    Identifier = nameof(query.SearchTerm),
+                    ErrorMessage = $"{nameof(query.SearchTerm)} is required."
                 }
             };
 
