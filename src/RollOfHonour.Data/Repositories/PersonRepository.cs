@@ -24,17 +24,18 @@ public class PersonRepository : IPersonRepository
         try
         {
             var dbPerson = await _dbContext.People
-              .Include(p => p.Photos)
-              .Include(p => p.Decorations)
-              .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
-              .Include(p => p.SubUnit).ThenInclude(unit => unit!.Regiment)
-              .FirstOrDefaultAsync(p => p.Id == id);
+                .Include(p => p.Photos)
+                .Include(p => p.Decorations)
+                .Include(p => p.RecordedNames).ThenInclude(rn => rn.WarMemorial)
+                .Include(p => p.SubUnit).ThenInclude(unit => unit!.Regiment)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (dbPerson is null)
             {
                 // TODO: Is this necessary?
                 return null;
             }
+
             return dbPerson.ToDomainModel(settingBlobName, settingBlobImageContainerName);
         }
         catch (InvalidOperationException)
@@ -46,9 +47,9 @@ public class PersonRepository : IPersonRepository
     public async Task<IEnumerable<Person>> DiedOnDay(DateTime date)
     {
         var diedOnDate = _dbContext.People
-            .Where(p => 
-                p.DateOfDeath.HasValue && 
-                    (p.DateOfDeath.Value.Day == date.Day && p.DateOfDeath.Value.Month == date.Month))
+            .Where(p =>
+                p.DateOfDeath.HasValue &&
+                (p.DateOfDeath.Value.Day == date.Day && p.DateOfDeath.Value.Month == date.Month))
             .Include(p => p.Photos)
             .AsNoTracking();
 
@@ -83,11 +84,13 @@ public class PersonRepository : IPersonRepository
             dbPeople.AddRange(diedOnDate.ToList());
         }
 
-        IEnumerable<Person> people = dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+        IEnumerable<Person> people =
+            dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
         return people;
     }
 
-    public async Task<PaginatedList<Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex, int pageSize)
+    public async Task<PaginatedList<Person>> SearchPeople(PersonQuery query, Filters filters, int pageIndex,
+        int pageSize)
     {
         var dbPeople = GetPeopleByName(query);
 
@@ -108,7 +111,8 @@ public class PersonRepository : IPersonRepository
             .OrderBy(p => p.LastName)
             .AsNoTracking();
 
-        var results = await dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToListAsync();
+        var results = await dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName))
+            .ToListAsync();
         return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
     }
 
@@ -116,7 +120,8 @@ public class PersonRepository : IPersonRepository
     {
         var dbPeople = GetPeopleByName(query);
         var regiments = await dbPeople
-            .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null && !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
+            .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null &&
+                        !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
             .Select(p => new RegimentFilter((int)p.SubUnit!.RegimentId!, p.SubUnit!.Regiment!.Name!))
             .AsNoTracking()
             .Distinct()
@@ -131,6 +136,7 @@ public class PersonRepository : IPersonRepository
             .Include(p => p.Photos)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
+            .Where(p => p.Deleted == false)
             .AsNoTracking()
             .ToListAsync();
 
@@ -140,7 +146,8 @@ public class PersonRepository : IPersonRepository
         }
 
         return new PaginatedList<Person>(dbPeople.Select(p =>
-            p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToList(), _dbContext.People.Count(), pageIndex, pageSize);
+                p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToList(), _dbContext.People.Count(),
+            pageIndex, pageSize);
     }
 
     public int Count()
@@ -166,7 +173,8 @@ public class PersonRepository : IPersonRepository
 
     private IQueryable<Models.DB.Person> ByRegiment(IQueryable<Models.DB.Person> people, HashSet<int> regimentIds)
     {
-        return people.Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && regimentIds.Contains((int)p.SubUnit.RegimentId));
+        return people.Where(p =>
+            p.SubUnit != null && p.SubUnit.RegimentId.HasValue && regimentIds.Contains((int)p.SubUnit.RegimentId));
     }
 
     private IQueryable<Models.DB.Person> DiedBefore(IQueryable<Models.DB.Person> people, DateTime date)
@@ -182,14 +190,14 @@ public class PersonRepository : IPersonRepository
     private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query)
     {
         var dbPeople = _dbContext.People
-              .Include(p => p.Photos)
-              .Include(p => p.Decorations)
-              .Include(p => p.RecordedNames)
-              .ThenInclude(rn => rn.WarMemorial)
-              .Include(p => p.SubUnit)
-              .ThenInclude(unit => unit!.Regiment)
-              .Where(p => p.Deleted == false && (p.FirstNames!.Contains(query.SearchTerm)
-                || p.LastName!.Contains(query.SearchTerm)));
+            .Include(p => p.Photos)
+            .Include(p => p.Decorations)
+            .Include(p => p.RecordedNames)
+            .ThenInclude(rn => rn.WarMemorial)
+            .Include(p => p.SubUnit)
+            .ThenInclude(unit => unit!.Regiment)
+            .Where(p => p.Deleted == false && (p.FirstNames!.Contains(query.SearchTerm)
+                                               || p.LastName!.Contains(query.SearchTerm)));
 
         return dbPeople;
     }

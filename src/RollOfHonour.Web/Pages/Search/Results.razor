@@ -188,7 +188,7 @@
     public int SelectedQueryType { get; set; }
 
     private QueryType _selectedQueryType { get; set; } = QueryType.Person;
-    private War _selectedWar { get; set; } = (int)War.WW1;
+    private War _selectedWar { get; set; } = War.WW1;
     private PersonType _selectedPersonType { get; set; } = PersonType.Military;
     private HashSet<int> _regimentIds { get; set; } = new();
     private int _dateOfDeathFilter { get; set; } = 1900;
@@ -196,8 +196,8 @@
     private List<RegimentFilter> _regimentFilters { get; set; } = new();
     private bool _isLoading = true;
     private const int _pageSize = 10;
-    public PaginatedList<Core.Models.Memorial> MemorialSearchResults = new();
-    public PaginatedList<Core.Models.Person> PersonSearchResults = new();
+    public PaginatedList<Memorial> MemorialSearchResults = new();
+    public PaginatedList<Person> PersonSearchResults = new();
     public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
 
     protected override async Task OnInitializedAsync()
@@ -216,7 +216,7 @@
         {
             var searchQuery = BuildMemorialQuery();
 
-            Result<PaginatedList<Core.Models.Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, _pageSize);
+            Result<PaginatedList<Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, _pageSize);
 
             if (results.IsSuccess is not true)
             {
@@ -245,7 +245,7 @@
         {
             var query = BuildPersonQuery();
             var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
-            Result<PaginatedList<Core.Models.Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, _pageSize);
+            Result<PaginatedList<Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, _pageSize);
 
             if (results.IsSuccess is not true)
             {
