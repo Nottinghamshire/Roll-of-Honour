@@ -148,7 +148,17 @@ public class Person
     public int WarId { private get; set; }
     public Enums.War War => WarId == 1 ? Enums.War.WW1 : Enums.War.WW2;
 
-    public PersonType PersonType => string.IsNullOrEmpty(this.Rank) ? PersonType.Civilian : PersonType.Military;
+    public PersonType PersonType
+    {
+        get
+        { //Not perfect yet, but an improvement.
+            return string.IsNullOrEmpty(this.Rank)
+                   && string.IsNullOrEmpty(this.Regiment)
+                   && !this.UnitId.HasValue
+                ? PersonType.Civilian
+                : PersonType.Military;
+        }
+    }
 
     private int AgeCalculator(DateTime dateOfBirth, DateTime dateOfDeath)
     {

@@ -71,10 +71,7 @@
                                     }
                                     else
                                     {
-                                        <span class="rank">@person.Rank</span>
-                                        <span class="name">@person.Name</span>
-                                        <span class="unit">@person.UnitRegimentString</span>
-                                        <span class="date">@person.DateOfDeathString</span>
+                                        @await Html.PartialAsync("_IndexMilitaryCard", person)
                                     }
                                     <span class="link"><i class="fal fa-glasses"></i> Read more</span>
                                 </div>
