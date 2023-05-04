@@ -254,11 +254,10 @@
 @code {
     private string searchTerm = "";
     private War _selectedWar = War.WW1;
-    private PersonType _selectedPersonType = PersonType.Military;
     private QueryType _selectedQueryType = QueryType.Person;
 
     private void SearchRollOfHonour()
     {
-        navManager.NavigateTo($"/Results?s={searchTerm}&w={(int)_selectedWar}&pt={(int)_selectedPersonType}&qt={(int)_selectedQueryType}");
+        navManager.NavigateTo($"/Results?s={searchTerm}&w={(int)_selectedWar}&qt={(int)_selectedQueryType}");
     }
 }
