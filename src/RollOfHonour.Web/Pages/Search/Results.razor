@@ -210,16 +210,12 @@
     public int SelectedWar { get; set; }
 
     [Parameter]
-    [SupplyParameterFromQuery(Name = "pt")]
-    public int SelectedPersonType { get; set; }
-
-    [Parameter]
     [SupplyParameterFromQuery(Name = "qt")]
     public int SelectedQueryType { get; set; }
 
     private QueryType _selectedQueryType { get; set; } = QueryType.Person;
     private War _selectedWar { get; set; } = War.WW1;
-    private PersonType _selectedPersonType { get; set; } = PersonType.Military;
+    private PersonType? _selectedPersonType { get; set; }
     private HashSet<int> _regimentIds { get; set; } = new();
     private int _dateOfDeathFilter { get; set; } = 1900;
     private int _dateOfBirthFilter { get; set; } = 1900;
@@ -351,7 +347,6 @@
     private void SetSearchParamsFromQuery()
     {
         _selectedQueryType = (QueryType)SelectedQueryType;
-        _selectedPersonType = (PersonType)SelectedPersonType;
         _selectedWar = (War)SelectedWar;
     }
 

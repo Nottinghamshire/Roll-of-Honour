@@ -208,7 +208,7 @@ public class PersonRepository : IPersonRepository
     }
 
     private IQueryable<Models.DB.Person> PersonTypeFilter(IQueryable<Models.DB.Person> people,
-        PersonType filtersSelectedPersonType)
+        PersonType? filtersSelectedPersonType)
     {
         if (filtersSelectedPersonType == PersonType.Civilian)
         {
