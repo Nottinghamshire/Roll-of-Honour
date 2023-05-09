@@ -160,6 +160,11 @@ public class PersonRepository : IPersonRepository
 
     private IQueryable<Models.DB.Person> FilterPeople(IQueryable<Models.DB.Person> people, Filters filters)
     {
+        if (filters.WarIsSelected)
+        {
+            people = ByWar(people, filters.War);
+        }
+        
         // Default is Military
         people = PersonTypeFilter(people, filters.SelectedPersonType);
 
@@ -178,6 +183,12 @@ public class PersonRepository : IPersonRepository
     }
 
 
+    private IQueryable<Models.DB.Person> ByWar(IQueryable<Models.DB.Person> people, War? filtersWar)
+    {
+        return people.Where(p =>
+            p.WarId != null && p.WarId.HasValue && filtersWar!.Value == (War)p.WarId);
+    }
+    
     private IQueryable<Models.DB.Person> ByRegiment(IQueryable<Models.DB.Person> people, HashSet<int> regimentIds)
     {
         return people.Where(p =>

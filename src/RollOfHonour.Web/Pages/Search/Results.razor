@@ -206,15 +206,11 @@
     public int PageIndex { get; set; } = 1;
 
     [Parameter]
-    [SupplyParameterFromQuery(Name = "w")]
-    public int SelectedWar { get; set; }
-
-    [Parameter]
     [SupplyParameterFromQuery(Name = "qt")]
     public int SelectedQueryType { get; set; }
 
     private QueryType _selectedQueryType { get; set; } = QueryType.Person;
-    private War _selectedWar { get; set; } = War.WW1;
+    private War? _selectedWar { get; set; } 
     private PersonType? _selectedPersonType { get; set; }
     private HashSet<int> _regimentIds { get; set; } = new();
     private int _dateOfDeathFilter { get; set; } = 1900;
@@ -270,7 +266,7 @@
         if (_selectedQueryType == QueryType.Person)
         {
             var query = BuildPersonQuery();
-            var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
+            var filters = new Filters(_selectedWar,_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
             Result<PaginatedList<Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, _pageSize);
 
             if (results.IsSuccess is not true)
@@ -347,7 +343,6 @@
     private void SetSearchParamsFromQuery()
     {
         _selectedQueryType = (QueryType)SelectedQueryType;
-        _selectedWar = (War)SelectedWar;
     }
 
     private void ReturnToSearch()

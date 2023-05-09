@@ -31,6 +31,6 @@
     private string SearchTerm = "";
     private void SearchRollOfHonour()
     {
-        navManager.NavigateTo($"/Results?s={SearchTerm}&w=0&qt={(int)SelectedQueryType}", true);
+        navManager.NavigateTo($"/Results?s={SearchTerm}&qt={(int)SelectedQueryType}", true);
     }
 }
