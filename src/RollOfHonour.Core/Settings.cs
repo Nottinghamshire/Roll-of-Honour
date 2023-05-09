@@ -2,7 +2,7 @@
 
 public class AppSettings
 {
-    public Storage Storage { get; set; }
+    public Storage Storage { get; set; } = null!;
 }
 public class Storage
 {

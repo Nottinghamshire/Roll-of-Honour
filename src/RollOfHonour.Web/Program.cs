@@ -6,7 +6,6 @@ using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;
-using RollOfHonour.Web;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +17,6 @@ builder.Services.AddDbContext<RollOfHonourContext>(options =>
 builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
-builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 builder.Services.AddTransient<ISuperSearchService, SuperSearchService>();
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C");
