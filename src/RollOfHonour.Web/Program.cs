@@ -1,18 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using RollOfHonour.Core;
 using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;
+using RollOfHonour.Web;
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
 
 builder.Services.AddDbContext<RollOfHonourContext>(options =>
-  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();

@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RollOfHonour.Core;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
@@ -7,14 +9,13 @@ namespace RollOfHonour.Data.Repositories;
 
 public class MemorialRepository : IMemorialRepository
 {
-    private string settingBlobName = "ncc01sarollhonstdlrsdev";
-    private string settingBlobImageContainerName = "images";
-
+    private readonly Storage _storage;
     public RollOfHonourContext _dbContext { get; set; }
 
-    public MemorialRepository(RollOfHonourContext dbContext)
+    public MemorialRepository(RollOfHonourContext dbContext, IOptions<Storage> storageSettings)
     {
         _dbContext = dbContext;
+        _storage = storageSettings.Value;
     }
 
     public async Task<Memorial?> GetById(int id)
@@ -22,16 +23,16 @@ public class MemorialRepository : IMemorialRepository
         try
         {
             var dbMemorial = await _dbContext.WarMemorials
-              .Include(m => m.RecordedNames)
-              .Include(m => m.Photos)
-              .FirstAsync(p => p.Id == id);
+                .Include(m => m.RecordedNames)
+                .Include(m => m.Photos)
+                .FirstAsync(p => p.Id == id);
 
             if (dbMemorial == null)
             {
                 return null;
             }
 
-            return dbMemorial.ToDomainModel(settingBlobName, settingBlobImageContainerName);
+            return dbMemorial.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName);
         }
         catch (InvalidOperationException)
         {
@@ -45,7 +46,7 @@ public class MemorialRepository : IMemorialRepository
         var dbMemorials = _dbContext.WarMemorials
             .Include(m => m.Photos)
             .Where(m =>
-            m.Name.Contains(searchString));
+                m.Name.Contains(searchString));
 
         var resultCount = dbMemorials.Count();
 
@@ -55,10 +56,12 @@ public class MemorialRepository : IMemorialRepository
         }
 
         dbMemorials = dbMemorials.Skip(
-            (pageIndex - 1) * pageSize)
+                (pageIndex - 1) * pageSize)
             .Take(pageSize);
 
-        var results = await dbMemorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToListAsync();
+        var results = await dbMemorials
+            .Select(m => m.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
+            .ToListAsync();
 
         return new PaginatedList<Memorial>(results, resultCount, pageIndex, pageSize);
     }
@@ -74,7 +77,7 @@ public class MemorialRepository : IMemorialRepository
         var dbMemorials = await _dbContext.WarMemorials
             .Include(m => m.Photos)
             .Skip(
-            (pageIndex - 1) * pageSize)
+                (pageIndex - 1) * pageSize)
             .Take(pageSize).ToListAsync();
 
         if (!dbMemorials.Any())
@@ -82,7 +85,8 @@ public class MemorialRepository : IMemorialRepository
             return new PaginatedList<Memorial>();
         }
 
-        return new PaginatedList<Memorial>(dbMemorials.Select(m => m.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToList(), _dbContext.WarMemorials.Count(), pageIndex, pageSize);
+        return new PaginatedList<Memorial>(
+            dbMemorials.Select(m => m.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
+                .ToList(), _dbContext.WarMemorials.Count(), pageIndex, pageSize);
     }
-
 }
