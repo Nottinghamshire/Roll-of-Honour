@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RollOfHonour.Core;
 using RollOfHonour.Core.Enums;
-using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
@@ -10,14 +11,13 @@ namespace RollOfHonour.Data.Repositories;
 
 public class PersonRepository : IPersonRepository
 {
-    private string settingBlobName = "ncc01sarollhonstdlrsdev";
-    private string settingBlobImageContainerName = "images";
-
+    private readonly Storage _storage;
     private RollOfHonourContext _dbContext { get; set; }
 
-    public PersonRepository(RollOfHonourContext dbContext)
+    public PersonRepository(RollOfHonourContext dbContext, IOptions<Storage> storageSettings)
     {
         _dbContext = dbContext;
+        _storage = storageSettings.Value;
     }
 
     public async Task<Person?> GetById(int id)
@@ -37,7 +37,7 @@ public class PersonRepository : IPersonRepository
                 return null;
             }
 
-            return dbPerson.ToDomainModel(settingBlobName, settingBlobImageContainerName);
+            return dbPerson.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName);
         }
         catch (InvalidOperationException)
         {
@@ -86,7 +86,7 @@ public class PersonRepository : IPersonRepository
         }
 
         IEnumerable<Person> people =
-            dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+            dbPeople.Select(p => p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName));
         return people;
     }
 
@@ -112,7 +112,8 @@ public class PersonRepository : IPersonRepository
             .OrderBy(p => p.LastName)
             .AsNoTracking();
 
-        var results = await dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName))
+        var results = await dbPeople
+            .Select(p => p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
             .ToListAsync();
         return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
     }
@@ -147,7 +148,8 @@ public class PersonRepository : IPersonRepository
         }
 
         return new PaginatedList<Person>(dbPeople.Select(p =>
-                p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToList(), _dbContext.People.Count(),
+                p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName)).ToList(),
+            _dbContext.People.Count(),
             pageIndex, pageSize);
     }
 
