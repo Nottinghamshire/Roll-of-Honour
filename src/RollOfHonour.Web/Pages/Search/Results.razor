@@ -263,9 +263,6 @@
                 await QueryPeopleByRegiment(false, PageIndex);
                 _regimentFilters = await _searchService.GetRegimentFiltersForSearchByRegimentName(BuildRegimentPersonQuery());
                 break;
-
-            default:
-                throw new ArgumentOutOfRangeException();
         }
         _isLoading = false;
     }
@@ -346,8 +343,6 @@
                 break;
             case QueryType.Memorial:
                 break;
-            default:
-                throw new ArgumentOutOfRangeException();
         }
         _isLoading = false;
     }
@@ -379,8 +374,6 @@
                 break;
             case QueryType.Memorial:
                 break;
-            default:
-                throw new ArgumentOutOfRangeException();
         }
         _isLoading = false;
     }
