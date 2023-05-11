@@ -118,9 +118,51 @@ public class PersonRepository : IPersonRepository
         return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
     }
 
-    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearch(PersonQuery query)
+    public async Task<PaginatedList<Person>> SearchPeopleByRegimentName(RegimentPersonQuery query, Filters filters,
+        int pageIndex, int pageSize)
+    {
+        var dbPeople = GetPeopleByRegimentName(query);
+
+        if (filters.IsFiltered)
+        {
+            dbPeople = FilterPeople(dbPeople, filters);
+        }
+
+        var resultCount = dbPeople.Count();
+        if (resultCount == 0)
+        {
+            return new PaginatedList<Person>();
+        }
+
+        dbPeople = dbPeople
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize).Distinct()
+            .OrderBy(p => p.LastName)
+            .AsNoTracking();
+
+        var results = await dbPeople
+            .Select(p => p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
+            .ToListAsync();
+        return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
+    }
+
+    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearch(ISearchQuery query)
     {
         var dbPeople = GetPeopleByName(query);
+        var regiments = await dbPeople
+            .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null &&
+                        !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
+            .Select(p => new RegimentFilter((int)p.SubUnit!.RegimentId!, p.SubUnit!.Regiment!.Name!))
+            .AsNoTracking()
+            .Distinct()
+            .ToListAsync();
+
+        return regiments;
+    }
+
+    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearchByRegimentName(ISearchQuery query)
+    {
+        var dbPeople = GetPeopleByRegimentName(query);
         var regiments = await dbPeople
             .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null &&
                         !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
@@ -164,7 +206,7 @@ public class PersonRepository : IPersonRepository
         {
             people = ByWar(people, filters.War);
         }
-        
+
         // Default is Military
         people = PersonTypeFilter(people, filters.SelectedPersonType);
 
@@ -188,7 +230,7 @@ public class PersonRepository : IPersonRepository
         return people.Where(p =>
             p.WarId != null && p.WarId.HasValue && filtersWar!.Value == (War)p.WarId);
     }
-    
+
     private IQueryable<Models.DB.Person> ByRegiment(IQueryable<Models.DB.Person> people, HashSet<int> regimentIds)
     {
         return people.Where(p =>
@@ -205,7 +247,7 @@ public class PersonRepository : IPersonRepository
         return people.Where(p => p.DateOfBirth >= date);
     }
 
-    private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query)
+    private IQueryable<Models.DB.Person> GetPeopleByName(ISearchQuery query)
     {
         var dbPeople = _dbContext.People
             .Include(p => p.Photos)
@@ -216,6 +258,25 @@ public class PersonRepository : IPersonRepository
             .ThenInclude(unit => unit!.Regiment)
             .Where(p => p.Deleted == false && (p.FirstNames!.Contains(query.SearchTerm)
                                                || p.LastName!.Contains(query.SearchTerm)));
+
+        return dbPeople;
+    }
+
+    private IQueryable<Models.DB.Person> GetPeopleByRegimentName(ISearchQuery query)
+    {
+        var dbPeople = _dbContext.People
+            .Include(p => p.Photos)
+            .Include(p => p.Decorations)
+            .Include(p => p.RecordedNames)
+            .ThenInclude(rn => rn.WarMemorial)
+            .Include(p => p.SubUnit)
+            .ThenInclude(unit => unit!.Regiment)
+            .Where(p => p.SubUnit != null
+                        && p.SubUnit.Regiment != null
+                        && p.SubUnit.Regiment.Name != null
+                        && p.SubUnit.Regiment.Name.Contains(query.SearchTerm)
+                        && p.Deleted == false
+            );
 
         return dbPeople;
     }

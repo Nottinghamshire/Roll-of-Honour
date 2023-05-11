@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace RollOfHonour.Core.Models
 {
     public class PaginatedList<T> : List<T>
@@ -10,6 +5,7 @@ namespace RollOfHonour.Core.Models
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
         public int PageSize { get; private set; }
+        public int ResultsCount { get; set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
@@ -17,6 +13,7 @@ namespace RollOfHonour.Core.Models
             PageSize = pageSize;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             this.AddRange(items);
+            ResultsCount = count;
         }
 
         public PaginatedList()

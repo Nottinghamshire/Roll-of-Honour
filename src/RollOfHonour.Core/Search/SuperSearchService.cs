@@ -21,7 +21,38 @@ public class SuperSearchService : ISuperSearchService
         return await _personRepository.GetRegimentFiltersForSearch(query);
     }
 
-    public async Task<Result<PaginatedList<Core.Models.Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber,
+    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearchByRegimentName(RegimentPersonQuery query)
+    {
+        return await _personRepository.GetRegimentFiltersForSearchByRegimentName(query);
+    }
+
+    public async Task<Result<PaginatedList<Memorial>>> MemorialSearch(MemorialQuery query, int pageNumber, int pageSize)
+    {
+        if (string.IsNullOrEmpty(query.SearchTerm))
+        {
+            var errors = new List<ValidationError>
+            {
+                new()
+                {
+                    Identifier = nameof(query.SearchTerm),
+                    ErrorMessage = $"{nameof(query.SearchTerm)} is required."
+                }
+            };
+
+            return Result<PaginatedList<Memorial>>.Invalid(errors);
+        }
+
+        var memorialResults = await _memorialRepository.SearchMemorials(query.SearchTerm, pageNumber, pageSize);
+
+        if (!memorialResults.Any())
+        {
+            return Result<PaginatedList<Memorial>>.NotFound();
+        }
+
+        return memorialResults;
+    }
+
+    public async Task<Result<PaginatedList<Person>>> PersonSearch(PersonQuery query, Filters filters, int pageNumber,
         int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
@@ -35,21 +66,21 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<PaginatedList<Core.Models.Memorial>>.Invalid(errors);
+            return Result<PaginatedList<Person>>.Invalid(errors);
         }
 
-        var memorialResults = await _memorialRepository.SearchMemorials(query.SearchTerm, pageNumber, pageSize);
+        var peopleResults = await _personRepository.SearchPeople(query, filters, pageNumber, pageSize);
 
-        if (!memorialResults.Any())
+        if (!peopleResults.Any())
         {
-            return Result<PaginatedList<Core.Models.Memorial>>.NotFound();
+            return Result<PaginatedList<Person>>.NotFound();
         }
 
-        return memorialResults;
+        return peopleResults;
     }
 
-    public async Task<Result<PaginatedList<Core.Models.Person>>> PersonSearch(PersonQuery query, Filters filters,
-        int pageNumber, int pageSize)
+    public async Task<Result<PaginatedList<Person>>> PersonSearchByRegimentName(RegimentPersonQuery query,
+        Filters filters, int pageNumber, int pageSize)
     {
         if (string.IsNullOrEmpty(query.SearchTerm))
         {
@@ -62,14 +93,14 @@ public class SuperSearchService : ISuperSearchService
                 }
             };
 
-            return Result<PaginatedList<Core.Models.Person>>.Invalid(errors);
+            return Result<PaginatedList<Person>>.Invalid(errors);
         }
 
-        var peopleResults = await _personRepository.SearchPeople(query, filters, pageNumber, pageSize);
+        var peopleResults = await _personRepository.SearchPeopleByRegimentName(query, filters, pageNumber, pageSize);
 
         if (!peopleResults.Any())
         {
-            return Result<PaginatedList<Core.Models.Person>>.NotFound();
+            return Result<PaginatedList<Person>>.NotFound();
         }
 
         return peopleResults;

@@ -4,7 +4,6 @@
 @inject IJSRuntime JSRuntime;
 @inject NavigationManager navManager;
 @using Ardalis.Result;
-@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using RollOfHonour.Core.Enums;
 @using RollOfHonour.Core.Models;
 @using RollOfHonour.Core.Models.Search;
@@ -32,7 +31,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/search-results.html" aria-current="location" class="current">
+                        <a href="/results" aria-current="location" class="current">
                             Search Results for "@SearchString"
                         </a>
                     </li>
@@ -40,14 +39,14 @@
             </nav>
         </div>
 
-        @if ( HasResults || _isLoading)
+        @if (HasResults || _isLoading)
         {
             <div class="columns is-multiline">
 
                 <div id="results-jump-to" class="column is-full-tablet is-8-desktop is-8-widescreen is-8-fullhd">
 
                     <div class="text-block">
-                        <h1>Search results for <span class="highlight">"@SearchString"</span></h1>
+                        <h1>Search results for <span class="highlight">"@SearchString"</span> (Count @ResultsCount)</h1>
                         <p>
                             The results for your search are listed below. You can make further adjustments to your search if
                             you need
@@ -61,7 +60,7 @@
                         @bind-IsLoading="_isLoading"
                         ChangePage="@ChangePage"/>
                 </div>
-                @if (_selectedQueryType == QueryType.Person)
+                @if (_selectedQueryType == QueryType.Person || _selectedQueryType == QueryType.Regiment)
                 {
                     <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
                         <aside class="sidebar" id="jumpto-filters">
@@ -224,7 +223,8 @@
         private const int _pageSize = 10;
     public PaginatedList<Memorial> MemorialSearchResults = new();
     public PaginatedList<Person> PersonSearchResults = new();
-    public bool HasResults => (MemorialSearchResults.Any() || PersonSearchResults.Any());
+    public bool HasResults => MemorialSearchResults.Any() || PersonSearchResults.Any();
+    public int ResultsCount => PersonSearchResults.ResultsCount + MemorialSearchResults.ResultsCount;
 
     protected override async Task OnInitializedAsync()
     {
@@ -232,29 +232,40 @@
         PersonSearchResults = new();
         MemorialSearchResults = new();
 
-        if (_selectedQueryType == QueryType.Person)
+        switch (_selectedQueryType)
         {
-            await QueryPeople(false, PageIndex);
-            _regimentFilters = await _searchService.GetRegimentFiltersForSearch(BuildPersonQuery());
-        }
+            case QueryType.Person:
+                await QueryPeople(false, PageIndex);
+                _regimentFilters = await _searchService.GetRegimentFiltersForSearch(BuildPersonQuery());
+                break;
 
-        else if (_selectedQueryType == QueryType.Memorial)
-        {
-            var searchQuery = BuildMemorialQuery();
-
-            Result<PaginatedList<Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, _pageSize);
-
-            if (results.IsSuccess is not true)
+            case QueryType.Memorial:
             {
-                return;
+                var searchQuery = BuildMemorialQuery();
+
+                Result<PaginatedList<Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, _pageSize);
+
+                if (results.IsSuccess is not true)
+                {
+                    return;
+                }
+
+                if (!results.Value.Any())
+                {
+                    return;
+                }
+
+                MemorialSearchResults = results.Value;
+                break;
             }
 
-            if (!results.Value.Any())
-            {
-                return;
-            }
+            case QueryType.Regiment:
+                await QueryPeopleByRegiment(false, PageIndex);
+                _regimentFilters = await _searchService.GetRegimentFiltersForSearchByRegimentName(BuildRegimentPersonQuery());
+                break;
 
-            MemorialSearchResults = results.Value;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
         _isLoading = false;
     }
@@ -292,12 +303,52 @@
         }
     }
 
+    private async Task QueryPeopleByRegiment(bool stateChangeNeeded, int pageIndex)
+    {
+        PersonSearchResults = new();
+        if (_selectedQueryType == QueryType.Regiment)
+        {
+            var query = BuildRegimentPersonQuery();
+            var filters = new Filters(_selectedWar, _dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
+            Result<PaginatedList<Person>> results = await _searchService.PersonSearchByRegimentName(query, filters, pageIndex, _pageSize);
+
+            if (results.IsSuccess is not true)
+            {
+                return;
+            }
+
+            if (!results.Value.Any())
+            {
+                return;
+            }
+
+
+            PersonSearchResults = results.Value;
+            if (stateChangeNeeded)
+            {
+                StateHasChanged();
+            }
+        }
+    }
+
     private async Task FilterSearch()
     {
         _isLoading = true;
         PageIndex = 1;
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
-        await QueryPeople(true, PageIndex);
+        switch (_selectedQueryType)
+        {
+            case QueryType.Regiment:
+                await QueryPeopleByRegiment(true, PageIndex);
+                break;
+            case QueryType.Person:
+                await QueryPeople(true, PageIndex);
+                break;
+            case QueryType.Memorial:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         _isLoading = false;
     }
 
@@ -318,13 +369,37 @@
         _isLoading = true;
         PageIndex = page;
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
-        await QueryPeople(true, PageIndex);
+        switch (_selectedQueryType)
+        {
+            case QueryType.Regiment:
+                await QueryPeopleByRegiment(true, PageIndex);
+                break;
+            case QueryType.Person:
+                await QueryPeople(true, PageIndex);
+                break;
+            case QueryType.Memorial:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         _isLoading = false;
     }
 
     private PersonQuery BuildPersonQuery()
     {
         var searchQuery = new PersonQuery
+        {
+            SearchTerm = SearchString,
+            SelectedWar = _selectedWar,
+            PersonType = _selectedPersonType,
+        };
+
+        return searchQuery;
+    }
+
+    private RegimentPersonQuery BuildRegimentPersonQuery()
+    {
+        var searchQuery = new RegimentPersonQuery
         {
             SearchTerm = SearchString,
             SelectedWar = _selectedWar,
