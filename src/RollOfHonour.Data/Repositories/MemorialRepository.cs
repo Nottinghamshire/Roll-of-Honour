@@ -32,7 +32,7 @@ public class MemorialRepository : IMemorialRepository
                 return null;
             }
 
-            return dbMemorial.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName);
+            return dbMemorial.ToDomainModel(_storage.ImageUrlPrefix);
         }
         catch (InvalidOperationException)
         {
@@ -60,7 +60,7 @@ public class MemorialRepository : IMemorialRepository
             .Take(pageSize);
 
         var results = await dbMemorials
-            .Select(m => m.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
+            .Select(m => m.ToDomainModel(_storage.ImageUrlPrefix))
             .ToListAsync();
 
         return new PaginatedList<Memorial>(results, resultCount, pageIndex, pageSize);
@@ -86,7 +86,7 @@ public class MemorialRepository : IMemorialRepository
         }
 
         return new PaginatedList<Memorial>(
-            dbMemorials.Select(m => m.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
+            dbMemorials.Select(m => m.ToDomainModel(_storage.ImageUrlPrefix))
                 .ToList(), _dbContext.WarMemorials.Count(), pageIndex, pageSize);
     }
 }

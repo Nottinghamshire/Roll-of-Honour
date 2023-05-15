@@ -2,7 +2,7 @@
 
 public partial class WarMemorial
 {
-    public Core.Models.Memorial ToDomainModel(string blobServiceName, string blobImagesContainer)
+    public Core.Models.Memorial ToDomainModel(string imageUrlPrefix)
     {
         var domainRecordedNames = this.RecordedNames.Select(recordedName => new Core.Models.RecordedName(recordedName.AsRecorded!)
         {
@@ -32,7 +32,7 @@ public partial class WarMemorial
 
         foreach (var photo in this.Photos)
         {
-            memorial.Photos.Add(photo.ToDomainModel(blobServiceName, blobImagesContainer));
+            memorial.Photos.Add(photo.ToDomainModel(imageUrlPrefix));
         }
 
 
