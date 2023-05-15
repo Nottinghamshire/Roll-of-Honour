@@ -37,7 +37,7 @@ public class PersonRepository : IPersonRepository
                 return null;
             }
 
-            return dbPerson.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName);
+            return dbPerson.ToDomainModel(_storage.ImageUrlPrefix);
         }
         catch (InvalidOperationException)
         {
@@ -86,7 +86,7 @@ public class PersonRepository : IPersonRepository
         }
 
         IEnumerable<Person> people =
-            dbPeople.Select(p => p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName));
+            dbPeople.Select(p => p.ToDomainModel(_storage.ImageUrlPrefix));
         return people;
     }
 
@@ -113,7 +113,7 @@ public class PersonRepository : IPersonRepository
             .AsNoTracking();
 
         var results = await dbPeople
-            .Select(p => p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
+            .Select(p => p.ToDomainModel(_storage.ImageUrlPrefix))
             .ToListAsync();
         return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
     }
@@ -141,7 +141,7 @@ public class PersonRepository : IPersonRepository
             .AsNoTracking();
 
         var results = await dbPeople
-            .Select(p => p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName))
+            .Select(p => p.ToDomainModel(_storage.ImageUrlPrefix))
             .ToListAsync();
         return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
     }
@@ -190,7 +190,7 @@ public class PersonRepository : IPersonRepository
         }
 
         return new PaginatedList<Person>(dbPeople.Select(p =>
-                p.ToDomainModel(_storage.BlobName, _storage.BlobImageContainerName)).ToList(),
+                p.ToDomainModel(_storage.ImageUrlPrefix)).ToList(),
             _dbContext.People.Count(),
             pageIndex, pageSize);
     }

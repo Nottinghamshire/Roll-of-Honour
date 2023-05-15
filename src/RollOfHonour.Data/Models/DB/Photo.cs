@@ -5,9 +5,9 @@ namespace RollOfHonour.Data.Models.DB;
 
 public class Photo
 {
-  public Core.Models.Photo ToDomainModel(string blobServiceName, string blobImagesContainer)
+  public Core.Models.Photo ToDomainModel(string imageUrlPrefix)
   {
-    var photo = new Core.Models.Photo(blobServiceName, blobImagesContainer)
+    var photo = new Core.Models.Photo(imageUrlPrefix)
     {
       Id = this.Id,
       Name = this.Name ?? string.Empty,

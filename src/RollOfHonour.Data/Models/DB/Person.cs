@@ -2,7 +2,7 @@
 
 public class Person
 {
-    public Core.Models.Person ToDomainModel(string blobServiceName, string blobImagesContainer)
+    public Core.Models.Person ToDomainModel(string imageUrlPrefix)
     {
         var person = new Core.Models.Person(this.MainPhotoId)
         {
@@ -43,7 +43,7 @@ public class Person
 
         foreach (var photo in this.Photos)
         {
-            person.Photos.Add(photo.ToDomainModel(blobServiceName, blobImagesContainer));
+            person.Photos.Add(photo.ToDomainModel(imageUrlPrefix));
         }
 
         return person;
