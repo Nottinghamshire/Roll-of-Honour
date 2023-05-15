@@ -2,7 +2,8 @@ namespace RollOfHonour.Core.Enums
 {
     public enum QueryType
     {
-        Person, 
-        Memorial
+        Person = 0, 
+        Memorial = 1,
+        Regiment = 2
     }
 }

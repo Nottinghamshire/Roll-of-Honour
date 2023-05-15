@@ -4,12 +4,29 @@
     <span class="filter-label">
         Filter by regiment
     </span>
-    <ul class="button-list">
+    <div class="filter-block">
+        @if (ShowRegiments)
+        {
+            <a href="#" title="Hide regiments" class="expand-search" @onclick="@Show">
+                <i class="fas fa-chevron-double-up"></i>
+                <span class="expand-text">Hide all regiments</span>
+            </a>
+        }
+        else
+        {
+            <a href="#" title="Show regiments" class="expand-search" @onclick="@Show">
+                <i class="fas fa-chevron-double-down"></i>
+                <span class="expand-text">Show regiments</span>
+            </a>
+        }
+    </div>
+
+    <ul class="button-list search-expand" hidden="@(!ShowRegiments)">
         @foreach (var regiment in Regiments)
         {
             <li>
                 <div class="button_checkbox">
-                    <input type="checkbox" @onchange="(e => UpdateRegiment(regiment.RegimentId))" id="@regiment.Regiment">
+                    <input type="checkbox" @onchange="_ => UpdateRegiment(regiment.RegimentId)" id="@regiment.Regiment">
                     <label for="@regiment.Regiment">@regiment.Regiment</label>
                 </div>
             </li>
@@ -31,5 +48,17 @@
         {
             await ToggleRegiment.InvokeAsync(regimentId);
         }
+    }
+
+    private bool ShowRegiments { get; set; } = false;
+
+    private void Show()
+    {
+        ShowRegiments = !ShowRegiments;
+    }
+
+    protected override void OnInitialized()
+    {
+        ShowRegiments = !Regiments.Any() || Regiments.Count <= 6;
     }
 }

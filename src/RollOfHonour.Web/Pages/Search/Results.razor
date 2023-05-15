@@ -31,7 +31,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/search-results.html" aria-current="location" class="current">
+                        <a href="/results" aria-current="location" class="current">
                             Search Results for "@SearchString"
                         </a>
                     </li>
@@ -46,7 +46,7 @@
                 <div id="results-jump-to" class="column is-full-tablet is-8-desktop is-8-widescreen is-8-fullhd">
 
                     <div class="text-block">
-                        <h1>Search results for <span class="highlight">"@SearchString"</span></h1>
+                        <h1>Search results for <span class="highlight">"@SearchString"</span> (Count @ResultsCount)</h1>
                         <p>
                             The results for your search are listed below. You can make further adjustments to your search if
                             you need
@@ -60,124 +60,127 @@
                         @bind-IsLoading="_isLoading"
                         ChangePage="@ChangePage"/>
                 </div>
-                <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
-                    <aside class="sidebar" id="jumpto-filters">
-                        <div class="search-filter-block">
-                            <div class="form-toggle-block">
-                                <span class="toggle-label">
-                                    Specific War?
-                                </span>
-                                <ul>
-                                    <InputRadioGroup @bind-Value=@_selectedWar>
-                                        @foreach (var war in (War[])Enum.GetValues(typeof(War)))
-                                        {
-                                            <li>
-                                                <InputRadio class="input-hidden" id=@war Value=@war/>
-                                                @switch (war)
-                                                {
-                                                    case War.WW1:
-                                                        <label class="radio-label" for=@war>
-                                                            <img src="/images/insignia-ww1-search.png" alt="World War 1" class="radio-image"/>
-                                                            <span class="radio-text">World War 1</span>
-                                                        </label>
-                                                        break;
-                                                    case War.WW2:
-                                                        <label class="radio-label" for=@war>
-                                                            <img src="/images/insignia-ww2-search.png" alt="World War 2" class="radio-image"/>
-                                                            <span class="radio-text">World War 2</span>
-                                                        </label>
-                                                        break;
-                                                    default:
-                                                        <label class="radio-label" for=@war></label>
-                                                        break;
-                                                }
-                                            </li>
-                                        }
-                                    </InputRadioGroup>
-                                </ul>
+                @if (_selectedQueryType == QueryType.Person || _selectedQueryType == QueryType.Regiment)
+                {
+                    <div class="column is-full-tablet is-4-desktop is-4-widescreen is-4-fullhd">
+                        <aside class="sidebar" id="jumpto-filters">
+                            <div class="search-filter-block">
+                                <div class="form-toggle-block">
+                                    <span class="toggle-label">
+                                        Specific War?
+                                    </span>
+                                    <ul>
+                                        <InputRadioGroup @bind-Value=@_selectedWar>
+                                            @foreach (var war in (War[])Enum.GetValues(typeof(War)))
+                                            {
+                                                <li>
+                                                    <InputRadio class="input-hidden" id=@war Value=@war/>
+                                                    @switch (war)
+                                                    {
+                                                        case War.WW1:
+                                                            <label class="radio-label" for=@war>
+                                                                <img src="/images/insignia-ww1-search.png" alt="World War 1" class="radio-image"/>
+                                                                <span class="radio-text">World War 1</span>
+                                                            </label>
+                                                            break;
+                                                        case War.WW2:
+                                                            <label class="radio-label" for=@war>
+                                                                <img src="/images/insignia-ww2-search.png" alt="World War 2" class="radio-image"/>
+                                                                <span class="radio-text">World War 2</span>
+                                                            </label>
+                                                            break;
+                                                        default:
+                                                            <label class="radio-label" for=@war></label>
+                                                            break;
+                                                    }
+                                                </li>
+                                            }
+                                        </InputRadioGroup>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        @if (_regimentFilters.Any())
-                        {
-                            <RegimentFilters ToggleRegiment="ToggleRegiment" Regiments="_regimentFilters"/>
-                        }
-                        <div class="search-filter-block">
-                            <div class="date-range-block">
-                                <span class="filter-label">
-                                    Filter between a specific period
-                                </span>
+                            @if (_regimentFilters.Any())
+                            {
+                                <RegimentFilters ToggleRegiment="ToggleRegiment" Regiments="_regimentFilters"/>
+                            }
+                            <div class="search-filter-block">
+                                <div class="date-range-block">
+                                    <span class="filter-label">
+                                        Filter between a specific period
+                                    </span>
 
-                                <ul>
-                                    <li>
-                                        <div class="range-slider">
-                                            <input class="range-slider__range" type="range" @bind=@_dateOfBirthFilter
-                                                   min="1850" max="2000" name="birth_date">
-                                            <span class="range-slider__value">@_dateOfBirthFilter</span>
-                                            <label for="birth_date">Date of Birth</label>
-                                        </div>
-                                    </li>
+                                    <ul>
+                                        <li>
+                                            <div class="range-slider">
+                                                <input class="range-slider__range" type="range" @bind=@_dateOfBirthFilter
+                                                       min="1850" max="2000" name="birth_date">
+                                                <span class="range-slider__value">@_dateOfBirthFilter</span>
+                                                <label for="birth_date">Date of Birth</label>
+                                            </div>
+                                        </li>
 
-                                    <li>
-                                        <div class="range-slider">
-                                            <input class="range-slider__range" type="range" @bind=@_dateOfDeathFilter
-                                                   min="1850" max="2000" name="death_date">
-                                            <span class="range-slider__value">@_dateOfDeathFilter</span>
-                                            <label for="death_date">Date of Death</label>
-                                        </div>
-                                    </li>
-                                </ul>
+                                        <li>
+                                            <div class="range-slider">
+                                                <input class="range-slider__range" type="range" @bind=@_dateOfDeathFilter
+                                                       min="1850" max="2000" name="death_date">
+                                                <span class="range-slider__value">@_dateOfDeathFilter</span>
+                                                <label for="death_date">Date of Death</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="search-filter-block">
-                            <div class="form-toggle-block">
-                                <span class="toggle-label">
-                                    Is this person Military or Civilian?
-                                </span>
-                                <ul>
-                                    <InputRadioGroup @bind-Value=@_selectedPersonType>
-                                        @foreach (var personType in (PersonType[])Enum.GetValues(typeof(PersonType)))
-                                        {
-                                            <li>
-                                                <InputRadio class="input-hidden" id=@personType Value=@personType/>
-                                                @switch (personType)
-                                                {
-                                                    case PersonType.Military:
-                                                        <label class="radio-label" for=@personType>
-                                                            <img src="/images/insignia-military-search.png" alt="Military Records" class="radio-image"/>
-                                                            <span class="radio-text">@personType</span>
-                                                        </label>
-                                                        break;
-                                                    case PersonType.Civilian:
-                                                        <label class="radio-label" for=@personType>
-                                                            <img src="/images/insignia-civilian-search.png" alt="Civilian Records" class="radio-image"/>
-                                                            <span class="radio-text">@personType</span>
-                                                        </label>
-                                                        break;
-                                                    default:
-                                                        <label class="radio-label" for=@personType></label>
-                                                        break;
-                                                }
-                                            </li>
-                                        }
-                                    </InputRadioGroup>
-                                </ul>
+                            <div class="search-filter-block">
+                                <div class="form-toggle-block">
+                                    <span class="toggle-label">
+                                        Is this person Military or Civilian?
+                                    </span>
+                                    <ul>
+                                        <InputRadioGroup @bind-Value=@_selectedPersonType>
+                                            @foreach (var personType in (PersonType[])Enum.GetValues(typeof(PersonType)))
+                                            {
+                                                <li>
+                                                    <InputRadio class="input-hidden" id=@personType Value=@personType/>
+                                                    @switch (personType)
+                                                    {
+                                                        case PersonType.Military:
+                                                            <label class="radio-label" for=@personType>
+                                                                <img src="/images/insignia-military-search.png" alt="Military Records" class="radio-image"/>
+                                                                <span class="radio-text">@personType</span>
+                                                            </label>
+                                                            break;
+                                                        case PersonType.Civilian:
+                                                            <label class="radio-label" for=@personType>
+                                                                <img src="/images/insignia-civilian-search.png" alt="Civilian Records" class="radio-image"/>
+                                                                <span class="radio-text">@personType</span>
+                                                            </label>
+                                                            break;
+                                                        default:
+                                                            <label class="radio-label" for=@personType></label>
+                                                            break;
+                                                    }
+                                                </li>
+                                            }
+                                        </InputRadioGroup>
+                                    </ul>
 
+                                </div>
                             </div>
-                        </div>
 
-                        <button title="Look at this record" type="button" disabled="@_isLoading" @onclick="FilterSearch" class="button primary">
-                            <i
-                                class="fal fa-glasses" aria-hidden="true">
-                            </i> Filter Search
-                        </button>
+                            <button title="Look at this record" type="button" disabled="@_isLoading" @onclick="FilterSearch" class="button primary">
+                                <i
+                                    class="fal fa-glasses" aria-hidden="true">
+                                </i> Filter Search
+                            </button>
 
-                        <a href="#jumpto-results" class="button primary mobile-results-button"
-                           title="Go back to search results">
-                            See your search results
-                        </a>
-                    </aside>
-                </div>
+                            <a href="#jumpto-results" class="button primary mobile-results-button"
+                               title="Go back to search results">
+                                See your search results
+                            </a>
+                        </aside>
+                    </div>
+                }
             </div>
         }
         else
@@ -206,15 +209,11 @@
     public int PageIndex { get; set; } = 1;
 
     [Parameter]
-    [SupplyParameterFromQuery(Name = "w")]
-    public int SelectedWar { get; set; }
-
-    [Parameter]
     [SupplyParameterFromQuery(Name = "qt")]
     public int SelectedQueryType { get; set; }
 
     private QueryType _selectedQueryType { get; set; } = QueryType.Person;
-    private War _selectedWar { get; set; } = War.WW1;
+    private War? _selectedWar { get; set; }
     private PersonType? _selectedPersonType { get; set; }
     private HashSet<int> _regimentIds { get; set; } = new();
     private int _dateOfDeathFilter { get; set; } = 1900;
@@ -224,7 +223,8 @@
         private const int _pageSize = 10;
     public PaginatedList<Memorial> MemorialSearchResults = new();
     public PaginatedList<Person> PersonSearchResults = new();
-    public bool HasResults => (MemorialSearchResults.Count() > 0 || PersonSearchResults.Count() > 0);
+    public bool HasResults => MemorialSearchResults.Any() || PersonSearchResults.Any();
+    public int ResultsCount => PersonSearchResults.ResultsCount + MemorialSearchResults.ResultsCount;
 
     protected override async Task OnInitializedAsync()
     {
@@ -232,29 +232,37 @@
         PersonSearchResults = new();
         MemorialSearchResults = new();
 
-        if (_selectedQueryType == QueryType.Person)
+        switch (_selectedQueryType)
         {
-            await QueryPeople(false, PageIndex);
-            _regimentFilters = await _searchService.GetRegimentFiltersForSearch(BuildPersonQuery());
-        }
+            case QueryType.Person:
+                await QueryPeople(false, PageIndex);
+                _regimentFilters = await _searchService.GetRegimentFiltersForSearch(BuildPersonQuery());
+                break;
 
-        else if (_selectedQueryType == QueryType.Memorial)
-        {
-            var searchQuery = BuildMemorialQuery();
-
-            Result<PaginatedList<Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, _pageSize);
-
-            if (results.IsSuccess is not true)
+            case QueryType.Memorial:
             {
-                return;
+                var searchQuery = BuildMemorialQuery();
+
+                Result<PaginatedList<Memorial>> results = await _searchService.MemorialSearch(searchQuery, PageIndex, _pageSize);
+
+                if (results.IsSuccess is not true)
+                {
+                    return;
+                }
+
+                if (!results.Value.Any())
+                {
+                    return;
+                }
+
+                MemorialSearchResults = results.Value;
+                break;
             }
 
-            if (!results.Value.Any())
-            {
-                return;
-            }
-
-            MemorialSearchResults = results.Value;
+            case QueryType.Regiment:
+                await QueryPeopleByRegiment(false, PageIndex);
+                _regimentFilters = await _searchService.GetRegimentFiltersForSearchByRegimentName(BuildRegimentPersonQuery());
+                break;
         }
         _isLoading = false;
     }
@@ -270,8 +278,36 @@
         if (_selectedQueryType == QueryType.Person)
         {
             var query = BuildPersonQuery();
-            var filters = new Filters(_dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
+            var filters = new Filters(_selectedWar, _dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
             Result<PaginatedList<Person>> results = await _searchService.PersonSearch(query, filters, pageIndex, _pageSize);
+
+            if (results.IsSuccess is not true)
+            {
+                return;
+            }
+
+            if (!results.Value.Any())
+            {
+                return;
+            }
+
+
+            PersonSearchResults = results.Value;
+            if (stateChangeNeeded)
+            {
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task QueryPeopleByRegiment(bool stateChangeNeeded, int pageIndex)
+    {
+        PersonSearchResults = new();
+        if (_selectedQueryType == QueryType.Regiment)
+        {
+            var query = BuildRegimentPersonQuery();
+            var filters = new Filters(_selectedWar, _dateOfDeathFilter, _dateOfBirthFilter, _selectedPersonType, _regimentIds);
+            Result<PaginatedList<Person>> results = await _searchService.PersonSearchByRegimentName(query, filters, pageIndex, _pageSize);
 
             if (results.IsSuccess is not true)
             {
@@ -297,7 +333,17 @@
         _isLoading = true;
         PageIndex = 1;
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
-        await QueryPeople(true, PageIndex);
+        switch (_selectedQueryType)
+        {
+            case QueryType.Regiment:
+                await QueryPeopleByRegiment(true, PageIndex);
+                break;
+            case QueryType.Person:
+                await QueryPeople(true, PageIndex);
+                break;
+            case QueryType.Memorial:
+                break;
+        }
         _isLoading = false;
     }
 
@@ -318,7 +364,17 @@
         _isLoading = true;
         PageIndex = page;
         _ = await JSRuntime.InvokeAsync<bool>("scrollToElementId", "results-jump-to");
-        await QueryPeople(true, PageIndex);
+        switch (_selectedQueryType)
+        {
+            case QueryType.Regiment:
+                await QueryPeopleByRegiment(true, PageIndex);
+                break;
+            case QueryType.Person:
+                await QueryPeople(true, PageIndex);
+                break;
+            case QueryType.Memorial:
+                break;
+        }
         _isLoading = false;
     }
 
@@ -333,7 +389,19 @@
 
         return searchQuery;
     }
- 
+
+    private RegimentPersonQuery BuildRegimentPersonQuery()
+    {
+        var searchQuery = new RegimentPersonQuery
+        {
+            SearchTerm = SearchString,
+            SelectedWar = _selectedWar,
+            PersonType = _selectedPersonType,
+        };
+
+        return searchQuery;
+    }
+
     private MemorialQuery BuildMemorialQuery()
     {
         var searchQuery = new MemorialQuery
@@ -347,7 +415,6 @@
     private void SetSearchParamsFromQuery()
     {
         _selectedQueryType = (QueryType)SelectedQueryType;
-        _selectedWar = (War)SelectedWar;
     }
 
     private void ReturnToSearch()

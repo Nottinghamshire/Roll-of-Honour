@@ -6,258 +6,270 @@
     <div class="column">
         <div class="text-block">
             <h1>Search our database</h1>
-            <p>Our database includes a list of all the war memorials in and around Nottinghamshire. You can use this
-                page to search for a specific record, just fill in the fields below to start your search.</p>
+            <p>
+                Our database includes a list of all the war memorials in and around Nottinghamshire. You can use this
+                page to search for a specific record, just fill in the fields below to start your search.
+            </p>
         </div>
     </div>
 </div>
 
 <div class="search-block" style="width: 100%; margin-bottom: 5%;">
-    <div class="form-block" data-aos="fade-up">
-        <form id="search-all" action="javascript:void(0);" >
-            <div class="columns is-multiline">
-                <div class="column is-12-tablet is-12-desktop is-6-widescreen is-8-fullhd">
-                    <div class="form-row">
-                        <label for="searchquery" id="Query-ariaLabel">Begin your search by entering a name
-                            below:</label>
-                        <input @bind="@searchTerm" id="searchquery" name="Query" class="input-text" type="text"
-                            aria-labelledby="Query-ariaLabel" title="Enter your search query here..."
-                            placeholder="e.g. Ken Ashford" />
-                    </div>
-                </div>
-
-                <div class="column is-6-tablet is-6-desktop is-3-widescreen is-2-fullhd">
-                    <div class="form-toggle-block">
-                        <span class="toggle-label">
-                            Specific War?
-                        </span>
-                        <InputRadioGroup name="war" @bind-Value="@_selectedWar">
-                        <ul>
-                            <li>
-                                <InputRadio Value=@War.WW1 name="war" id="ww1" class="input-hidden ww1" />
-                                <label for="ww1" class="radio-label">
-                                    <img src="/images/insignia-ww1-search.png" alt="World War 1" class="radio-image" />
-                                    <span class="radio-text">World War 1</span>
-                                </label>
-                            </li>
-                            <li>
-                                <InputRadio Value=@War.WW2 name="war" id="ww2" class="input-hidden ww2" />
-                                <label for="ww2" class="radio-label">
-                                    <img src="/images/insignia-ww2-search.png" alt="World War 2" class="radio-image" />
-                                    <span class="radio-text">World War 2</span>
-                                </label>
-                            </li>
-                        </ul>
-                        </InputRadioGroup>
-                    </div>
-                </div>
-
-                <div class="column is-6-tablet is-6-desktop is-3-widescreen is-2-fullhd">
-                    <div class="form-toggle-block">
-                        <span class="toggle-label">
-                            Type of record?
-                        </span>
-                        <InputRadioGroup name="search-type" @bind-Value="@_selectedQueryType">
-                        <ul>
-                            <li>
-                                <InputRadio Value=@QueryType.Person name="search-type" id="person" class="input-hidden filter-person"
-                                    checked />
-                                <label for="person" class="radio-label">
-                                    <img src="/images/insignia-person.png" alt="People Records" class="radio-image" />
-                                    <span class="radio-text">Person</span>
-                                </label>
-                            </li>
-                            <li>
-                                <InputRadio Value=@QueryType.Memorial name="search-type" id="memorial"
-                                    class="input-hidden filter-memorial" />
-                                <label for="memorial" class="radio-label">
-                                    <img src="/images/insignia-memorial.png" alt="Memorial Records"
-                                        class="radio-image" />
-                                    <span class="radio-text">Memorial</span>
-                                </label>
-                            </li>
-                        </ul>
-                        </InputRadioGroup>
-                    </div>
-                </div>
-
-            </div>
-
-            <!--<div class="columns">
-                <div class="column">
-                    <div class="filter-block">
-                        <a href="#" title="Show more search options" class="expand-search"><i
-                                class="fas fa-chevron-double-down"></i> <span class="expand-text">Show more search
-                                options</span><span class="expand-text hide">Show less search options</span></a>
-                    </div>
-                </div>
-            </div>-->
-
-
-            <!--<div class="search-expand">
-                <div class="columns is-multiline is-vcentered">
-                    <div class="column is-12-tablet is-12-desktop is-12-widescreen is-5-fullhd">
-                        <span class="filter-label">
-                            Search from Battalions
-                        </span>
-                        <ul class="button-list">
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_1">
-                                    <label for="battalion_1">101st Airborne Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_2">
-                                    <label for="battalion_2">1st Armored Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_3">
-                                    <label for="battalion_3">1st Infantry Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_4">
-                                    <label for="battalion_4">2nd Infantry Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_5">
-                                    <label for="battalion_5">3rd Infantry Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_6">
-                                    <label for="battalion_6">4th Armored Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_7">
-                                    <label for="battalion_7">5th Infantry Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_8">
-                                    <label for="battalion_8">7th Armored Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_9">
-                                    <label for="battalion_9">7th Infantry Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_10">
-                                    <label for="battalion_10">10th Mountain Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_11">
-                                    <label for="battalion_11">11th Armored Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_12">
-                                    <label for="battalion_12">12th Armored Division</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="button_checkbox">
-                                    <input type="checkbox" id="battalion_13">
-                                    <label for="battalion_13">17th Airborne Division</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="column is-12-tablet is-6-desktop is-6-widescreen is-4-fullhd">
-
-                        <div class="date-range-block">
-                            <span class="filter-label">
-                                Search between a specific period
-                            </span>
-
-                            <ul>
-                                <li>
-                                    <div class="range-slider">
-                                        <input class="range-slider__range" type="range" value="1900" min="1850"
-                                            max="2000" name="birth_date">
-                                        <span class="range-slider__value">0</span>
-                                        <label for="birth_date">Date of Birth</label>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="range-slider">
-                                        <input class="range-slider__range" type="range" value="1950" min="1850"
-                                            max="2000" name="death_date">
-                                        <span class="range-slider__value">0</span>
-                                        <label for="death_date">Date of Death</label>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                    <div class="column is-12-tablet is-6-desktop is-6-widescreen is-3-fullhd">
-                        <div class="form-toggle-block">
-                            <span class="toggle-label">
-                                Is this person Civilian or Military?
-                            </span>
-                            <ul>
-                                <li>
-                                    <input type="radio" name="person-type" id="civilian" class="input-hidden" checked />
-                                    <label for="civilian" class="radio-label">
-                                        <img src="/images/insignia-civilian-search.png" alt="Civilian Records"
-                                            class="radio-image" />
-                                        <span class="radio-text">Civilian</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input type="radio" name="person-type" id="military" class="input-hidden" />
-                                    <label for="military" class="radio-label">
-                                        <img src="/images/insignia-military-search.png" alt="Military Records"
-                                            class="radio-image" />
-                                        <span class="radio-text">Military</span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
-
-            <div class="columns">
-                <div class="column is-full">
-                    <div class="form-row">
-                        <button type="submit" value="Search" @onclick="SearchRollOfHonour"
-                            class="submit-button centered"><i class="fal fa-file-search"></i> Search our
-                            records</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+<div class="form-block" data-aos="fade-up">
+<form id="search-all" action="javascript:void(0);">
+<div class="columns is-multiline">
+    <div class="column is-12-tablet is-12-desktop is-5-widescreen is-7-fullhd">
+        <div class="form-row">
+            <label for="searchquery" id="Query-ariaLabel">
+                Begin your search by entering a name
+                below:
+            </label>
+            <input @bind="@searchTerm" id="searchquery" name="Query" class="input-text" type="text"
+                   aria-labelledby="Query-ariaLabel" title="Enter your search query here..."
+                   placeholder="e.g. Ken Ashford"/>
+        </div>
     </div>
+
+    <div class="column is-5-tablet is-6-desktop is-3-widescreen is-2-fullhd">
+        <div class="form-toggle-block">
+            <span class="toggle-label">
+                Specific War?
+            </span>
+            <InputRadioGroup name="war" @bind-Value="@_selectedWar">
+                <ul>
+                    <li>
+                        <InputRadio Value=@War.WW1 name="war" id="ww1" class="input-hidden ww1"/>
+                        <label for="ww1" class="radio-label">
+                            <img src="/images/insignia-ww1-search.png" alt="World War 1" class="radio-image"/>
+                            <span class="radio-text">World War 1</span>
+                        </label>
+                    </li>
+                    <li>
+                        <InputRadio Value=@War.WW2 name="war" id="ww2" class="input-hidden ww2"/>
+                        <label for="ww2" class="radio-label">
+                            <img src="/images/insignia-ww2-search.png" alt="World War 2" class="radio-image"/>
+                            <span class="radio-text">World War 2</span>
+                        </label>
+                    </li>
+                </ul>
+            </InputRadioGroup>
+        </div>
+    </div>
+
+    <div class="column is-7-tablet is-6-desktop is-4-widescreen is-3-fullhd">
+        <div class="form-toggle-block">
+            <span class="toggle-label">
+                Type of record?
+            </span>
+            <InputRadioGroup name="search-type" @bind-Value="@_selectedQueryType">
+                <ul>
+                    <li class="third">
+                        <InputRadio Value=@QueryType.Person name="search-type" id="person" class="input-hidden filter-person" checked/>
+                        <label for="person" class="radio-label">
+                            <img src="/images/insignia-person.png" alt="People Records" class="radio-image"/>
+                            <span class="radio-text">Person</span>
+                        </label>
+                    </li>
+                    <li class="third">
+                        <InputRadio Value=@QueryType.Memorial name="search-type" id="memorial" class="input-hidden filter-memorial"/>
+                        <label for="memorial" class="radio-label">
+                            <img src="/images/insignia-memorial.png" alt="Memorial Records"
+                                 class="radio-image"/>
+                            <span class="radio-text">Memorial</span>
+                        </label>
+                    </li>
+                    <li class="third">
+                        <InputRadio Value=@QueryType.Regiment name="search-type" id="regiment" class="input-hidden filter-regiment"/>
+                        <label for="regiment" class="radio-label">
+                            <img src="/images/insignia-regiment.png" alt="Regiment Records" class="radio-image"/>
+                            <span class="radio-text">Regiment</span>
+                        </label>
+                    </li>
+                </ul>
+            </InputRadioGroup>
+        </div>
+    </div>
+
+</div>
+
+<!--<div class="columns">
+    <div class="column">
+        <div class="filter-block">
+            <a href="#" title="Show more search options" class="expand-search"><i
+                                                                                   class="fas fa-chevron-double-down"></i> <span class="expand-text">Show more search
+                options</span><span class="expand-text hide">Show less search options</span></a>
+        </div>
+    </div>
+</div>-->
+
+
+<!--<div class="search-expand">
+    <div class="columns is-multiline is-vcentered">
+        <div class="column is-12-tablet is-12-desktop is-12-widescreen is-5-fullhd">
+            <span class="filter-label">
+                Search from Battalions
+            </span>
+            <ul class="button-list">
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_1">
+                        <label for="battalion_1">101st Airborne Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_2">
+                        <label for="battalion_2">1st Armored Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_3">
+                        <label for="battalion_3">1st Infantry Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_4">
+                        <label for="battalion_4">2nd Infantry Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_5">
+                        <label for="battalion_5">3rd Infantry Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_6">
+                        <label for="battalion_6">4th Armored Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_7">
+                        <label for="battalion_7">5th Infantry Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_8">
+                        <label for="battalion_8">7th Armored Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_9">
+                        <label for="battalion_9">7th Infantry Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_10">
+                        <label for="battalion_10">10th Mountain Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_11">
+                        <label for="battalion_11">11th Armored Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_12">
+                        <label for="battalion_12">12th Armored Division</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="button_checkbox">
+                        <input type="checkbox" id="battalion_13">
+                        <label for="battalion_13">17th Airborne Division</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="column is-12-tablet is-6-desktop is-6-widescreen is-4-fullhd">
+
+            <div class="date-range-block">
+                <span class="filter-label">
+                    Search between a specific period
+                </span>
+
+                <ul>
+                    <li>
+                        <div class="range-slider">
+                            <input class="range-slider__range" type="range" value="1900" min="1850"
+                                   max="2000" name="birth_date">
+                            <span class="range-slider__value">0</span>
+                            <label for="birth_date">Date of Birth</label>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="range-slider">
+                            <input class="range-slider__range" type="range" value="1950" min="1850"
+                                   max="2000" name="death_date">
+                            <span class="range-slider__value">0</span>
+                            <label for="death_date">Date of Death</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="column is-12-tablet is-6-desktop is-6-widescreen is-3-fullhd">
+            <div class="form-toggle-block">
+                <span class="toggle-label">
+                    Is this person Civilian or Military?
+                </span>
+                <ul>
+                    <li>
+                        <input type="radio" name="person-type" id="civilian" class="input-hidden" checked />
+                        <label for="civilian" class="radio-label">
+                            <img src="/images/insignia-civilian-search.png" alt="Civilian Records"
+                                 class="radio-image" />
+                            <span class="radio-text">Civilian</span>
+                        </label>
+                    </li>
+                    <li>
+                        <input type="radio" name="person-type" id="military" class="input-hidden" />
+                        <label for="military" class="radio-label">
+                            <img src="/images/insignia-military-search.png" alt="Military Records"
+                                 class="radio-image" />
+                            <span class="radio-text">Military</span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<div class="columns">
+    <div class="column is-full">
+        <div class="form-row">
+            <button type="submit" value="Search" @onclick="SearchRollOfHonour"
+                    class="submit-button centered">
+                <i class="fal fa-file-search"></i> Search our
+                records
+            </button>
+        </div>
+    </div>
+</div>
+</form>
+</div>
 </div>
 
 @code {
     private string searchTerm = "";
-    private War _selectedWar = War.WW1;
+    private War? _selectedWar;
     private QueryType _selectedQueryType = QueryType.Person;
 
     private void SearchRollOfHonour()
     {
-        navManager.NavigateTo($"/Results?s={searchTerm}&w={(int)_selectedWar}&qt={(int)_selectedQueryType}");
+        navManager.NavigateTo($"/Results?s={searchTerm}&qt={(int)_selectedQueryType}");
     }
+
 }

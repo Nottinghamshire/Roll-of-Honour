@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RollOfHonour.Core;
 using RollOfHonour.Core.Enums;
-using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
@@ -10,14 +11,13 @@ namespace RollOfHonour.Data.Repositories;
 
 public class PersonRepository : IPersonRepository
 {
-    private string settingBlobName = "ncc01sarollhonstdlrsdev";
-    private string settingBlobImageContainerName = "images";
-
+    private readonly Storage _storage;
     private RollOfHonourContext _dbContext { get; set; }
 
-    public PersonRepository(RollOfHonourContext dbContext)
+    public PersonRepository(RollOfHonourContext dbContext, IOptions<Storage> storageSettings)
     {
         _dbContext = dbContext;
+        _storage = storageSettings.Value;
     }
 
     public async Task<Person?> GetById(int id)
@@ -37,7 +37,7 @@ public class PersonRepository : IPersonRepository
                 return null;
             }
 
-            return dbPerson.ToDomainModel(settingBlobName, settingBlobImageContainerName);
+            return dbPerson.ToDomainModel(_storage.ImageUrlPrefix);
         }
         catch (InvalidOperationException)
         {
@@ -86,7 +86,7 @@ public class PersonRepository : IPersonRepository
         }
 
         IEnumerable<Person> people =
-            dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName));
+            dbPeople.Select(p => p.ToDomainModel(_storage.ImageUrlPrefix));
         return people;
     }
 
@@ -112,14 +112,57 @@ public class PersonRepository : IPersonRepository
             .OrderBy(p => p.LastName)
             .AsNoTracking();
 
-        var results = await dbPeople.Select(p => p.ToDomainModel(settingBlobName, settingBlobImageContainerName))
+        var results = await dbPeople
+            .Select(p => p.ToDomainModel(_storage.ImageUrlPrefix))
             .ToListAsync();
         return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
     }
 
-    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearch(PersonQuery query)
+    public async Task<PaginatedList<Person>> SearchPeopleByRegimentName(RegimentPersonQuery query, Filters filters,
+        int pageIndex, int pageSize)
+    {
+        var dbPeople = GetPeopleByRegimentName(query);
+
+        if (filters.IsFiltered)
+        {
+            dbPeople = FilterPeople(dbPeople, filters);
+        }
+
+        var resultCount = dbPeople.Count();
+        if (resultCount == 0)
+        {
+            return new PaginatedList<Person>();
+        }
+
+        dbPeople = dbPeople
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize).Distinct()
+            .OrderBy(p => p.LastName)
+            .AsNoTracking();
+
+        var results = await dbPeople
+            .Select(p => p.ToDomainModel(_storage.ImageUrlPrefix))
+            .ToListAsync();
+        return new PaginatedList<Person>(results, resultCount, pageIndex, pageSize);
+    }
+
+    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearch(ISearchQuery query)
     {
         var dbPeople = GetPeopleByName(query);
+        var regiments = await dbPeople
+            .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null &&
+                        !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
+            .Select(p => new RegimentFilter((int)p.SubUnit!.RegimentId!, p.SubUnit!.Regiment!.Name!))
+            .AsNoTracking()
+            .Distinct()
+            .ToListAsync();
+
+        return regiments;
+    }
+
+    public async Task<List<RegimentFilter>> GetRegimentFiltersForSearchByRegimentName(ISearchQuery query)
+    {
+        var dbPeople = GetPeopleByRegimentName(query);
         var regiments = await dbPeople
             .Where(p => p.SubUnit != null && p.SubUnit.RegimentId.HasValue && p.SubUnit.Regiment != null &&
                         !string.IsNullOrEmpty(p.SubUnit.Regiment.Name))
@@ -147,7 +190,8 @@ public class PersonRepository : IPersonRepository
         }
 
         return new PaginatedList<Person>(dbPeople.Select(p =>
-                p.ToDomainModel(settingBlobName, settingBlobImageContainerName)).ToList(), _dbContext.People.Count(),
+                p.ToDomainModel(_storage.ImageUrlPrefix)).ToList(),
+            _dbContext.People.Count(),
             pageIndex, pageSize);
     }
 
@@ -158,6 +202,11 @@ public class PersonRepository : IPersonRepository
 
     private IQueryable<Models.DB.Person> FilterPeople(IQueryable<Models.DB.Person> people, Filters filters)
     {
+        if (filters.WarIsSelected)
+        {
+            people = ByWar(people, filters.War);
+        }
+
         // Default is Military
         people = PersonTypeFilter(people, filters.SelectedPersonType);
 
@@ -176,6 +225,12 @@ public class PersonRepository : IPersonRepository
     }
 
 
+    private IQueryable<Models.DB.Person> ByWar(IQueryable<Models.DB.Person> people, War? filtersWar)
+    {
+        return people.Where(p =>
+            p.WarId != null && p.WarId.HasValue && filtersWar!.Value == (War)p.WarId);
+    }
+
     private IQueryable<Models.DB.Person> ByRegiment(IQueryable<Models.DB.Person> people, HashSet<int> regimentIds)
     {
         return people.Where(p =>
@@ -192,7 +247,7 @@ public class PersonRepository : IPersonRepository
         return people.Where(p => p.DateOfBirth >= date);
     }
 
-    private IQueryable<Models.DB.Person> GetPeopleByName(PersonQuery query)
+    private IQueryable<Models.DB.Person> GetPeopleByName(ISearchQuery query)
     {
         var dbPeople = _dbContext.People
             .Include(p => p.Photos)
@@ -203,6 +258,25 @@ public class PersonRepository : IPersonRepository
             .ThenInclude(unit => unit!.Regiment)
             .Where(p => p.Deleted == false && (p.FirstNames!.Contains(query.SearchTerm)
                                                || p.LastName!.Contains(query.SearchTerm)));
+
+        return dbPeople;
+    }
+
+    private IQueryable<Models.DB.Person> GetPeopleByRegimentName(ISearchQuery query)
+    {
+        var dbPeople = _dbContext.People
+            .Include(p => p.Photos)
+            .Include(p => p.Decorations)
+            .Include(p => p.RecordedNames)
+            .ThenInclude(rn => rn.WarMemorial)
+            .Include(p => p.SubUnit)
+            .ThenInclude(unit => unit!.Regiment)
+            .Where(p => p.SubUnit != null
+                        && p.SubUnit.Regiment != null
+                        && p.SubUnit.Regiment.Name != null
+                        && p.SubUnit.Regiment.Name.Contains(query.SearchTerm)
+                        && p.Deleted == false
+            );
 
         return dbPeople;
     }
