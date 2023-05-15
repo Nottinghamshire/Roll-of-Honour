@@ -38,7 +38,7 @@ public class Person
 
         foreach (var memorial in this.RecordedNames.Select(rn => rn.WarMemorial).Distinct())
         {
-            person.Memorials.Add(memorial.Id, memorial.Name);
+            person.Memorials.TryAdd(memorial.Id, memorial.Name);
         }
 
         foreach (var photo in this.Photos)
