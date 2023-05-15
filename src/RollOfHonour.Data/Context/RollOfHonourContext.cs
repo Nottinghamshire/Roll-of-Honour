@@ -64,7 +64,7 @@ public partial class RollOfHonourContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer();
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ArmedService>(entity =>
         {
@@ -181,6 +181,11 @@ public partial class RollOfHonourContext : DbContext
             entity.HasOne(d => d.War).WithMany(p => p.People)
                 .HasForeignKey(d => d.WarId)
                 .HasConstraintName("FK_dbo.People_dbo.Wars_War_Id");
+            entity.HasIndex(p => p.LastName);
+            entity.HasIndex(p => p.FirstNames);
+            entity.HasIndex(p => p.DateOfBirth);
+            entity.HasIndex(p => p.DateOfDeath);
+            entity.HasIndex(p => p.Rank);
         });
 
         modelBuilder.Entity<PersonAuditItem>(entity =>
@@ -365,6 +370,7 @@ public partial class RollOfHonourContext : DbContext
             entity.HasOne(d => d.Regiment).WithMany(p => p.SubUnits)
                 .HasForeignKey(d => d.RegimentId)
                 .HasConstraintName("FK_dbo.SubUnits_dbo.Regiments_RegimentId");
+            entity.HasIndex(r => r.Name);
         });
 
         modelBuilder.Entity<UserProfile>(entity =>
@@ -420,6 +426,7 @@ public partial class RollOfHonourContext : DbContext
 
             entity.Property(e => e.NamesCount).HasDefaultValueSql("((1))");
             entity.Property(e => e.Ukniwmref).HasColumnName("UKNIWMRef");
+            entity.HasIndex(wm => wm.Name);
         });
 
         modelBuilder.Entity<WarMemorialAuditItem>(entity =>
