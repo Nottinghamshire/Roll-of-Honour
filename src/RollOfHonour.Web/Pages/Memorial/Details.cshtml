@@ -15,15 +15,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/memorials.html" class="parent">
-                            Search by Memorial
+                        <a asp-page="/memorial/index" title="Memorials" class="parent">
+                            Memorials
                             <span class="spacer" aria-hidden="true">
                                 <i class="fa-light fa-chevron-right"></i>
                             </span>
                         </a>
                     </li>
                     <li>
-                        <a href="/memorial.html" aria-current="location" class="current">
+                        <a asp-page="/memorial/details" asp-route-id="@Model.Memorial!.Id" title="Memorials" class="parent">
                             About @Model.Memorial!.Name
                         </a>
                     </li>
@@ -79,7 +79,9 @@
                             {
                                 <li>
                                     <a asp-page="/person/Details" asp-route-id="@recName.PersonId"
-                                        title="Learn more about @recName.AsRecorded">@recName.AsRecorded</a>
+                                       title="Learn more about @recName.AsRecorded">
+                                        @recName.AsRecorded
+                                    </a>
                                 </li>
                             }
                         </ul>
@@ -125,7 +127,7 @@
                                 {
                                     <div class="column is-4-desktop">
                                         <a href="@photo.ImageUriMedium"
-                                            title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
+                                           title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
                                             <div class="picture-block short styled-alt">
                                                 <div class="picture-border">
                                                     <div class="picture-embed" style="background-image: url(@photo.ImageUriOriginal);"></div>
@@ -143,21 +145,22 @@
                 <aside class="sidebar">
                     <div class="picture-block memorial-picture">
                         <div class="picture-border">
-                            @if(@Model.Memorial.MainPhoto is not null)
+                            @if (@Model.Memorial.MainPhoto is not null)
                             {
                                 <div class="picture-embed" style="background-image: url(@Model.Memorial.MainPhoto.ImageUriOriginal);"></div>
                             }
-                            else {
-                                <div class="picture-embed" style="background-image: url(../images/poppy-grey.jpg);"></div>
+                            else
+                            {
+                                <div class="picture-embed" style="background-image: url(./images/poppy-grey.jpg);"></div>
                             }
                         </div>
                     </div>
                     @if (!String.IsNullOrEmpty(Model.Memorial.UKNIWMRef))
                     {
                         <div class="iwm-link">
-                            <img src="/images/logo-iwm.png" title="Imperial War Museum Logo" />
+                            <img src="/images/logo-iwm.png" title="Imperial War Museum Logo"/>
                             <a href="https://www.iwm.org.uk/memorials/item/memorial/@Model.Memorial.UKNIWMRef"
-                                target="_blank">
+                               target="_blank">
                                 WM Reference @Model.Memorial.UKNIWMRef<i class="fa-light fa-arrow-up-right-from-square"></i>
                             </a>
                         </div>
