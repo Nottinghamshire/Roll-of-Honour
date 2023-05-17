@@ -17,15 +17,15 @@
                 </a>
             </li>
             <li>
-                <a href="/people.html" class="parent">
-                    Search by People
+                <a asp-page="/person/index" title="Memorials" class="parent">
+                    People
                     <span class="spacer" aria-hidden="true">
                         <i class="fa-light fa-chevron-right"></i>
                     </span>
                 </a>
             </li>
             <li>
-                <a href="/person.html" aria-current="location" class="current">
+                <a  asp-page="/person/details" asp-route-id="@Model.Person!.Id"  aria-current="location" class="current">
                     About @Model.Person!.Name
                 </a>
             </li>
