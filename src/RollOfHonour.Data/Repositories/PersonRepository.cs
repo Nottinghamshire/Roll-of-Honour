@@ -256,8 +256,10 @@ public class PersonRepository : IPersonRepository
             .ThenInclude(rn => rn.WarMemorial)
             .Include(p => p.SubUnit)
             .ThenInclude(unit => unit!.Regiment)
-            .Where(p => p.Deleted == false && (p.FirstNames!.Contains(query.SearchTerm)
-                                               || p.LastName!.Contains(query.SearchTerm)));
+            .Where(p =>
+                p.Deleted == false &&
+                p.FullName!.Contains(query.SearchTerm)
+            );
 
         return dbPeople;
     }
