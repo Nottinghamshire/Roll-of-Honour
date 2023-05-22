@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using RollOfHonour.Data.Context;
@@ -12,9 +13,11 @@ using RollOfHonour.Data.Context;
 namespace RollOfHonour.Data.Migrations
 {
     [DbContext(typeof(RollOfHonourContext))]
-    partial class RollOfHonourContextModelSnapshot : ModelSnapshot
+    [Migration("20230522101943_AddFullNameToPerson")]
+    partial class AddFullNameToPerson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,16 +226,16 @@ namespace RollOfHonour.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstNames")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Initials")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("MainPhotoId")
                         .HasColumnType("int");
@@ -263,7 +266,9 @@ namespace RollOfHonour.Data.Migrations
 
                     b.HasIndex("DateOfDeath");
 
-                    b.HasIndex("FullName");
+                    b.HasIndex("FirstNames");
+
+                    b.HasIndex("LastName");
 
                     b.HasIndex("Rank");
 

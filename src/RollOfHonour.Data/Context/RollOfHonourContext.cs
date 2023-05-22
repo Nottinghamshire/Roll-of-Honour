@@ -181,8 +181,7 @@ public partial class RollOfHonourContext : DbContext
             entity.HasOne(d => d.War).WithMany(p => p.People)
                 .HasForeignKey(d => d.WarId)
                 .HasConstraintName("FK_dbo.People_dbo.Wars_War_Id");
-            entity.HasIndex(p => p.LastName);
-            entity.HasIndex(p => p.FirstNames);
+            entity.HasIndex(p => p.FullName);
             entity.HasIndex(p => p.DateOfBirth);
             entity.HasIndex(p => p.DateOfDeath);
             entity.HasIndex(p => p.Rank);
