@@ -20,6 +20,6 @@
     private void SearchRollOfHonour()
     {
         if (String.IsNullOrEmpty(SearchTerm)) return;
-        navManager.NavigateTo($"/Results?s={SearchTerm}&w=0&pt=0&qt=0", true);
+        navManager.NavigateTo($"/Results?s={SearchTerm}&=0&qt=0", true);
     }
 }

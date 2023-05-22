@@ -12,11 +12,7 @@
             <div class="column is-full-tablet is-7-desktop is-8-fullhd">
                 <div class="text-block" data-aos="fade-up">
                     <h1><span class="subtitle">Nottinghamshire </span>Roll of Honour</h1>
-                    <p>The Nottinghamshire Great War Roll of Honour is a permanent tribute to local men and women who
-                        died during the First and second World War. Until now, no list of Nottinghamshire’s Great War
-                        dead has been compiled and many communities did not keep written records of 1914-18 losses. This
-                        project pays homage to the county’s fallen and creates a unique, centralised archive for
-                        researchers, historians and the general public.</p>
+                    <p>The Nottinghamshire Roll of Honour is a permanent tribute to local men and women who died as a result of the First and Second World Wars.  Until now, no lists of Nottinghamshire’s Great War and World War Two dead have been compiled and many communities did not keep written records of 1914-18 or 1939-45 losses.  This project pays homage to the county’s fallen and creates a unique, centralised archive for researchers, historians and the general public.</p>
                 </div>
                <component type="typeof(BasicSearchComponent)" render-mode="ServerPrerendered"/>
             </div>
@@ -25,7 +21,7 @@
                     <div class="text-block">
                         <h3 class="aligncenter">Today we remember...</h3>
                     </div>
-                    @await Component.InvokeAsync(nameof(MemoryDetailsList))
+                    @await Component.InvokeAsync(nameof(MemoryDetailsList), RenderMode.ServerPrerendered)
                     <a asp-page="/person/index" title="Look at all our records" class="button primary"><i
                             class="fal fa-folder-open"></i> Look at all our records</a>
                 </aside>

@@ -2,7 +2,7 @@
 
 public class Person
 {
-    public Core.Models.Person ToDomainModel(string blobServiceName, string blobImagesContainer)
+    public Core.Models.Person ToDomainModel(string imageUrlPrefix)
     {
         var person = new Core.Models.Person(this.MainPhotoId)
         {
@@ -27,7 +27,8 @@ public class Person
             Unit = this.SubUnit?.Name == null ? string.Empty : this.SubUnit.Name,
             UnitId = this.SubUnitId == null ? null : this.SubUnitId,
             Regiment = this.SubUnit?.Regiment?.Name == null ? string.Empty : this.SubUnit.Regiment.Name,
-            RegimentId = this.SubUnit?.RegimentId
+            RegimentId = this.SubUnit?.RegimentId,
+            WarId = WarId ?? 0
         };
 
         foreach (var decoration in this.Decorations)
@@ -37,12 +38,12 @@ public class Person
 
         foreach (var memorial in this.RecordedNames.Select(rn => rn.WarMemorial).Distinct())
         {
-            person.Memorials.Add(memorial.Id, memorial.Name);
+            person.Memorials.TryAdd(memorial.Id, memorial.Name);
         }
 
         foreach (var photo in this.Photos)
         {
-            person.Photos.Add(photo.ToDomainModel(blobServiceName, blobImagesContainer));
+            person.Photos.Add(photo.ToDomainModel(imageUrlPrefix));
         }
 
         return person;

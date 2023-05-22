@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using RollOfHonour.Core.Enums;
 
 namespace RollOfHonour.Core.Models;
 
@@ -94,7 +94,11 @@ public class Person
     public string? Comments { get; set; }
     public bool Deleted { get; set; }
 
-    public string? AddressAtEnlistment { get; set; }
+    public string? AddressAtEnlistment { private get; set; }
+
+    public string AddressAtEnlistmentString =>
+        !string.IsNullOrEmpty(AddressAtEnlistment) ? AddressAtEnlistment : "Unknown";
+
     public int? Cwgc { get; set; }
     public string? PlaceOfBirth { private get; set; }
     public string PlaceOfBirthString => !string.IsNullOrEmpty(PlaceOfBirth) ? PlaceOfBirth : "Unknown";
@@ -140,6 +144,21 @@ public class Person
     }
 
     public List<Photo> Photos { get; set; } = new List<Photo>();
+
+    public int WarId { private get; set; }
+    public Enums.War War => WarId == 1 ? Enums.War.WW1 : Enums.War.WW2;
+
+    public PersonType PersonType
+    {
+        get
+        { //Not perfect yet, but an improvement.
+            return string.IsNullOrEmpty(this.Rank)
+                   && string.IsNullOrEmpty(this.Regiment)
+                   && !this.UnitId.HasValue
+                ? PersonType.Civilian
+                : PersonType.Military;
+        }
+    }
 
     private int AgeCalculator(DateTime dateOfBirth, DateTime dateOfDeath)
     {

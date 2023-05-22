@@ -15,15 +15,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/memorials.html" class="parent">
-                            Search by Memorial
+                        <a asp-page="/memorial/index" title="Memorials" class="parent">
+                            Memorials
                             <span class="spacer" aria-hidden="true">
                                 <i class="fa-light fa-chevron-right"></i>
                             </span>
                         </a>
                     </li>
                     <li>
-                        <a href="/memorial.html" aria-current="location" class="current">
+                        <a asp-page="/memorial/details" asp-route-id="@Model.Memorial!.Id" title="Memorials" class="parent">
                             About @Model.Memorial!.Name
                         </a>
                     </li>
@@ -34,7 +34,7 @@
             <div class="column is-full-tablet is-8-desktop is-8-fullhd">
 
                 <div class="memorial-block">
-                    <span class="memorial-name">@Model.Memorial.Name</span>
+                    <span class="memorial-name">@Model.Memorial!.Name</span>
                     <div class="memorial-description">
                         <div class="text-block">
                             <p>@Model.Memorial.Description</p>
@@ -64,9 +64,9 @@
                             <li id="tab-01" role="tab" tabindex="0" aria-selected="true" aria-controls="tabpanel-01">
                                 <i class="fas fa-stream"></i> Names on this memorial
                             </li>
-                            <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02">
-                                <i class="fas fa-map-marked-alt"></i> Location
-                            </li>
+                            @* <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02"> *@
+                            @*     <i class="fas fa-map-marked-alt"></i> Location *@
+                            @* </li> *@
                             <li id="tab-03" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-03">
                                 <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
                             </li>
@@ -79,40 +79,42 @@
                             {
                                 <li>
                                     <a asp-page="/person/Details" asp-route-id="@recName.PersonId"
-                                        title="Learn more about @recName.AsRecorded">@recName.AsRecorded</a>
+                                       title="Learn more about @recName.AsRecorded">
+                                        @recName.AsRecorded
+                                    </a>
                                 </li>
                             }
                         </ul>
 
                     </div>
 
-                    <div id="tabpanel-02" role="tabpanel">
-                        <div class="tab-title"><i class="fas fa-map-marked-alt"></i> Location</div>
-                        <div class="map-block">
-                            <div class="map-container">
-                                <div id="nccMap" style="width: 100%; height: 450px; position: relative;"
-                                    class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
-                                    tabindex="0">
-                                    <div class="leaflet-pane leaflet-map-pane"
-                                        style="transform: translate3d(0px, 0px, 0px);">
-                                        <div class="leaflet-pane leaflet-tile-pane">
-                                            <div class="leaflet-bottom leaflet-left"></div>
-                                            <div class="leaflet-bottom leaflet-right">
-                                                <div
-                                                    class="leaflet-control-attribution leaflet-control esri-truncated-attribution:hover esri-truncated-attribution">
-                                                    <a href="http://leafletjs.com"
-                                                        title="A JS library for interactive maps">Leaflet</a> | Powered
-                                                    by <a href="https://www.esri.com">Esri</a> | <span
-                                                        class="esri-dynamic-attribution">USGS, NOAA</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                    @* <div id="tabpanel-02" role="tabpanel"> *@
+                    @*     <div class="tab-title"><i class="fas fa-map-marked-alt"></i> Location</div> *@
+                    @*     <div class="map-block"> *@
+                    @*         <div class="map-container"> *@
+                    @*             <div id="nccMap" style="width: 100%; height: 450px; position: relative;" *@
+                    @*                 class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" *@
+                    @*                 tabindex="0"> *@
+                    @*                 <div class="leaflet-pane leaflet-map-pane" *@
+                    @*                     style="transform: translate3d(0px, 0px, 0px);"> *@
+                    @*                     <div class="leaflet-pane leaflet-tile-pane"> *@
+                    @*                         <div class="leaflet-bottom leaflet-left"></div> *@
+                    @*                         <div class="leaflet-bottom leaflet-right"> *@
+                    @*                             <div *@
+                    @*                                 class="leaflet-control-attribution leaflet-control esri-truncated-attribution:hover esri-truncated-attribution"> *@
+                    @*                                 <a href="http://leafletjs.com" *@
+                    @*                                     title="A JS library for interactive maps">Leaflet</a> | Powered *@
+                    @*                                 by <a href="https://www.esri.com">Esri</a> | <span *@
+                    @*                                     class="esri-dynamic-attribution">USGS, NOAA</span> *@
+                    @*                             </div> *@
+                    @*                         </div> *@
+                    @*                     </div> *@
+                    @*                 </div> *@
+                    @*             </div> *@
+                    @*         </div> *@
+                    @*     </div> *@
+                    @* *@
+                    @* </div> *@
 
                     <div id="tabpanel-03" role="tabpanel">
 
@@ -125,7 +127,7 @@
                                 {
                                     <div class="column is-4-desktop">
                                         <a href="@photo.ImageUriMedium"
-                                            title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
+                                           title="Portrait of Reginald Dudley Bawdwen Anderson. Courtesy of Worksop College">
                                             <div class="picture-block short styled-alt">
                                                 <div class="picture-border">
                                                     <div class="picture-embed" style="background-image: url(@photo.ImageUriOriginal);"></div>
@@ -143,21 +145,22 @@
                 <aside class="sidebar">
                     <div class="picture-block memorial-picture">
                         <div class="picture-border">
-                            @if(@Model.Memorial.MainPhoto is not null)
+                            @if (@Model.Memorial.MainPhoto is not null)
                             {
                                 <div class="picture-embed" style="background-image: url(@Model.Memorial.MainPhoto.ImageUriOriginal);"></div>
                             }
-                            else {
-                                <div class="picture-embed" style="background-image: url(../images/poppy-grey.jpg);"></div>
+                            else
+                            {
+                                <div class="picture-embed" style="background-image: url(./images/poppy-grey.jpg);"></div>
                             }
                         </div>
                     </div>
                     @if (!String.IsNullOrEmpty(Model.Memorial.UKNIWMRef))
                     {
                         <div class="iwm-link">
-                            <img src="/images/logo-iwm.png" title="Imperial War Museum Logo" />
+                            <img src="/images/logo-iwm.png" title="Imperial War Museum Logo"/>
                             <a href="https://www.iwm.org.uk/memorials/item/memorial/@Model.Memorial.UKNIWMRef"
-                                target="_blank">
+                               target="_blank">
                                 WM Reference @Model.Memorial.UKNIWMRef<i class="fa-light fa-arrow-up-right-from-square"></i>
                             </a>
                         </div>
