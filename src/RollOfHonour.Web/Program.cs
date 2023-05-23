@@ -12,10 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
 
 builder.Services.AddDbContext<RollOfHonourContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));
-builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        x => x.UseNetTopologySuite()));
+builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
 builder.Services.AddTransient<ISuperSearchService, SuperSearchService>();
 
@@ -37,6 +36,15 @@ builder.Services.AddSignalR().AddAzureSignalR(options =>
 builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<RollOfHonourContext>();
+    context.Database.Migrate();
+}
 
 if (!app.Environment.IsDevelopment())
 {
