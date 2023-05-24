@@ -20,38 +20,14 @@ internal class DataUpdateService : IDataUpdateService
 
     public async Task UpdateGeographicTypeFromEastingNorthing()
     {
-        // Create a geometry point
-
         var connStr = _context.Database.GetConnectionString();
 
         var memorials = await _context.WarMemorials.Where(m => m.Easting != 0 && m.Northing != 0).ToListAsync();
-        // foreach (var memorial in memorials)
-        // {
-        //     //Convert from Easting Northing to LatLong Point/Geographic type
-        //
-        //     Cartesian cartesian = GeoUK.Convert.ToCartesian(new Airy1830(), new BritishNationalGrid(),
-        //         new EastingNorthing(memorial.Easting, memorial.Northing));
-        //
-        //     Cartesian wgsCartesian = Transform.Osgb36ToEtrs89(cartesian);
-        //
-        //     LatitudeLongitude wgsLatLng = GeoUK.Convert.ToLatitudeLongitude(new Wgs84(), wgsCartesian);
-        //
-        //     // Geometry point = new Point(wgsLatLng.Latitude, wgsLatLng.Longitude)
-        //     // {
-        //     //     SRID = 8307
-        //     //     //SRID = 27700
-        //     // };
-        //
-        //     var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(8307);
-        //
-        //     Geometry point = gf.CreatePoint(new Coordinate(wgsLatLng.Latitude, wgsLatLng.Longitude));
-        //
-        //     //Set property
-        //     memorial.Location = point;
-        // }
+
 
         foreach (var memorial in memorials)
         {
+            // Create a geometry point
             memorial.Location = ConvertEastingNorthingToLatLong(new EastingNorthing(memorial.Easting, memorial.Northing));
 
 
@@ -71,11 +47,6 @@ internal class DataUpdateService : IDataUpdateService
 
     private Point ConvertEastingNorthingToLatLong(EastingNorthing eastingNorthing)
     {
-        // 1. Convert to Cartesian
-        // Given an easting and northing in metres (see text)
-        // const double easting = 651409.903;
-        // const double northing = 313177.270;
-
         // Convert to Cartesian
         Cartesian cartesian = GeoUK.Convert.ToCartesian(new Wgs84(),
             new BritishNationalGrid(), eastingNorthing);
@@ -88,8 +59,6 @@ internal class DataUpdateService : IDataUpdateService
         var coord = new Coordinate(wgsLatLong.Latitude, wgsLatLong.Longitude);
         var newLatLong = new Point(coord) { SRID = 4326 };
 
-
-        // var seattle = new Point(-122.333056, 47.609722) { SRID = 4326 };
         return newLatLong;
     }
 }
