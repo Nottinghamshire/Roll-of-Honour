@@ -25,7 +25,7 @@ public partial class WarMemorial
             Id = this.Id,
             UKNIWMRef = this.Ukniwmref,
             Description = this.Description,
-            //Location = //TODO: Convert to LatLong from East/North 
+            Location = this.Location,
             MainPhotoId = this.MainPhotoId,
             NamesCount = this.NamesCount,
             District = this.District,
@@ -49,11 +49,7 @@ public partial class WarMemorial
 
     public string? Description { get; set; }
 
-    public int Easting { get; set; }
-
-    public int Northing { get; set; }
-    
-    public Geometry? Location { get; set; } //= new Point(52.9364, 1.1358);
+    public Geometry? Location { get; set; } 
     public int? MainPhotoId { get; set; }
 
     public int NamesCount { get; set; }
