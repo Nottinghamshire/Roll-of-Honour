@@ -64,9 +64,9 @@
                             <li id="tab-01" role="tab" tabindex="0" aria-selected="true" aria-controls="tabpanel-01">
                                 <i class="fas fa-stream"></i> Names on this memorial
                             </li>
-                            @* <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02"> *@
-                            @*     <i class="fas fa-map-marked-alt"></i> Location *@
-                            @* </li> *@
+                            <li id="tab-02" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-02">
+                                <i class="fas fa-map-marked-alt"></i> Location
+                            </li>
                             <li id="tab-03" role="tab" tabindex="-1" aria-selected="false" aria-controls="tabpanel-03">
                                 <i class="fa-sharp fa-solid fa-image-polaroid"></i> Photographs
                             </li>
@@ -88,33 +88,27 @@
 
                     </div>
 
-                    @* <div id="tabpanel-02" role="tabpanel"> *@
-                    @*     <div class="tab-title"><i class="fas fa-map-marked-alt"></i> Location</div> *@
-                    @*     <div class="map-block"> *@
-                    @*         <div class="map-container"> *@
-                    @*             <div id="nccMap" style="width: 100%; height: 450px; position: relative;" *@
-                    @*                 class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" *@
-                    @*                 tabindex="0"> *@
-                    @*                 <div class="leaflet-pane leaflet-map-pane" *@
-                    @*                     style="transform: translate3d(0px, 0px, 0px);"> *@
-                    @*                     <div class="leaflet-pane leaflet-tile-pane"> *@
-                    @*                         <div class="leaflet-bottom leaflet-left"></div> *@
-                    @*                         <div class="leaflet-bottom leaflet-right"> *@
-                    @*                             <div *@
-                    @*                                 class="leaflet-control-attribution leaflet-control esri-truncated-attribution:hover esri-truncated-attribution"> *@
-                    @*                                 <a href="http://leafletjs.com" *@
-                    @*                                     title="A JS library for interactive maps">Leaflet</a> | Powered *@
-                    @*                                 by <a href="https://www.esri.com">Esri</a> | <span *@
-                    @*                                     class="esri-dynamic-attribution">USGS, NOAA</span> *@
-                    @*                             </div> *@
-                    @*                         </div> *@
-                    @*                     </div> *@
-                    @*                 </div> *@
-                    @*             </div> *@
-                    @*         </div> *@
-                    @*     </div> *@
-                    @* *@
-                    @* </div> *@
+                    <div id="tabpanel-02" role="tabpanel">
+                        <div class="tab-title"><i class="fas fa-map-marked-alt"></i> Location</div>
+                        <div class="map-block">
+                            <div class="map-container">
+                                <div id="nccMap" style="width: 100%; height: 450px; position: relative;" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0">
+                                    <div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);">
+                                        <div class="leaflet-pane leaflet-tile-pane">
+                                            <div class="leaflet-bottom leaflet-left"></div>
+                                            <div class="leaflet-bottom leaflet-right">
+                                                <div
+                                                    class="leaflet-control-attribution leaflet-control esri-truncated-attribution:hover esri-truncated-attribution">
+                                                    <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | Powered by <a href="https://www.esri.com">Esri</a> |
+                                                    <span class="esri-dynamic-attribution">USGS, NOAA</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div id="tabpanel-03" role="tabpanel">
 
@@ -170,3 +164,31 @@
         </div>
     </div>
 </section>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script>
+      // All the code for the leaflet map will come here
+      const map = L.map('nccMap', {
+        scrollWheelZoom:false,
+        center: [@Model.Memorial.Location?.Coordinate.X, @Model.Memorial.Location?.Coordinate.Y],
+        zoom: 17
+      });
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
+      
+      const basicMemorialIcon = L.icon({
+              iconUrl: '../images/insignia-memorial.png',
+              iconSize: [30, 30]
+            });
+      
+      const memorialMarker = L.marker([@Model.Memorial.Location?.Coordinate.X, @Model.Memorial.Location?.Coordinate.Y], {icon: basicMemorialIcon, alt: '@Model.Memorial.Name'})
+      .bindPopup('@Model.Memorial.Name')
+      .addTo(map);
+      
+    </script>

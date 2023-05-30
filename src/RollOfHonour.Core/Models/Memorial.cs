@@ -18,9 +18,8 @@ public class Memorial : IAggregateRoot
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; } = string.Empty;
 
-    //public int Easting { get; set; }
-    //public int Northing { get; set; }
-    //public Point? Location { get; set; } = new Point(52.9364, 1.1358);
+    public Geometry? Location { get; set; }
+
     public string? District { get; set; }
     public string? Postcode { get; set; }
     public int NamesCount { get; set; } //TODO: Might be a better way to do this based on Count of recorded names
@@ -49,24 +48,23 @@ public class Memorial : IAggregateRoot
     }
 
     public List<Photo> Photos { get; set; } = new List<Photo>();
-
-    public Memorial(string name, Point location)
-    {
-        Name = Guard.Against.NullOrEmpty(name, nameof(name));
-        //Location = location;
-    }
-
-    public Memorial(string name, string description, Point location)
-    {
-        Name = Guard.Against.NullOrEmpty(name, nameof(name));
-        //Location = location;
-        Description = description;
-    }
-
-    public Memorial(string name)
-    {
-        Name = Guard.Against.NullOrEmpty(name, nameof(name));
-    }
+    // public Memorial(string name, Point location)
+    // {
+    //     Name = Guard.Against.NullOrEmpty(name, nameof(name));
+    //     Location = location;
+    // }
+    //
+    // public Memorial(string name, string description, Point location)
+    // {
+    //     Name = Guard.Against.NullOrEmpty(name, nameof(name));
+    //     Location = location;
+    //     Description = description;
+    // }
+    //
+    // public Memorial(string name)
+    // {
+    //     Name = Guard.Against.NullOrEmpty(name, nameof(name));
+    // }
 
     public Memorial(string name, List<RecordedName> recordedNames)
     {
@@ -74,9 +72,9 @@ public class Memorial : IAggregateRoot
         _recordedNames.AddRange(recordedNames);
     }
 
-    public void RecordName(RecordedName newName)
-    {
-        Guard.Against.Null(newName, nameof(newName));
-        _recordedNames.Add(newName);
-    }
+    // public void RecordName(RecordedName newName)
+    // {
+    //     Guard.Against.Null(newName, nameof(newName));
+    //     _recordedNames.Add(newName);
+    // }
 }
