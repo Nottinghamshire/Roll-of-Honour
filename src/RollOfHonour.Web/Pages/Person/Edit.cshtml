@@ -1,7 +1,6 @@
-﻿@page
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@page "{id:int?}"
 @using RollOfHonour.Core.Enums
-@model RollOfHonour.Web.Pages.Person.Details
+@model RollOfHonour.Web.Pages.Person.Edit
 
 <section class="panel with-background bg-app">
 <div class="container is-fluid">
@@ -37,11 +36,6 @@
 <div class="column is-full-tablet is-8-desktop is-8-fullhd">
     <div class="person-block">
         <div class="war-label">
-            @if (Model.UserIsAuthenticated)
-            {
-                <a asp-page="./Edit" asp-route-id="@Model.Person!.Id" class="btn btn-default"><i class="fa fa-edit"></i></a>
-            }
-
             @if (Model.Person.War == War.WW1)
             {
                 <img class="ww-insignia" src="/images/insignia-ww1.png" alt="This data is related to World War 1">
@@ -54,68 +48,136 @@
 
         @if (Model.Person.PersonType == PersonType.Military)
         {
-            <span class="rank">@Model.Person.Rank</span>
-            <h1 class="name">@Model.Person.Name</h1>
+            <form method="post">
+                Rank:
+                            <input asp-for="EditFormPerson!.Rank" />
+                
+                <br/>
+                <br/>
 
-            <div class="service-number">
-                <span class="label"><i class="fa-light fa-hashtag fa-fw"></i> Service Number</span>
-                <span class="data">@Model.Person.ServiceNumberString</span>
-            </div>
+                First Name:
+                            <input asp-for="EditFormPerson!.FirstNames" />
 
-            <div class="military-unit">
-                <span class="label"><i class="fa-light fa-flag fa-fw"></i> Military Unit</span>
-                <span class="data">@Model.Person.UnitRegimentString</span>
-            </div>
+                <br />
+                <br />
 
-            <div class="date-of-birth">
-                <span class="label"><i class="fa-light fa-calendar fa-fw"></i> Date of birth</span>
-                <span class="data">@Model.Person.DateOfBirthString</span>
-            </div>
+                Last Name:
+                            <input asp-for="EditFormPerson!.LastName" />
+                
+                <br/>
+                <br/>
 
-            <div class="date-of-death">
-                <span class="label"><i class="fa-light fa-tombstone fa-fw"></i> Date of Death</span>
-                <span class="data">@Model.Person.DateOfDeathString (@Model.Person.AgeAtDeathString)</span>
-            </div>
+                Service Number:
+                            <input asp-for="EditFormPerson!.ServiceNumber" />
 
-            <div class="place-of-birth">
-                <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of Birth</span>
-                <span class="data">@Model.Person.PlaceOfBirthString</span>
-            </div>
+                <br />
+                <br />
 
-            <div class="employment">
-                <span class="label"><i class="fa-light fa-timeline fa-fw"></i> Employment, Education or Hobbies</span>
-                <span class="data">@Model.Person.EmploymentHobbiesString</span>
-            </div>
+                Military Unit:
+                            <input asp-for="EditFormPerson!.Unit" />
+                
+                <br />
+                <br />
+
+                Military Regiment:
+                            <input asp-for="EditFormPerson!.Regiment" />
+                
+                <br />
+                <br />
+
+                Place of Birth:
+                            <input asp-for="EditFormPerson!.PlaceOfBirth" />
+
+                <br />
+                <br />
+
+                Employment (Employment, Education, or Hobbies):
+                            <input asp-for="EditFormPerson!.EmploymentHobbies" />
+                
+                <br />
+                <br />
+
+                Family History
+                            <input asp-for="EditFormPerson!.FamilyHistory" />
+                
+                <br />
+                <br />
+
+                Military History
+                            <input asp-for="EditFormPerson!.MilitaryHistory" />
+                
+                <br />
+                <br />
+
+                Extra Information
+                            <input asp-for="EditFormPerson!.ExtraInfo" />
+                
+                <br />
+                <br />
+
+                <input type="submit" value="Save"/>
+            </form>
+
         }
         @if (Model.Person.PersonType == PersonType.Civilian)
         {
-            <span class="rank">Civilian</span>
-            <h1 class="name">@Model.Person.Name</h1>
+            <form method="post">
 
-            <div class="military-unit">
-                <span class="label"><i class="fa-light fa-address-card fa-fw"></i> Address</span>
-                <span class="data">@Model.Person.AddressAtEnlistmentString</span>
-            </div>
+                First Names:
+                <input asp-for="EditFormPerson!.FirstNames"/>
 
-            <div class="date-of-birth">
-                <span class="label"><i class="fa-light fa-calendar fa-fw"></i> Date of birth</span>
-                <span class="data">@Model.Person.DateOfBirthString</span>
-            </div>
+                <br/>
+                <br/>
 
-            <div class="date-of-death">
-                <span class="label"><i class="fa-light fa-tombstone fa-fw"></i> Date of Death</span>
-                <span class="data">@Model.Person.DateOfDeathString (@Model.Person.AgeAtDeathString)</span>
-            </div>
+                Last Name:
+                <input asp-for="EditFormPerson!.LastName"/>
 
-            <div class="place-of-birth">
-                <span class="label"><i class="fa-light fa-location-dot fa-fw"></i> Place of Birth</span>
-                <span class="data">@Model.Person.PlaceOfBirthString</span>
-            </div>
+                <br />
+                <br />
 
-            <div class="employment">
-                <span class="label"><i class="fa-light fa-timeline fa-fw"></i> Employment, Education or Hobbies</span>
-                <span class="data">@Model.Person.EmploymentHobbiesString</span>
-            </div>
+                @*Commented out form inputs are currently in a format difficult to bind to front-end
+            add a text box and suggested format with form validation?
+            *@
+                Address:
+                <input asp-for="EditFormPerson!.AddressAtEnlistment" />
+
+                @*
+            Date of Birth:
+            <input asp-for="Person!.DateOfBirth" />
+
+            Date of Death:
+            <input asp-for="Person!.DateOfDeath" />
+            *@
+
+                <br />
+                <br />
+
+                Place of Birth:
+                <input asp-for="EditFormPerson!.PlaceOfBirth"/>
+
+                <br />
+                <br />
+
+                Employment (Employment, Education, or Hobbies):
+                <input asp-for="EditFormPerson!.EmploymentHobbies"/>
+
+                <br />
+                <br />
+                
+                Family History
+                <input asp-for="EditFormPerson!.FamilyHistory" />
+                
+                <br />
+                <br />
+
+                Extra Information
+                <input asp-for="EditFormPerson!.ExtraInfo" />
+                
+                <br />
+                <br />
+
+                <input type="submit"/>
+            </form>
         }
 
     </div>
@@ -149,6 +211,7 @@
                     </p>
                 </div>
             </div>
+
             @if (Model.Person.PersonType == PersonType.Military)
             {
                 <div id="tabpanel-02" role="tabpanel" class="hide">
@@ -236,7 +299,6 @@
                     @foreach (var decoration in Model.Person.Decorations)
                     {
                         <li>
-                            @* <img src="/images/decorations/d1.png" title="Military Cross"> <span class="title">@decoration.Name</span> *@
                             <span class="title">@decoration.Name</span>
                         </li>
                     }

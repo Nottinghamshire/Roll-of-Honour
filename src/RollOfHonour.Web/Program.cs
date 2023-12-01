@@ -1,12 +1,12 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Microsoft.IdentityModel.Logging;
 using RollOfHonour.Core;
 using RollOfHonour.Core.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Repositories;
-
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
@@ -14,15 +14,17 @@ builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnecti
 builder.Services.AddDbContext<RollOfHonourContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         x => x.UseNetTopologySuite()));
-builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));builder.Services.AddScoped<IPersonRepository, PersonRepository>();
-builder.Services.AddScoped<IMemorialRepository, MemorialRepository>();
+
+builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));
+builder.Services.AddTransient<IPersonRepository, PersonRepository>();
+builder.Services.AddTransient<IMemorialRepository, MemorialRepository>();
 builder.Services.AddTransient<ISuperSearchService, SuperSearchService>();
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C");
 
 //builder.Services.AddAuthorization(options =>
 //{
-//options.FallbackPolicy = options.DefaultPolicy;
+//    options.FallbackPolicy = options.DefaultPolicy;
 //});
 
 builder.Services.AddRazorPages()
@@ -35,8 +37,22 @@ builder.Services.AddSignalR().AddAzureSignalR(options =>
 
 builder.Services.AddServerSideBlazor();
 
-var app = builder.Build();
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy(AuthorizationPolicyNames.EditPerson, policy => 
+//        policy.RequireAssertion(context => 
+//            context.User.HasClaim(claim => 
+//                claim.Type is AuthorizationClaims.AdminPersonEdit 
+//                    or AuthorizationClaims.ModeratorPersonEdit)));
 
+//    options.AddPolicy(AuthorizationPolicyNames.EditMemorial, policy => 
+//        policy.RequireAssertion(context => 
+//            context.User.HasClaim(claim => 
+//                claim.Type is AuthorizationClaims.AdminMemorialEdit 
+//                    or AuthorizationClaims.ModeratorMemorialEdit)));
+//});
+
+var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -58,7 +74,15 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "MemorialRemoveCitizen",
+        pattern: "{controller=Memorial}/{action=Remove}/{memorialId?}/{citizenId?}");
+});
 
 app.MapRazorPages();
 app.MapBlazorHub();

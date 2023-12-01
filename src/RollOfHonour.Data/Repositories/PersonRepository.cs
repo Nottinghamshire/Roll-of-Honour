@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using RollOfHonour.Core;
 using RollOfHonour.Core.Enums;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Models.Search;
 using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
+using Person = RollOfHonour.Core.Models.Person;
+using War = RollOfHonour.Core.Enums.War;
 
 namespace RollOfHonour.Data.Repositories;
 
@@ -38,6 +41,25 @@ public class PersonRepository : IPersonRepository
             }
 
             return dbPerson.ToDomainModel(_storage.ImageUrlPrefix);
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+    }
+    private async Task<Models.DB.Person?> GetEntityById(int id)
+    {
+        try
+        {
+            var dbPerson = await _dbContext.People
+                .Include(_ => _.Photos)
+                .Include(_ => _.Decorations)
+                .Include(_ => _.RecordedNames).ThenInclude(rn => rn.WarMemorial)
+                .Include(_ => _.SubUnit).ThenInclude(unit => unit!.Regiment)
+                .Include(_ => _.War)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return dbPerson ?? null;
         }
         catch (InvalidOperationException)
         {
@@ -172,6 +194,46 @@ public class PersonRepository : IPersonRepository
             .ToListAsync();
 
         return regiments;
+    }
+
+    public async Task Update(Person person)
+    {
+        var personEntity = await GetEntityById(person.Id);//_dbContext.People.Single(_ => _.Id == person.Id);
+        if (personEntity != null)
+        {
+            if(personEntity.WarId is not null)
+                person.WarId = (int)personEntity.WarId;
+
+            // set values via context currently causing some unexpected changes to entity so doing manually
+            // change to use something like auto mapper?
+            personEntity.Rank = person.Rank;
+            personEntity.ServiceNumber = person.ServiceNumber;
+            personEntity.MilitaryHistory = person.MilitaryHistory;
+
+            if (person.Unit.IsNullOrEmpty() is false && person.Regiment.IsNullOrEmpty() is false)
+            {
+                //var subUnit = await _dbContext.SubUnits.SingleOrDefaultAsync(_ => _.Name != null && _.Name.ToLower() == person.Unit);
+                //if (subUnit is not null)
+                //    personEntity.SubUnit = subUnit;
+                //else
+                //{
+                if (personEntity.SubUnit != null)
+                {
+                    personEntity.SubUnit.Name = person.Unit;
+                    personEntity.SubUnit.Regiment = new Models.DB.Regiment { Name = person.Regiment };
+                }
+                //}
+            }
+
+            personEntity.FirstNames = person.FirstNames;
+            personEntity.LastName = person.LastName;
+            personEntity.PlaceOfBirth = person.PlaceOfBirth;
+            personEntity.EmploymentHobbies = person.EmploymentHobbies;
+            personEntity.FamilyHistory = person.FamilyHistory ?? "";
+            personEntity.ExtraInfo = person.ExtraInfo ?? "";
+
+            await _dbContext.SaveChangesAsync();
+        }
     }
 
     public async Task<PaginatedList<Person>> GetPageOfPeople(int pageIndex, int pageSize)

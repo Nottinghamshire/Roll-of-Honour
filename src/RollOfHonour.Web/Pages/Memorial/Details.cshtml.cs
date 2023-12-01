@@ -6,24 +6,30 @@ namespace RollOfHonour.Web.Pages.Memorial;
 
 public class Details : PageModel
 {
-  public Core.Models.Memorial? Memorial { get; set; }
+    public Core.Models.Memorial? Memorial { get; set; }
 
-  public IMemorialRepository _memorialRepository { get; set; }
+    public IMemorialRepository _memorialRepository { get; set; }
 
-  public Details(IMemorialRepository memorialRepository)
-  {
-    _memorialRepository = memorialRepository;
-  }
-  public async Task<IActionResult> OnGet(int id)
-  {
-    var memorial = await _memorialRepository.GetById(id);
+    public bool UserIsAuthenticated { get; set; }
 
-    if (memorial == null)
+    public Details(IMemorialRepository memorialRepository)
     {
-      return NotFound();
+        _memorialRepository = memorialRepository;
     }
 
-    Memorial = memorial;
-    return Page();
-  }
+    public async Task<IActionResult> OnGet(int id)
+    {
+        // only needed to determine whether to show the update buttons, will need to check against roles when implemented
+        if (Request.HttpContext.User.Identity != null)
+            UserIsAuthenticated = Request.HttpContext.User.Identity.IsAuthenticated;
+
+        var memorial = await _memorialRepository.GetById(id);
+        if (memorial == null)
+        {
+            return NotFound();
+        }
+
+        Memorial = memorial;
+        return Page();
+    }
 }
