@@ -38,6 +38,21 @@ builder.Services.AddSignalR().AddAzureSignalR(options =>
 
 builder.Services.AddServerSideBlazor();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AuthorizationPolicyNames.EditPerson, policy =>
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(claim =>
+                claim.Type is AuthorizationClaims.AdministratorPersonEdit
+                    or AuthorizationClaims.ModeratorPersonEdit)));
+
+    options.AddPolicy(AuthorizationPolicyNames.EditMemorial, policy =>
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(claim =>
+                claim.Type is AuthorizationClaims.AdministratorMemorialEdit
+                    or AuthorizationClaims.ModeratorMemorialEdit)));
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -47,7 +62,6 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<RollOfHonourContext>();
     
     context.Database.Migrate();
-
 
     // seed db roles/claims
     var appRoles = new List<Role>
@@ -92,22 +106,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
-//app.UseAuthorization();
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(AuthorizationPolicyNames.EditPerson, policy =>
-        policy.RequireAssertion(context =>
-            context.User.HasClaim(claim =>
-                claim.Type is AuthorizationClaims.AdministratorPersonEdit
-                    or AuthorizationClaims.ModeratorPersonEdit)));
-
-    options.AddPolicy(AuthorizationPolicyNames.EditMemorial, policy =>
-        policy.RequireAssertion(context =>
-            context.User.HasClaim(claim =>
-                claim.Type is AuthorizationClaims.AdministratorMemorialEdit
-                    or AuthorizationClaims.ModeratorMemorialEdit)));
-});
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
