@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RollOfHonour.Core.Authorization;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Shared;
 
@@ -15,7 +16,7 @@ public class MemorialController : Controller
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
     public async Task<IActionResult> AddPerson(int? memorialId, Person? person)
     {
         try
@@ -32,7 +33,7 @@ public class MemorialController : Controller
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
     public async Task<IActionResult> RemovePerson(int? memorialId, int? citizenId)
     {
         try

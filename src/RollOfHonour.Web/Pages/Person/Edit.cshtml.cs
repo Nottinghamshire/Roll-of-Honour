@@ -1,16 +1,12 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using RollOfHonour.Core.Authorization;
-using RollOfHonour.Core.Enums;
 using RollOfHonour.Core.Shared;
 
 namespace RollOfHonour.Web.Pages.Person;
 
+[Authorize(Policy = AuthorizationPolicyNames.EditPerson)]
 public class Edit : PageModel
 {
     [BindProperty] public Core.Models.Person Person { get; set; } = default!;

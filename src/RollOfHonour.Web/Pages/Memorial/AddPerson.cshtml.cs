@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RollOfHonour.Core.Authorization;
 using RollOfHonour.Core.Enums;
 using RollOfHonour.Core.Shared;
 
 namespace RollOfHonour.Web.Pages.Memorial;
 
+[Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
 public class AddPerson : PageModel
 {
     [BindProperty] public Core.Models.Memorial Memorial { get; set; } = default!;
