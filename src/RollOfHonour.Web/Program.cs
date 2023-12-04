@@ -19,6 +19,7 @@ builder.Services.AddDbContext<RollOfHonourContext>(options =>
 builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));
 builder.Services.AddTransient<IPersonRepository, PersonRepository>();
 builder.Services.AddTransient<IMemorialRepository, MemorialRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ISuperSearchService, SuperSearchService>();
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C");
@@ -66,6 +67,11 @@ using (var scope = app.Services.CreateScope())
     // seed db roles/claims
     var appRoles = new List<Role>
     {
+        new()
+        {
+            Name = ApplicationRoles.User,
+            IsActive = true
+        },
         new()
         {
             Name = ApplicationRoles.Administrator,
