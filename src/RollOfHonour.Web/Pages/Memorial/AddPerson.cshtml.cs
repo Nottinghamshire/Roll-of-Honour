@@ -7,7 +7,9 @@ using RollOfHonour.Core.Shared;
 
 namespace RollOfHonour.Web.Pages.Memorial;
 
-[Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
+//[Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
+
+[Authorize]
 public class AddPerson : PageModel
 {
     [BindProperty] public Core.Models.Memorial Memorial { get; set; } = default!;
@@ -55,7 +57,7 @@ public class AddPerson : PageModel
     {
         try
         {
-            VerifyAuthorizedRequest();
+            VerifyAuthorizedRequest(); // do we need to do this manually when using [Authorize] ?
 
             Person.PersonType = IsMilitary ? PersonType.Military : PersonType.Civilian;
 

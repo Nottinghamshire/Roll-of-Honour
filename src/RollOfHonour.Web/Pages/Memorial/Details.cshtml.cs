@@ -24,10 +24,8 @@ public class Details : PageModel
             UserIsAuthenticated = Request.HttpContext.User.Identity.IsAuthenticated;
 
         var memorial = await _memorialRepository.GetById(id);
-        if (memorial == null)
-        {
+        if (memorial is null)
             return NotFound();
-        }
 
         Memorial = memorial;
         return Page();

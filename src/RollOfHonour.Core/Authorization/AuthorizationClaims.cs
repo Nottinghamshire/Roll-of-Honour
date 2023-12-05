@@ -8,4 +8,5 @@ public struct AuthorizationClaims
     public const string ModeratorMemorialEdit = $"{ApplicationRoles.Moderator}.Memorial.Edit";
     public const string AdministratorMemorialEdit = $"{ApplicationRoles.Administrator}.Memorial.Edit";
 
+    public const string AdministratorUserEdit = $"{ApplicationRoles.StaffAdmin}.User.Edit";
 }

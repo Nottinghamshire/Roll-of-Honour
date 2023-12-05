@@ -6,7 +6,8 @@ using RollOfHonour.Core.Shared;
 
 namespace RollOfHonour.Web.Pages.Person;
 
-[Authorize(Policy = AuthorizationPolicyNames.EditPerson)]
+//[Authorize(Policy = AuthorizationPolicyNames.EditPerson)]
+[Authorize]
 public class Edit : PageModel
 {
     [BindProperty] public Core.Models.Person Person { get; set; } = default!;

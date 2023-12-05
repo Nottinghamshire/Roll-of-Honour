@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RollOfHonour.Core.Authorization;
 using RollOfHonour.Data.Context;
@@ -9,6 +10,7 @@ namespace RollOfHonour.Data.Repositories;
 
 public interface IUserRepository
 {
+    public Task<User?> GetAsync(Guid reference);
     public Task CreateAsync(User user);
 }
 
@@ -19,6 +21,18 @@ public class UserRepository : IUserRepository
     public UserRepository(RollOfHonourContext context)
     {
         _dbContext = context;
+    }
+
+    public async Task<User?> GetAsync(Guid reference)
+    {
+        try
+        {
+            return Models.DB.User.ToDomainModel(await _dbContext.Users.SingleOrDefaultAsync(_ => _.Reference == reference));
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 
     public async Task CreateAsync(User user)

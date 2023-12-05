@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RollOfHonour.Core.Authorization;
 using RollOfHonour.Core.Models;
 using RollOfHonour.Core.Shared;
 
@@ -16,7 +15,8 @@ public class MemorialController : Controller
     }
 
     [HttpPost]
-    [Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
+    //[Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
+    [Authorize]
     public async Task<IActionResult> AddPerson(int? memorialId, Person? person)
     {
         try
@@ -24,6 +24,7 @@ public class MemorialController : Controller
             if (memorialId.HasValue && person is not null)
                 await _memorialRepository.AddPerson((int)memorialId, person);
 
+            // request.host might not always result in the expected domain if received from 3rd party?
             return Redirect($"{Request.Host}/Memorial/Details?id={memorialId}");
         }
         catch (Exception ex)
@@ -33,7 +34,8 @@ public class MemorialController : Controller
     }
 
     [HttpPost]
-    [Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
+    //[Authorize(Policy = AuthorizationPolicyNames.EditMemorial)]
+    [Authorize]
     public async Task<IActionResult> RemovePerson(int? memorialId, int? citizenId)
     {
         try

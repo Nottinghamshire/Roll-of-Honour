@@ -1,6 +1,8 @@
-﻿namespace RollOfHonour.Core.Models;
+﻿using RollOfHonour.Core.Shared;
 
-public class Claim
+namespace RollOfHonour.Core.Models;
+
+public class Claim : IAggregateRoot
 {
     public int Id { get; set; }
 

@@ -52,6 +52,11 @@ builder.Services.AddAuthorization(options =>
             context.User.HasClaim(claim =>
                 claim.Type is AuthorizationClaims.AdministratorMemorialEdit
                     or AuthorizationClaims.ModeratorMemorialEdit)));
+
+    options.AddPolicy(AuthorizationPolicyNames.EditUser, policy =>
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(claim =>
+                claim.Type is AuthorizationClaims.AdministratorUserEdit)));
 });
 
 var app = builder.Build();
@@ -81,6 +86,11 @@ using (var scope = app.Services.CreateScope())
         {
             Name = ApplicationRoles.Moderator,
             IsActive = true,
+        },
+        new()
+        {
+            Name = ApplicationRoles.StaffAdmin,
+            IsActive = true
         }
     };
     appRoles.ForEach(item => context.Roles.AddIfNotExists(item, role => role.Name == item.Name));
@@ -88,12 +98,19 @@ using (var scope = app.Services.CreateScope())
 
     var appAdministratorRole = context.Roles.Single(_ => _.Name == ApplicationRoles.Administrator);
     var appModeratorRole = context.Roles.Single(_ => _.Name == ApplicationRoles.Moderator);
+    var appStaffAdminRole = context.Roles.Single(_ => _.Name == ApplicationRoles.StaffAdmin);
     var appClaims = new List<Claim>
     {
+        // Admin
         new() { Name = $"{AuthorizationClaims.AdministratorPersonEdit}", Role = appAdministratorRole },
         new() { Name = $"{AuthorizationClaims.AdministratorMemorialEdit}", Role = appAdministratorRole },
+        // Moderator
         new() { Name = $"{AuthorizationClaims.ModeratorPersonEdit}", Role = appModeratorRole },
-        new() { Name = $"{AuthorizationClaims.ModeratorMemorialEdit}", Role = appModeratorRole }
+        new() { Name = $"{AuthorizationClaims.ModeratorMemorialEdit}", Role = appModeratorRole },
+        // Staff admin - Basically Admin but ability to edit users and their roles
+        new() { Name = $"{AuthorizationClaims.AdministratorUserEdit}", Role = appStaffAdminRole },
+        new() { Name = $"{AuthorizationClaims.AdministratorPersonEdit}", Role = appStaffAdminRole },
+        new() { Name = $"{AuthorizationClaims.AdministratorMemorialEdit}", Role = appStaffAdminRole }
     };
     appClaims.ForEach(item => context.Claims.AddIfNotExists(item, claim => claim.Name == item.Name));
     context.SaveChanges();

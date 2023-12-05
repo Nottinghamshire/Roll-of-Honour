@@ -1,6 +1,8 @@
-﻿namespace RollOfHonour.Core.Models;
+﻿using RollOfHonour.Core.Shared;
 
-public class User
+namespace RollOfHonour.Core.Models;
+
+public class User : IAggregateRoot
 {
     public int Id { get; set; }
 
@@ -15,4 +17,7 @@ public class User
     public bool IsActive { get; set; }
 
     public Role? Role { get; set; } = default!;
+
+    public Guid Reference { get; set; } = default!;
+
 }
