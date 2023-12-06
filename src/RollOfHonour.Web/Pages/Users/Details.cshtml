@@ -1,0 +1,29 @@
+﻿@page
+@using RollOfHonour.Core.Enums
+@model RollOfHonour.Web.Pages.Users.Details
+
+<section class="panel with-background bg-app">
+<div class="container is-fluid">
+    <div class="columns is-multiline">
+        <div class="column is-full-tablet is-8-desktop is-8-fullhd">
+            <div class="person-block">
+                <h1> User management </h1> 
+                
+                @* TODO - Show all usernames in drop down list *@
+                @* TODO - Show all roles in drop down list *@
+                <form method="post">
+
+                    <label for="selectedUser">Select user:</label>
+                    <select name="selectedUser" id="selectedUser">
+                            @foreach (var user in Model.Usernames)
+                            {
+                                <option value="@user">@user</option>
+                            }
+                    </select>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</section>

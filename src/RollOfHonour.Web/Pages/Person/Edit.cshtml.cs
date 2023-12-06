@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RollOfHonour.Core.Authorization;
+using RollOfHonour.Core.Enums;
 using RollOfHonour.Core.Shared;
 
 namespace RollOfHonour.Web.Pages.Person;
@@ -13,6 +14,8 @@ public class Edit : PageModel
     [BindProperty] public Core.Models.Person Person { get; set; } = default!;
 
     [BindProperty] public Core.Models.Person EditFormPerson { get; set; } = default!;
+
+    [BindProperty] public War War { get; set; }
 
     private IPersonRepository _personRepository;
 
@@ -36,6 +39,7 @@ public class Edit : PageModel
 
             Person = person;
             EditFormPerson = person;
+            War = person.War;
 
             return Page();
         }
@@ -54,6 +58,8 @@ public class Edit : PageModel
             if (!ModelState.IsValid)
                 return Page();
 
+            // War isn't binding properly?
+            Person.WarId = War != 0 ? (War == War.WW1 ? 1 : 2) : Person.WarId;
             Person.Rank = EditFormPerson.Rank;
             Person.FirstNames = EditFormPerson.FirstNames;
             Person.LastName = EditFormPerson.LastName;

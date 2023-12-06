@@ -18,6 +18,8 @@ public class AddPerson : PageModel
 
     [BindProperty] public bool IsMilitary { get; set; } = false;
 
+    [BindProperty] public War War { get; set; }
+
     public IMemorialRepository _memorialRepository { get; set; }
 
     public AddPerson(IMemorialRepository memorialRepository)
@@ -61,6 +63,7 @@ public class AddPerson : PageModel
 
             Person.PersonType = IsMilitary ? PersonType.Military : PersonType.Civilian;
 
+            Person.WarId = War != 0 ? (War == War.WW1 ? 1 : 2) : Person.WarId;
             await _memorialRepository.AddPerson(Memorial.Id, Person);
             return RedirectToAction("Details", "Memorial",
                 new { id = Memorial.Id });

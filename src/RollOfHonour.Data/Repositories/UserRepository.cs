@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
 using RollOfHonour.Core.Authorization;
+using RollOfHonour.Core.Models;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Models.DB;
+using Role = RollOfHonour.Core.Models.Role;
 using User = RollOfHonour.Core.Models.User;
 
 namespace RollOfHonour.Data.Repositories;
@@ -12,6 +12,9 @@ public interface IUserRepository
 {
     public Task<User?> GetAsync(Guid reference);
     public Task CreateAsync(User user);
+    public Task<IReadOnlyCollection<User>?> GetAllAsync();
+
+    public Task<bool> UpdateRoleAsync(User user, Role role);
 }
 
 public class UserRepository : IUserRepository
@@ -56,6 +59,40 @@ public class UserRepository : IUserRepository
         }
         catch (Exception)
         {
+        }
+    }
+
+    public async Task<IReadOnlyCollection<User>?> GetAllAsync()
+    {
+        try
+        {
+            var users = await _dbContext.Users.ToListAsync();
+            return users.Select(Models.DB.User.ToDomainModel).ToList();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public async Task<bool> UpdateRoleAsync(User user, Role role)
+    {
+        try
+        {
+            var userEntity = await _dbContext.Users.SingleOrDefaultAsync(_ => _.Id == user.Id);
+            if (userEntity is null) return false;
+
+            var newUserRole = await _dbContext.Roles.SingleOrDefaultAsync(_ => _.Id == role.Id);
+            if(newUserRole is null) return false;
+
+            userEntity.Role = newUserRole;
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
 }

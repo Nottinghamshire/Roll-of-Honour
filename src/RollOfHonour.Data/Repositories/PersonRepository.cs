@@ -201,8 +201,7 @@ public class PersonRepository : IPersonRepository
         var personEntity = await GetEntityById(person.Id);//_dbContext.People.Single(_ => _.Id == person.Id);
         if (personEntity != null)
         {
-            if(personEntity.WarId is not null)
-                person.WarId = (int)personEntity.WarId;
+            personEntity.WarId = person.WarId;
 
             // set values via context currently causing some unexpected changes to entity so doing manually
             // change to use something like auto mapper?

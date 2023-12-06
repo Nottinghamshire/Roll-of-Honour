@@ -49,12 +49,18 @@
         @if (Model.Person.PersonType == PersonType.Military)
         {
             <form method="post">
+                <label asp-for="War"></label>
+                <select asp-for="War" asp-items="Html.GetEnumSelectList<War>()"></select>
+
+                <br/>
+                <br/>
+
                 Rank:
                             <input asp-for="EditFormPerson!.Rank" />
                 
                 <br/>
                 <br/>
-
+                
                 First Name:
                             <input asp-for="EditFormPerson!.FirstNames" />
 

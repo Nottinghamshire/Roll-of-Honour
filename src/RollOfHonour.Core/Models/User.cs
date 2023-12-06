@@ -20,4 +20,14 @@ public class User : IAggregateRoot
 
     public Guid Reference { get; set; } = default!;
 
+    // Domain-specific info for front-end
+    public string Username
+    {
+        get
+        {
+            return $"{Reference.ToString().Substring(4)} - {FirstName} {Surname}";
+        }
+    }
+
+
 }

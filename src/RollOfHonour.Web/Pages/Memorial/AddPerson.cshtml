@@ -71,12 +71,15 @@
                         <div>
                             <label for="isMilitary"> Is this person military? </label>
                             <input type="checkbox" value="@Model.IsMilitary" id="isMilitary">
-                            
-                            @* @if (Model.IsMilitary)
-                            { *@ @*page gets served and doesn't dynamically update so can't do this type of check*@
-                            <form method="post">
 
-                                <br />
+                            <form method="post">
+                                <br/>
+                                
+                                <label asp-for="War"></label>
+                                <select asp-for="War" asp-items="Html.GetEnumSelectList<War>()"></select>
+
+                                <br/>
+                                <br/>
 
                                 Rank:
                                 <input asp-for="Person!.Rank" />

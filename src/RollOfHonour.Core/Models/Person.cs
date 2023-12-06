@@ -140,7 +140,7 @@ public class Person
 
     public List<Photo> Photos { get; set; } = new List<Photo>();
 
-    public int WarId { private get; set; }
+    public int WarId { get; set; }
     public Enums.War War => WarId == 1 ? Enums.War.WW1 : Enums.War.WW2;
 
     public PersonType PersonType { get; set; }

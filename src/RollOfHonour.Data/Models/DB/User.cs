@@ -11,7 +11,7 @@ public class User
         return new()
         {
             Id = user.Id,
-            Role = Models.DB.Role.ToDomainModel(user.Role),
+            Role = Models.DB.Role.ToDomainModel(user.Role!),
             FirstName = user.FirstName,
             Surname = user.Surname,
             IsActive = user.IsActive,
