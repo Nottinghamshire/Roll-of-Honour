@@ -10,6 +10,7 @@ public interface IRoleRepository
     public Task<Role?> GetAsync(int id);
     public Task<Role?> GetByNameAsync(string name);
     public Task<IReadOnlyCollection<Role>?> GetAllAsync();
+    public Task<List<string>?> GetAllNamesAsync();
 }
 
 public class RoleRepository : IRoleRepository
@@ -25,7 +26,7 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            return Models.DB.Role.ToDomainModel(await _dbContext.Roles.SingleOrDefaultAsync(_ => _.Id == id));
+            return Models.DB.Role.ToDomainModel(await _dbContext.Roles.Include(_ => _.Claims).SingleOrDefaultAsync(_ => _.Id == id));
         }
         catch (Exception)
         {
@@ -37,7 +38,11 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            return Models.DB.Role.ToDomainModel(await _dbContext.Roles.SingleOrDefaultAsync(_ => _.Name == name));
+            var role = _dbContext.Roles.Include(_ => _.Claims).SingleOrDefault(_ => _.Name == name);
+            if (role is null)
+                return null;
+
+            return Models.DB.Role.ToDomainModel(role);
         }
         catch (Exception)
         {
@@ -49,10 +54,25 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            var roles = await _dbContext.Roles.ToListAsync();
+            var roles = await _dbContext.Roles.
+                Include(_ => _.Claims).ToListAsync();
             return roles.Select(Models.DB.Role.ToDomainModel).ToList();
         }
         catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public async Task<List<string>?> GetAllNamesAsync()
+    {
+        try
+        {
+            var roles = await _dbContext.Roles
+                .Include(_ => _.Claims).ToListAsync();
+            return roles.Select(_ => _.Name).ToList();
+        }
+        catch (Exception ex)
         {
             return null;
         }

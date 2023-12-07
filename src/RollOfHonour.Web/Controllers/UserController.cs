@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RollOfHonour.Data.Repositories;
 
 namespace RollOfHonour.Web.Controllers;
@@ -9,7 +10,7 @@ namespace RollOfHonour.Web.Controllers;
 public class UserController : Controller
 {
     private readonly IUserRepository _userRepository;
-    
+
     public UserController(IUserRepository userRepository)
     {
         _userRepository = userRepository;
@@ -31,7 +32,12 @@ public class UserController : Controller
         {
             ValidateRequest();
 
+            // TODO - check if user already exists
             // TODO - Create the user locally
+            // TODO - Assign basic user role to new account
+            // TODO - Assign CorrelationId as ObjectId so we can link the local acc to the AD account
+
+
             return NotFound();
         }
         catch (UnauthorizedAccessException)
@@ -48,12 +54,13 @@ public class UserController : Controller
     public async Task<IActionResult> AttachUserClaims()
     {
         // Going to be called via API connector once the user is created and when azure starts adding claims
-        
+
         try
         {
             ValidateRequest();
 
-            // TODO - Attach user claims to azure user
+            // TODO - Get user by object id 
+            // TODO - Attach stored user claims from role to azure user
             return NotFound();
         }
         catch (UnauthorizedAccessException)
@@ -84,7 +91,7 @@ public class UserController : Controller
         var basicUsername = userPass.Substring(0, userPass.IndexOf(':'));
         var basicPassword = userPass.Substring(userPass.IndexOf(':') + 1);
 
-        if (basicUsername != "" && basicPassword != "")
+        if (basicUsername != "" && basicPassword != "") // update to user and pass setup in Azure
             throw new UnauthorizedAccessException();
     }
 }

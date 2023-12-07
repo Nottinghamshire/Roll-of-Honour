@@ -10,6 +10,11 @@ public class Claim
 
     public static Core.Models.Claim ToDomainModel(Claim claim)
     {
-        return new() { Id = claim.Id, Name = claim.Name, Role = DB.Role.ToDomainModel(claim.Role) };
+        return new() { 
+            Id = claim.Id, 
+            Name = claim.Name,
+            //Note: mapping role at this level causes a recursive circular reference so causes a crash
+            //Role = DB.Role.ToDomainModel(claim.Role) 
+        };
     }
 }

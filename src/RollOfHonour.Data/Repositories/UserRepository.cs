@@ -13,8 +13,9 @@ public interface IUserRepository
     public Task<User?> GetAsync(Guid reference);
     public Task CreateAsync(User user);
     public Task<IReadOnlyCollection<User>?> GetAllAsync();
+    public Task<bool> UpdateRoleAsync(int userId, Role role);
+    public Task<Dictionary<string, int>> GetAllAsUsernameIdCollectionAsync();
 
-    public Task<bool> UpdateRoleAsync(User user, Role role);
 }
 
 public class UserRepository : IUserRepository
@@ -74,12 +75,28 @@ public class UserRepository : IUserRepository
             return null;
         }
     }
-
-    public async Task<bool> UpdateRoleAsync(User user, Role role)
+    public async Task<Dictionary<string, int>> GetAllAsUsernameIdCollectionAsync()
     {
         try
         {
-            var userEntity = await _dbContext.Users.SingleOrDefaultAsync(_ => _.Id == user.Id);
+            var users = await _dbContext.Users.ToListAsync();
+            var userIdCollection = new Dictionary<string, int>();
+            foreach (var user in users)
+                userIdCollection.Add($"{user.FirstName} {user.Surname}", user.Id);
+
+            return userIdCollection;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public async Task<bool> UpdateRoleAsync(int userId, Role role)
+    {
+        try
+        {
+            var userEntity = await _dbContext.Users.SingleOrDefaultAsync(_ => _.Id == userId);
             if (userEntity is null) return false;
 
             var newUserRole = await _dbContext.Roles.SingleOrDefaultAsync(_ => _.Id == role.Id);
