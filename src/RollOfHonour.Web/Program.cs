@@ -113,7 +113,7 @@ using (var scope = app.Services.CreateScope())
         new() { Name = $"{AuthorizationClaims.AdministratorPersonEdit}", Role = appStaffAdminRole },
         new() { Name = $"{AuthorizationClaims.AdministratorMemorialEdit}", Role = appStaffAdminRole }
     };
-    appClaims.ForEach(item => context.Claims.AddIfNotExists(item, claim => claim.Name == item.Name));
+    appClaims.ForEach(item => context.Claims.AddIfNotExists(item, claim => claim.Name == item.Name && claim.Role.Id == item.Role.Id));
     context.SaveChanges();
 }
 
