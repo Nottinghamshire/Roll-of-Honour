@@ -17,6 +17,8 @@ builder.Services.AddDbContext<RollOfHonourContext>(options =>
         x => x.UseNetTopologySuite()));
 
 builder.Services.Configure<Storage>(builder.Configuration.GetSection(nameof(AppSettings.Storage)));
+builder.Services.Configure<Whitelists>(builder.Configuration.GetSection(nameof(AppSettings.Whitelists)));
+builder.Services.Configure<APIBasicAuth>(builder.Configuration.GetSection(nameof(AppSettings.APIConnectorsAuth)));
 builder.Services.AddTransient<IPersonRepository, PersonRepository>();
 builder.Services.AddTransient<IMemorialRepository, MemorialRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -145,3 +147,4 @@ app.MapControllers();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+
