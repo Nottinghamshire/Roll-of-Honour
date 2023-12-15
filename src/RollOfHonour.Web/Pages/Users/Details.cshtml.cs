@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
+using RollOfHonour.Core.Authorization;
 using RollOfHonour.Data.Repositories;
 
 namespace RollOfHonour.Web.Pages.Users;
 
 //[Authorize(Policy = AuthorizationPolicyNames.EditUser)]
-[Authorize] 
+[Authorize]
 public class Details : PageModel
 {
     public bool UserIsAuthenticated { get; set; }
@@ -29,6 +30,9 @@ public class Details : PageModel
 
     public async Task<IActionResult> OnGet()
     {
+        return NotFound();
+
+        // TODO - when roles/claims are implemented into Azure claims stop redirecting user to index
         if (Request.HttpContext.User.Identity != null)
             UserIsAuthenticated = Request.HttpContext.User.Identity.IsAuthenticated;
 
