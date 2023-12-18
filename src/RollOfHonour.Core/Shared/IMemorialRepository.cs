@@ -9,4 +9,6 @@ public interface IMemorialRepository
     int Count();
     Task<PaginatedList<Memorial>> SearchMemorials(string searchString, int pageIndex, int pageSize);
     Task<PaginatedList<Memorial>> GetPageOfMemorials(int pageIndex, int pageSize);
+    Task RemovePerson(int memorialId, int citizenId);
+    Task<bool> AddPerson(int memorialId, Person personDetails);
 }

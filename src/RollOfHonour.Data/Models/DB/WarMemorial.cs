@@ -6,8 +6,9 @@ public partial class WarMemorial
 {
     public Core.Models.Memorial ToDomainModel(string imageUrlPrefix)
     {
-        var domainRecordedNames = this.RecordedNames.Select(recordedName => new Core.Models.RecordedName(recordedName.AsRecorded!)
+        var domainRecordedNames = this.RecordedNames.Select(recordedName => new Core.Models.RecordedName
         {
+            AsRecorded = recordedName.AsRecorded!,
             Id = recordedName.Id,
             PersonId = recordedName.PersonId ?? null,
             Initials = recordedName.Initials ?? string.Empty, 
@@ -20,8 +21,9 @@ public partial class WarMemorial
         })
           .ToList();
 
-        var memorial = new Core.Models.Memorial(this.Name, domainRecordedNames)
+        var memorial = new Core.Models.Memorial
         {
+            Name = this.Name,
             Id = this.Id,
             UKNIWMRef = this.Ukniwmref,
             Description = this.Description,
@@ -30,6 +32,7 @@ public partial class WarMemorial
             NamesCount = this.NamesCount,
             District = this.District,
             Postcode = this.Postcode,
+            RecordedNames = domainRecordedNames
         };
 
         foreach (var photo in this.Photos)
@@ -49,9 +52,10 @@ public partial class WarMemorial
 
     public string? Description { get; set; }
 
-    public int Easting { get; set; }
+    // below are causing errors?
+    //public int Easting { get; set; }
 
-    public int Northing { get; set; }
+    //public int Northing { get; set; }
     
     public Geometry? Location { get; set; } //= new Point(52.9364, 1.1358);
     public int? MainPhotoId { get; set; }

@@ -29,6 +29,12 @@ public partial class RollOfHonourContext : DbContext
 
     public virtual DbSet<Person> People { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<Role> Roles { get; set; }
+
+    public virtual DbSet<Claim> Claims { get; set; }
+
     public virtual DbSet<PersonAuditItem> PersonAuditItems { get; set; }
 
     public virtual DbSet<PersonModeration> PersonModerations { get; set; }

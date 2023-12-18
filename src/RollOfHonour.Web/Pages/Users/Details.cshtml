@@ -1,0 +1,43 @@
+﻿@page
+@using RollOfHonour.Core.Enums
+@model RollOfHonour.Web.Pages.Users.Details
+
+<section class="panel with-background bg-app">
+<div class="container is-fluid">
+    <div class="columns is-multiline">
+        <div class="column is-full-tablet is-8-desktop is-8-fullhd">
+            <div class="person-block">
+                <h1> User management </h1> 
+                
+                <form method="post">
+
+                    <label asp-for="SelectedUser">Select User:</label>
+                    <select asp-for="SelectedUser">
+                        @foreach (var user in Model.Usernames)
+                        {
+                            <option value="@user">@user</option>
+                        }
+                    </select>
+                    
+                    <br/>
+                    <br/>
+
+                    <label asp-for="UserRole">Select new role: </label>
+                    <select asp-for="UserRole">
+                        @foreach (var roleName in Model.Roles)
+                        {
+                            <option value="@roleName">@roleName</option>
+                        }
+                    </select>
+                    
+                    <br/>
+                    <br/>
+
+                    <input type="submit" value="Save" />
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</section>

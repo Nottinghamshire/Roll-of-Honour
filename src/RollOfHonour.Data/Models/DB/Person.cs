@@ -4,7 +4,7 @@ public class Person
 {
     public Core.Models.Person ToDomainModel(string imageUrlPrefix)
     {
-        var person = new Core.Models.Person(this.MainPhotoId)
+        var person = new Core.Models.Person
         {
             Id = this.Id,
             Comments = this.Comments,
@@ -28,6 +28,7 @@ public class Person
             UnitId = this.SubUnitId == null ? null : this.SubUnitId,
             Regiment = this.SubUnit?.Regiment?.Name == null ? string.Empty : this.SubUnit.Regiment.Name,
             RegimentId = this.SubUnit?.RegimentId,
+            MainPhotoId = this.MainPhotoId,
             WarId = WarId ?? 0
         };
 
