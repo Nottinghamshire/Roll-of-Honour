@@ -8,7 +8,6 @@
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <!-- App Stylesheets -->
     <link href="/css/style.css?v=0003" rel="stylesheet">
-    @* <link href="/css/overrides.css?v=0003" rel="stylesheet"> *@
     <link href="/css/simpleLightbox.css" rel="stylesheet" />
 
     <!-- Jquery -->
@@ -29,8 +28,8 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="~/_framework/blazor.server.js"></script>
-    
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
 </head>
 
@@ -41,7 +40,7 @@
                 <div class="column is-12-tablet is-12-desktop is-2-widescreen">
                     <a href="/" title="Go back to the homepage">
                         <img class="header-logo" srcset="/images/logo-roh.png 1x, /images/logo-roh@2x.png 2x"
-                             src="./images/logo-roh.png" alt="Nottinghamshire Roll of Honour Logo" />
+                            src="./images/logo-roh.png" alt="Nottinghamshire Roll of Honour Logo" />
                     </a>
                 </div>
                 <div class="column is-12-tablet is-12-desktop is-8-widescreen">
@@ -68,24 +67,21 @@
                             <li>
                                 <a asp-page="/memorial/index" title="Memorials">Memorials</a>
                             </li>
-                            <!-- <li>
-                                <a href="" title="Timeline">Timeline</a>
-                            </li> -->
                             <li>
                                 <a href="/search" title="Search">Search</a>
                             </li>
+                            <partial name="_LoginPartial" />
                         </ul>
                     </nav>
                 </div>
                 <div class="column is-hidden-touch is-hidden-desktop-only is-2-widescreen">
                     <a href="/" title="Visit the Nottinghamshire County Council website">
                         <img class="header-logo" srcset="/images/logo-ncc.png 1x, /images/logo-ncc@2x.png 2x"
-                             src="/images/logo-ncc.png" alt="Nottinghamshire County Council Logo" />
+                            src="/images/logo-ncc.png" alt="Nottinghamshire County Council Logo" />
                     </a>
                 </div>
             </div>
         </div>
-        <partial name="_LoginPartial" />
     </header>
     <main>
         @RenderBody()
@@ -114,9 +110,6 @@
                         <li>
                             <a asp-page="/memorial/index" title="Memorials">Memorials</a>
                         </li>
-                        @* <li> *@
-                        @*     <a href="/timeline.html" title="Timeline">Timeline</a> *@
-                        @* </li> *@
                         <li>
                             <a asp-page="/Search" title="Search">Search</a>
                         </li>
@@ -130,11 +123,6 @@
                         <li>
                             <a href="#" title="Terms and Conditions">Terms and Conditions</a>
                         </li>
-                        @* <li> *@
-                        @*     <span class="footer-login"> *@
-                        @*         <a href="#" title="Login"><i class="fa-light fa-right-to-bracket"></i> Login</a> *@
-                        @*     </span> *@
-                        @* </li> *@
                     </ul>
 
                     <span class="footer-support">Proudly supported by</span>
@@ -160,8 +148,7 @@
         window.scrollToElementId = (elementId) => {
             console.info('scrolling to element', elementId);
             var element = document.getElementById(elementId);
-            if(!element)
-            {
+            if (!element) {
                 console.warn('element was not found', elementId);
                 return false;
             }
