@@ -9,11 +9,11 @@ public class Details : PageModel
     public Core.Models.Person? Person { get; set; }
     public bool UserIsAuthenticated { get; set; }
 
-    private IPersonRepository _personRepository { get; set; } = null!;
+    private IPersonRepository PersonRepository { get; set; }
 
     public Details(IPersonRepository personRepository)
     {
-        _personRepository = personRepository;
+        PersonRepository = personRepository;
     }
 
     public async Task<IActionResult> OnGet(int id)
@@ -21,7 +21,7 @@ public class Details : PageModel
         if (Request.HttpContext.User.Identity != null)
             UserIsAuthenticated = Request.HttpContext.User.Identity.IsAuthenticated;
 
-        var person = await _personRepository.GetById(id);
+        var person = await PersonRepository.GetById(id);
 
         if (person == null)
         {

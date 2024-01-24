@@ -14,24 +14,25 @@ public interface IUserRepository
     public Task CreateAsync(User user);
     public Task<IReadOnlyCollection<User>?> GetAllAsync();
     public Task<bool> UpdateRoleAsync(int userId, Role role);
-    public Task<Dictionary<string, int>> GetAllAsUsernameIdCollectionAsync();
+    public Task<Dictionary<string, int>?> GetAllAsUsernameIdCollectionAsync();
 
 }
 
 public class UserRepository : IUserRepository
 {
-    public RollOfHonourContext _dbContext { get; set; }
+    public RollOfHonourContext DbContext { get; set; }
 
     public UserRepository(RollOfHonourContext context)
     {
-        _dbContext = context;
+        DbContext = context;
     }
 
     public async Task<User?> GetAsync(Guid reference)
     {
         try
         {
-            return Models.DB.User.ToDomainModel(await _dbContext.Users.SingleOrDefaultAsync(_ => _.Reference == reference));
+            var user = await DbContext.Users.SingleOrDefaultAsync(_ => _.Reference == reference);
+            return user is null ? null : Models.DB.User.ToDomainModel(user);
         }
         catch (Exception)
         {
@@ -43,9 +44,7 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            // don't need to validate here because we can enforce form input values via b2c user flow
-            // although ideally we do it here anyway just in case
-            var defaultRole = _dbContext.Roles.FirstOrDefault(_ => _.Name.Equals(ApplicationRoles.User));
+            var defaultRole = DbContext.Roles.FirstOrDefault(_ => _.Name.Equals(ApplicationRoles.User));
             var newUser = new Models.DB.User
             {
                 FirstName = user.FirstName,
@@ -56,10 +55,11 @@ public class UserRepository : IUserRepository
                 Role = defaultRole
             };
 
-            await _dbContext.Users.AddAsync(newUser);
+            await DbContext.Users.AddAsync(newUser);
         }
         catch (Exception)
         {
+            // ignored
         }
     }
 
@@ -67,7 +67,7 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            var users = await _dbContext.Users.ToListAsync();
+            var users = await DbContext.Users.ToListAsync();
             return users.Select(Models.DB.User.ToDomainModel).ToList();
         }
         catch (Exception)
@@ -75,14 +75,16 @@ public class UserRepository : IUserRepository
             return null;
         }
     }
-    public async Task<Dictionary<string, int>> GetAllAsUsernameIdCollectionAsync()
+    public async Task<Dictionary<string, int>?> GetAllAsUsernameIdCollectionAsync()
     {
         try
         {
-            var users = await _dbContext.Users.ToListAsync();
+            var users = await DbContext.Users.ToListAsync();
             var userIdCollection = new Dictionary<string, int>();
             foreach (var user in users)
+            {
                 userIdCollection.Add($"{user.FirstName} {user.Surname}", user.Id);
+            }
 
             return userIdCollection;
         }
@@ -96,14 +98,14 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            var userEntity = await _dbContext.Users.SingleOrDefaultAsync(_ => _.Id == userId);
+            var userEntity = await DbContext.Users.SingleOrDefaultAsync(_ => _.Id == userId);
             if (userEntity is null) return false;
 
-            var newUserRole = await _dbContext.Roles.SingleOrDefaultAsync(_ => _.Id == role.Id);
+            var newUserRole = await DbContext.Roles.SingleOrDefaultAsync(_ => _.Id == role.Id);
             if(newUserRole is null) return false;
 
             userEntity.Role = newUserRole;
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             return true;
         }
