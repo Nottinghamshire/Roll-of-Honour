@@ -6,7 +6,7 @@ public class Claim : IAggregateRoot
 {
     public int Id { get; set; }
 
-    public Role Role { get; set; }
+    public Role Role { get; set; } = default!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

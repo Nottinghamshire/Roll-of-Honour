@@ -15,18 +15,18 @@ public interface IRoleRepository
 
 public class RoleRepository : IRoleRepository
 {
-    public RollOfHonourContext _dbContext { get; set; }
+    public RollOfHonourContext DbContext { get; set; }
 
     public RoleRepository(RollOfHonourContext context)
     {
-        _dbContext = context;
+        DbContext = context;
     }
 
     public async Task<Role?> GetAsync(int id)
     {
         try
         {
-            return Models.DB.Role.ToDomainModel(await _dbContext.Roles.Include(_ => _.Claims).SingleOrDefaultAsync(_ => _.Id == id));
+            return Models.DB.Role.ToDomainModel(await DbContext.Roles.Include(role => role.Claims).SingleOrDefaultAsync(_ => _.Id == id));
         }
         catch (Exception)
         {
@@ -38,11 +38,8 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            var role = _dbContext.Roles.Include(_ => _.Claims).SingleOrDefault(_ => _.Name == name);
-            if (role is null)
-                return null;
-
-            return Models.DB.Role.ToDomainModel(role);
+            var role = await DbContext.Roles.Include(role => role.Claims).SingleOrDefaultAsync(_ => _.Name == name);
+            return role is null ? null : Models.DB.Role.ToDomainModel(role);
         }
         catch (Exception)
         {
@@ -54,8 +51,7 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            var roles = await _dbContext.Roles.
-                Include(_ => _.Claims).ToListAsync();
+            var roles = await DbContext.Roles.Include(role => role.Claims).ToListAsync();
             return roles.Select(Models.DB.Role.ToDomainModel).ToList();
         }
         catch (Exception)
@@ -68,11 +64,10 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            var roles = await _dbContext.Roles
-                .Include(_ => _.Claims).ToListAsync();
-            return roles.Select(_ => _.Name).ToList();
+            var roles = await DbContext.Roles.Include(role => role.Claims).ToListAsync();
+            return roles.Select(role => role.Name).ToList();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
