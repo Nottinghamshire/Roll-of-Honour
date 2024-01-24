@@ -47,7 +47,7 @@ public class UserController : Controller
             // TEMP - Check against config CSV emails, if the signup email isnt in there return false / invalid 
             var emailWhitelist = _whitelists.Value.SignupEmails.Split(",").ToList();
             if (emailWhitelist.Contains(request.email) is false)
-                return BadRequest(new BlockingResponse
+                return Ok(new BlockingResponse
                 {
                     version = "1.0.0",
                     action = "ShowBlockPage",
