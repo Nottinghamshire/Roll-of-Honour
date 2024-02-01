@@ -24,8 +24,7 @@ public class MemorialController : Controller
             if (memorialId.HasValue && person is not null)
                 await _memorialRepository.AddPerson((int)memorialId, person);
 
-            // request.host might not always result in the expected domain if received from 3rd party?
-            return Redirect($"{Request.Host}/Memorial/Details?id={memorialId}");
+            return LocalRedirect($"/Memorial/Details?id={memorialId}");
         }
         catch (Exception ex)
         {
@@ -43,7 +42,7 @@ public class MemorialController : Controller
             if(memorialId.HasValue && citizenId.HasValue)
                 await _memorialRepository.RemovePerson((int)memorialId, (int)citizenId);
 
-            return Redirect($"{Request.Host}/Memorial/Details?id={memorialId}"); //, new { id = memorialId });
+            return LocalRedirect($"/Memorial/Details?id={memorialId}");
         }
         catch (Exception ex)
         {

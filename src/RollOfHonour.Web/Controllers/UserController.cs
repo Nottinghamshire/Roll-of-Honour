@@ -12,12 +12,15 @@ namespace RollOfHonour.Web.Controllers;
 [Route("api/users")]
 public class UserController : Controller
 {
+    private readonly ILogger<UserController> _logger;
+    
     private readonly IUserRepository _userRepository;
     private readonly IOptions<Whitelists> _whitelists;
     private readonly IOptions<APIBasicAuth> _authDetails;
-
-    public UserController(IUserRepository userRepository, IOptions<Whitelists> whitelists, IOptions<APIBasicAuth> authDetails)
+    
+    public UserController(ILogger<UserController> logger, IUserRepository userRepository, IOptions<Whitelists> whitelists, IOptions<APIBasicAuth> authDetails)
     {
+        _logger = logger;
         _userRepository = userRepository;
         _whitelists = whitelists;
         _authDetails = authDetails;
