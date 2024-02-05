@@ -8,6 +8,7 @@ using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Models.DB;
 using RollOfHonour.Data.Repositories;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
@@ -27,10 +28,15 @@ builder.Services.AddTransient<ISuperSearchService, SuperSearchService>();
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C");
 
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.FallbackPolicy = options.DefaultPolicy;
-//});
+builder.Logging.AddApplicationInsights(
+    configureTelemetryConfiguration: (config) =>
+        config.ConnectionString = builder.Configuration.GetConnectionString("AppInsights"),
+    configureApplicationInsightsLoggerOptions: (options) => { }
+);
+
+builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(nameof(PersonRepository), LogLevel.Trace);
+builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(nameof(PersonRepository), LogLevel.Information);
+builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(nameof(PersonRepository), LogLevel.Error);
 
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
