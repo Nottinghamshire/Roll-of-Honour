@@ -101,13 +101,20 @@ public class UserController : Controller
 
     private void ValidateRequest()
     {
+        _logger.LogInformation("CreateUser API Connector Trying to validate request");
         AuthenticationHeaderValue.TryParse(Request.Headers["Authorization"], out var authHeader);
 
         if (authHeader is null)
+        {
+            _logger.LogInformation("CreateUser API Connector AuthHeader is null");
             throw new UnauthorizedAccessException();
+        }
 
         if (authHeader.Parameter != null && authHeader.Parameter.StartsWith("Basic ") is false)
+        {
+            _logger.LogInformation("CreateUser API Connector AuthHeader is missing Basic auth credentials");
             throw new UnauthorizedAccessException();
+        }
 
         var basicAuthPrefix = "Basic ";
         var base64Credentials = authHeader!.Parameter!.Substring(basicAuthPrefix.Length).Trim();
@@ -117,7 +124,10 @@ public class UserController : Controller
         var basicPassword = userPass.Substring(userPass.IndexOf(':') + 1);
 
         if (basicUsername != _authDetails.Value.Username && basicPassword != _authDetails.Value.Password)
+        {
+            _logger.LogInformation("CreateUser API Connector Basic Auth details are incorrect");
             throw new UnauthorizedAccessException();
+        }
     }
 
     public class BlockingResponse
