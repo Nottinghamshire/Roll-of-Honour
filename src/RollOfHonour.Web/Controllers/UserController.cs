@@ -48,7 +48,7 @@ public class UserController : Controller
             var emailWhitelist = _whitelists.Value.SignupEmails.Split(",").ToList();
             if (emailWhitelist.Contains(request.email) is false)
             {
-                _logger.LogInformation($"CreateUser API Connector Email {request.email} is not whitelisted, returning BlockingResponse");
+                _logger.LogInformation($"CreateUser API Connector Email user email is not whitelisted, returning BlockingResponse");
 
                 return Ok(new BlockingResponse
                 {
@@ -58,7 +58,7 @@ public class UserController : Controller
                 });
             }
 
-            _logger.LogInformation($"CreateUser API Connector {request.email} is whitelisted, returning ContinuationResponse");
+            _logger.LogInformation($"CreateUser API Connector user email is whitelisted, returning ContinuationResponse");
 
             return Ok(new ContinuationResponse
             {
