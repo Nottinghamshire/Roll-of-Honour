@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using RollOfHonour.Core;
@@ -8,7 +9,7 @@ using RollOfHonour.Core.Shared;
 using RollOfHonour.Data.Context;
 using RollOfHonour.Data.Models.DB;
 using RollOfHonour.Data.Repositories;
-using Microsoft.Extensions.Logging.ApplicationInsights;
+using RollOfHonour.Web.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddAzureAppConfiguration(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
@@ -35,8 +36,7 @@ builder.Logging.AddApplicationInsights(
 );
 
 builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(nameof(PersonRepository), LogLevel.Trace);
-builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(nameof(PersonRepository), LogLevel.Information);
-builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(nameof(PersonRepository), LogLevel.Error);
+builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(nameof(UserController), LogLevel.Trace);
 
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();

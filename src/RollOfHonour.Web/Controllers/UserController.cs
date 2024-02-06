@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
@@ -42,20 +43,22 @@ public class UserController : Controller
         {
             ValidateRequest();
 
-            // TODO - check if user already exists
-            // TODO - Create the user locally
-            // TODO - Assign basic user role to new account
-            // TODO - Assign CorrelationId as ObjectId so we can link the local acc to the AD account
+            _logger.LogInformation("CreateUser API Connector called during the sign up process");
 
-            // TEMP - Check against config CSV emails, if the signup email isnt in there return false / invalid 
             var emailWhitelist = _whitelists.Value.SignupEmails.Split(",").ToList();
             if (emailWhitelist.Contains(request.email) is false)
+            {
+                _logger.LogInformation($"CreateUser API Connector Email {request.email} is not whitelisted, returning BlockingResponse");
+
                 return Ok(new BlockingResponse
                 {
                     version = "1.0.0",
                     action = "ShowBlockPage",
                     userMessage = "There was a problem with your request. You are not able to sign up at this time. Please contact your system administrator"
                 });
+            }
+
+            _logger.LogInformation($"CreateUser API Connector {request.email} is whitelisted, returning ContinuationResponse");
 
             return Ok(new ContinuationResponse
             {
@@ -63,12 +66,16 @@ public class UserController : Controller
                 action = "Continue"
             });
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException exception)
         {
+            _logger.LogError($"CreateUser API Connector Unauthorized Exception thrown during Sign up Process", new { exception } );
+
             return Unauthorized();
         }
-        catch (Exception)
+        catch (Exception exception) 
         {
+            _logger.LogError($"CreateUser API Connector Exception thrown during Sign up Process", new { exception });
+
             return BadRequest();
         }
     }
@@ -76,21 +83,10 @@ public class UserController : Controller
     [HttpPost("updateclaims")]
     public async Task<IActionResult> AttachUserClaims()
     {
-        // Going to be called via API connector once the user is created and when azure starts adding claims
-
         try
         {
             ValidateRequest();
 
-
-            //string userID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            //var identity = User.Identity as ClaimsIdentity;
-
-            //identity.AddClaim(new Claim("", "")); // Type is something like Authorization? value is relevant value?
-
-            //// TODO - Get user by object id 
-            //// TODO - Attach stored user claims from role to azure user
             return NotFound();
         }
         catch (UnauthorizedAccessException)
@@ -105,7 +101,6 @@ public class UserController : Controller
 
     private void ValidateRequest()
     {
-        // Temporary (possibly) until we have time to add certs instead
         AuthenticationHeaderValue.TryParse(Request.Headers["Authorization"], out var authHeader);
 
         if (authHeader is null)
@@ -125,14 +120,12 @@ public class UserController : Controller
             throw new UnauthorizedAccessException();
     }
 
-
     public class BlockingResponse
     {
         public string version { get; set; }
         public string action { get; set; }
         public string userMessage { get; set; }
     }
-
 
     public class ContinuationResponse
     {
