@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RollOfHonour.Core;
@@ -14,11 +15,15 @@ namespace RollOfHonour.Data.Repositories;
 
 public class PersonRepository : IPersonRepository
 {
+    private readonly ILogger<PersonRepository> _logger;
+    private RollOfHonourContext _dbContext { get; }
+    
     private readonly Storage _storage;
-    private RollOfHonourContext _dbContext { get; set; }
 
-    public PersonRepository(RollOfHonourContext dbContext, IOptions<Storage> storageSettings)
+    public PersonRepository(ILogger<PersonRepository> logger, 
+        RollOfHonourContext dbContext, IOptions<Storage> storageSettings)
     {
+        _logger = logger;
         _dbContext = dbContext;
         _storage = storageSettings.Value;
     }
@@ -198,30 +203,35 @@ public class PersonRepository : IPersonRepository
 
     public async Task Update(Person person)
     {
-        var personEntity = await GetEntityById(person.Id);//_dbContext.People.Single(_ => _.Id == person.Id);
-        if (personEntity != null)
+        try
         {
+            _logger.LogInformation($"Started to update person with id {person.Id}", new { person });
+
+            var personEntity = await GetEntityById(person.Id);
+            if (personEntity is null)
+            {
+                _logger.LogError($"Unable to find person with id {person.Id}");
+                return;
+            }
+
+            _logger.LogInformation($"Found person with id {person.Id}");
+
             personEntity.WarId = person.WarId;
 
-            // set values via context currently causing some unexpected changes to entity so doing manually
-            // change to use something like auto mapper?
             personEntity.Rank = person.Rank;
             personEntity.ServiceNumber = person.ServiceNumber;
             personEntity.MilitaryHistory = person.MilitaryHistory;
 
             if (person.Unit.IsNullOrEmpty() is false && person.Regiment.IsNullOrEmpty() is false)
             {
-                //var subUnit = await _dbContext.SubUnits.SingleOrDefaultAsync(_ => _.Name != null && _.Name.ToLower() == person.Unit);
-                //if (subUnit is not null)
-                //    personEntity.SubUnit = subUnit;
-                //else
-                //{
                 if (personEntity.SubUnit != null)
                 {
                     personEntity.SubUnit.Name = person.Unit;
                     personEntity.SubUnit.Regiment = new Models.DB.Regiment { Name = person.Regiment };
                 }
-                //}
+                
+                _logger.LogInformation($"Assigned sub unit to person with id {person.Id}");
+
             }
 
             personEntity.FirstNames = person.FirstNames;
@@ -232,6 +242,13 @@ public class PersonRepository : IPersonRepository
             personEntity.ExtraInfo = person.ExtraInfo ?? "";
 
             await _dbContext.SaveChangesAsync();
+            
+            _logger.LogInformation($"Saved changes to person with id {person.Id}");
+         
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError("An exception was caught in PersonRepository.Update", new { exception });
         }
     }
 
