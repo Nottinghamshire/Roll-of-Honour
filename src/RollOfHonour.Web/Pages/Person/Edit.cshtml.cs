@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RollOfHonour.Core.Authorization;
 using RollOfHonour.Core.Enums;
@@ -16,6 +17,8 @@ public class Edit : PageModel
     [BindProperty] public Core.Models.Person EditFormPerson { get; set; } = default!;
 
     [BindProperty] public War War { get; set; }
+    
+    public string ErrorMessage { get; set; }
 
     private IPersonRepository _personRepository;
 
@@ -56,7 +59,12 @@ public class Edit : PageModel
             VerifyAuthorizedRequest();
 
             if (!ModelState.IsValid)
+            {
+                var modelStateErrors = ModelState.Values.Where(parameter => parameter.ValidationState == ModelValidationState.Invalid).SelectMany(state => state.Errors.Select(error => error.ErrorMessage)).ToList();
+                if (modelStateErrors.Any())
+                    ErrorMessage = string.Join(", ", modelStateErrors);
                 return Page();
+            }
 
             // War isn't binding properly?
             Person.WarId = War != 0 ? (War == War.WW1 ? 1 : 2) : Person.WarId;
