@@ -62,7 +62,7 @@ public class Edit : PageModel
             {
                 var modelStateErrors = ModelState.Values.Where(parameter => parameter.ValidationState == ModelValidationState.Invalid).SelectMany(state => state.Errors.Select(error => error.ErrorMessage)).ToList();
                 if (modelStateErrors.Any())
-                    ErrorMessage = string.Join(", ", modelStateErrors);
+                    ErrorMessage = string.Join(" ", modelStateErrors);
                 return Page();
             }
 
