@@ -46,6 +46,8 @@
             }
         </div>
 
+        <span style="color:red">@Html.Raw(Model.ErrorMessage)</span>
+
         @if (Model.Person.PersonType == PersonType.Military)
         {
             <form method="post">
